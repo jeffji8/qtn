@@ -285,10 +285,32 @@ color: #111827;
 font-weight: 600;
 }
 
+.finance-first-row {
+position: relative;
+border-top: none;
+padding-top: 16px;
+}
+
+.finance-first-row::before,
+.finance-first-row::after {
+content: "";
+position: absolute;
+left: 0;
+right: 0;
+height: 0;
+border-top: 1px dashed #cbd5e1;
+}
+
+.finance-first-row::before {
+top: 0;
+}
+
+.finance-first-row::after {
+top: 8px;
+}
+
 .scheme-value {
 color: #374151;
-font-size: 15px;
-font-weight: 700;
 text-align: right;
 }
 
@@ -539,6 +561,118 @@ display: block;
 user-select: none;
 }
 
+/* 政府补贴多选下拉 */
+.multi-select {
+position: relative;
+width: 100%;
+}
+
+.multi-select-trigger {
+width: 100%;
+border: 1px solid #d1d5db;
+border-radius: 10px;
+padding: 10px 40px 10px 12px;
+font-size: 14px;
+background: #fff;
+color: #111827;
+cursor: pointer;
+position: relative;
+min-height: 42px;
+display: flex;
+align-items: center;
+line-height: 1.5;
+}
+
+.multi-select-trigger:focus,
+.multi-select.open .multi-select-trigger {
+border-color: #2563eb;
+box-shadow: 0 0 0 2px rgba(37,99,235,0.12);
+}
+
+.multi-select-trigger::after {
+content: "";
+position: absolute;
+right: 14px;
+top: 50%;
+width: 8px;
+height: 8px;
+border-right: 2px solid #6b7280;
+border-bottom: 2px solid #6b7280;
+transform: translateY(-70%) rotate(45deg);
+transition: transform 0.2s ease;
+}
+
+.multi-select.open .multi-select-trigger::after {
+transform: translateY(-30%) rotate(-135deg);
+}
+
+.multi-select-placeholder {
+color: #9ca3af;
+}
+
+.multi-select-panel {
+position: absolute;
+left: 0;
+right: 0;
+top: calc(100% + 6px);
+background: #fff;
+border: 1px solid #d1d5db;
+border-radius: 12px;
+box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+padding: 8px 12px;
+z-index: 30;
+display: none;
+}
+
+.multi-select.open .multi-select-panel {
+display: block;
+}
+
+.subsidy-option {
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 10px;
+padding: 10px 0;
+border-bottom: 1px solid #eceff3;
+}
+
+.subsidy-option:last-child {
+border-bottom: none;
+}
+
+.subsidy-option-left {
+display: flex;
+align-items: center;
+gap: 8px;
+flex: 1;
+min-width: 0;
+}
+
+.subsidy-option-left input[type="checkbox"] {
+width: 16px;
+height: 16px;
+margin: 0;
+}
+
+.subsidy-option-name {
+color: #111827;
+line-height: 1.4;
+word-break: break-all;
+}
+
+.subsidy-option-price {
+font-size: 13px;
+font-weight: 700;
+color: #374151;
+white-space: nowrap;
+}
+
+.subsidy-option.disabled-item .subsidy-option-name,
+.subsidy-option.disabled-item .subsidy-option-price {
+color: #9ca3af;
+}
+
 @media (max-width: 390px) {
 .container {
 padding: 8px 8px 20px;
@@ -596,7 +730,7 @@ grid-column: span 2;
 <img src="/logo.png" alt="logo" style="width: 32px; height: 32px; border-radius: 6px;">
 <div class="title" style="margin-bottom: 0;">理想汽车报价单</div>
 </div>
-<div class="sub">Design by Jeff V1.0.6<br>- 新增L8 Livis版本</div>
+<div class="sub">Design by Jeff V1.0.8<br>- 新增石景山补贴，根据开票价自动计算</div>
 
 <div class="form-grid">
 <div class="form-group full">
@@ -625,12 +759,37 @@ grid-column: span 2;
 </div>
 
 <div class="form-group">
-<label for="govSubsidy">政府补贴</label>
-<select id="govSubsidy">
-<option value="0">无</option>
-<option value="20000">报废补贴 -20000</option>
-<option value="15000">置换补贴 -15000</option>
-</select>
+<label>政府补贴</label>
+<div class="multi-select" id="govSubsidyMultiSelect">
+<div class="multi-select-trigger" id="govSubsidyTrigger" tabindex="0">
+<span id="govSubsidyText" class="multi-select-placeholder">请选择政府补贴</span>
+</div>
+<div class="multi-select-panel" id="govSubsidyPanel">
+<label class="subsidy-option" id="govSubsidyScrapWrap">
+<div class="subsidy-option-left">
+<input type="checkbox" class="gov-subsidy-checkbox" value="scrap" />
+<span class="subsidy-option-name">报废补贴</span>
+</div>
+<span class="subsidy-option-price" id="govSubsidyScrapPrice">-￥20,000</span>
+</label>
+
+<label class="subsidy-option" id="govSubsidyReplaceWrap">
+<div class="subsidy-option-left">
+<input type="checkbox" class="gov-subsidy-checkbox" value="replace" />
+<span class="subsidy-option-name">置换补贴</span>
+</div>
+<span class="subsidy-option-price" id="govSubsidyReplacePrice">-￥15,000</span>
+</label>
+
+<label class="subsidy-option" id="govSubsidyShijingshanWrap">
+<div class="subsidy-option-left">
+<input type="checkbox" class="gov-subsidy-checkbox" value="shijingshan" />
+<span class="subsidy-option-name">石景山补贴</span>
+</div>
+<span class="subsidy-option-price" id="govSubsidyShijingshanPrice">当前开票价不满足</span>
+</label>
+</div>
+</div>
 </div>
 
 <div class="form-group">
@@ -688,9 +847,7 @@ grid-column: span 2;
 <div class="image-preview-title">报价单图片已生成</div>
 <div class="image-preview-hint">长按下方图片保存到相册</div>
 <div class="image-preview-wrap" onclick="event.preventDefault(); event.stopPropagation(); return false;" ontouchstart="event.stopPropagation();" ontouchend="event.preventDefault(); event.stopPropagation(); return false;">
-<a data-pswp-width="512" data-pswp-height="512" target="_blank" href="">
 <a data-pswp-width='512' data-pswp-height='512' target='_blank' href=""><img id="previewImage" src="" alt="报价单图片" onclick="event.preventDefault(); event.stopPropagation(); return false;" ontouchend="event.preventDefault(); event.stopPropagation(); return false;" style="display: block; width: 100%; -webkit-user-select: none; user-select: none;" /></a>
-</a>
 </div>
 <button class="btn-preview-close" onclick="closeImagePreview()">关闭预览</button>
 </div>
@@ -824,22 +981,22 @@ const optionalDiscountMap = {
 ],
 "理想 L7 Pro": [
 { id: "l7pro_cash_discount", name: "现金优惠", price: 40000 },
-{ id: "l7pro_shunyi_subsidy", name: "顺义补贴", price: 5000 }
+{ id: "l7pro_shunyi_subsidy", name: "顺义补贴", price: 5000, subsidyType: "district" }
 ],
 "理想 L7 Max": [
 { id: "l7max_cash_discount", name: "现金优惠", price: 40000 },
-{ id: "l7max_shunyi_subsidy", name: "顺义补贴", price: 5000 }
+{ id: "l7max_shunyi_subsidy", name: "顺义补贴", price: 5000, subsidyType: "district" }
 ],
 "理想 L7 Ultra": [
 { id: "l7ultra_cash_discount", name: "现金优惠", price: 40000 },
-{ id: "l7ultra_shunyi_subsidy", name: "顺义补贴", price: 5000 }
+{ id: "l7ultra_shunyi_subsidy", name: "顺义补贴", price: 5000, subsidyType: "district" }
 ],
 "理想 i6": [
 { id: "i6_cash_discount", name: "现金优惠", price: 5000, fullOnly: false, defaultChecked: true },
 { id: "i6_full_payment_discount", name: "全款优惠", price: 5000, fullOnly: true }
 ],
 "理想 i8": [
-{ id: "shunyi_subsidy", name: "顺义补贴", price: 5000, fullOnly: false, defaultChecked: true },
+{ id: "shunyi_subsidy", name: "顺义补贴", price: 5000, fullOnly: false, defaultChecked: true, subsidyType: "district" },
 { id: "old_owner", name: "车主复购权益", price: 10000 },
 { id: "full_payment_discount", name: "全款优惠", price: 10000, fullOnly: true }
 ],
@@ -869,6 +1026,7 @@ const optionalDiscountMap = {
 
 let selectedConfigIds = [];
 let selectedDiscountIds = [];
+let selectedGovSubsidyIds = [];
 let isEditingDownPayment = false;
 
 function round2(num) {
@@ -936,14 +1094,6 @@ const exists = options.some(item => item.value === currentValue);
 financeEl.value = exists ? currentValue : "full";
 }
 
-function getGovSubsidyInfo() {
-const subsidyValue = parseFloat(document.getElementById("govSubsidy").value) || 0;
-let subsidyName = "无";
-if (subsidyValue === 20000) subsidyName = "报废补贴";
-if (subsidyValue === 15000) subsidyName = "置换补贴";
-return { subsidyValue, subsidyName };
-}
-
 function getCurrentOptionalConfigs() {
 const car = getCurrentCar();
 return optionalConfigMap[car.name] || [];
@@ -962,6 +1112,181 @@ function initDefaultSelectionsForCar(carName) {
 selectedConfigIds = [];
 const discounts = optionalDiscountMap[carName] || [];
 selectedDiscountIds = discounts.filter(item => item.defaultChecked).map(item => item.id);
+}
+
+function getSelectedOptionalConfigs() {
+const configs = getCurrentOptionalConfigs();
+return configs.filter(item => selectedConfigIds.includes(item.id));
+}
+
+function getSelectedOptionalDiscounts() {
+const discounts = getCurrentOptionalDiscounts();
+return discounts.filter(item => selectedDiscountIds.includes(item.id));
+}
+
+function getOptionalConfigTotal() {
+return getSelectedOptionalConfigs().reduce((sum, item) => sum + item.price, 0);
+}
+
+function getOptionalDiscountTotal() {
+return getSelectedOptionalDiscounts().reduce((sum, item) => sum + item.price, 0);
+}
+
+function getCurrentInvoicePrice() {
+const car = getCurrentCar();
+const optionalConfigTotal = getOptionalConfigTotal();
+const optionalDiscountTotal = getOptionalDiscountTotal();
+return Math.max(0, car.price + optionalConfigTotal - optionalDiscountTotal);
+}
+
+function hasSelectedDistrictDiscount() {
+return getSelectedOptionalDiscounts().some(item => item.subsidyType === "district");
+}
+
+function getShijingshanSubsidy(invoicePrice) {
+if (invoicePrice > 200000 && invoicePrice < 300000) return 3000;
+if (invoicePrice >= 300000 && invoicePrice < 500000) return 5000;
+if (invoicePrice >= 500000) return 8000;
+return 0;
+}
+
+function normalizeGovSubsidySelection(changedValue = "") {
+if (changedValue === "scrap" && selectedGovSubsidyIds.includes("scrap")) {
+selectedGovSubsidyIds = selectedGovSubsidyIds.filter(id => id !== "replace");
+}
+if (changedValue === "replace" && selectedGovSubsidyIds.includes("replace")) {
+selectedGovSubsidyIds = selectedGovSubsidyIds.filter(id => id !== "scrap");
+}
+
+if (hasSelectedDistrictDiscount()) {
+selectedGovSubsidyIds = selectedGovSubsidyIds.filter(id => id !== "shijingshan");
+}
+}
+
+function getGovSubsidyInfo(invoicePrice = 0) {
+let subsidyValue = 0;
+const subsidyItems = [];
+const districtDiscountSelected = hasSelectedDistrictDiscount();
+
+if (selectedGovSubsidyIds.includes("scrap")) {
+subsidyValue += 20000;
+subsidyItems.push({ name: "报废补贴", amount: 20000 });
+}
+
+if (selectedGovSubsidyIds.includes("replace")) {
+subsidyValue += 15000;
+subsidyItems.push({ name: "置换补贴", amount: 15000 });
+}
+
+if (selectedGovSubsidyIds.includes("shijingshan") && !districtDiscountSelected) {
+const shijingshanAmount = getShijingshanSubsidy(invoicePrice);
+if (shijingshanAmount > 0) {
+subsidyValue += shijingshanAmount;
+subsidyItems.push({ name: "石景山补贴", amount: shijingshanAmount });
+}
+}
+
+return {
+subsidyValue,
+subsidyItems
+};
+}
+
+function updateGovSubsidyDynamicDisplay() {
+const invoicePrice = getCurrentInvoicePrice();
+const districtDiscountSelected = hasSelectedDistrictDiscount();
+const shijingshanAmount = getShijingshanSubsidy(invoicePrice);
+
+const scrapChecked = selectedGovSubsidyIds.includes("scrap");
+const replaceChecked = selectedGovSubsidyIds.includes("replace");
+
+const scrapCheckbox = document.querySelector('.gov-subsidy-checkbox[value="scrap"]');
+const replaceCheckbox = document.querySelector('.gov-subsidy-checkbox[value="replace"]');
+const shijingshanCheckbox = document.querySelector('.gov-subsidy-checkbox[value="shijingshan"]');
+
+const scrapWrap = document.getElementById("govSubsidyScrapWrap");
+const replaceWrap = document.getElementById("govSubsidyReplaceWrap");
+const shijingshanWrap = document.getElementById("govSubsidyShijingshanWrap");
+const shijingshanPrice = document.getElementById("govSubsidyShijingshanPrice");
+
+document.getElementById("govSubsidyScrapPrice").textContent = "-￥20,000";
+document.getElementById("govSubsidyReplacePrice").textContent = "-￥15,000";
+
+if (replaceChecked) {
+scrapCheckbox.disabled = true;
+scrapWrap.classList.add("disabled-item");
+} else {
+scrapCheckbox.disabled = false;
+scrapWrap.classList.remove("disabled-item");
+}
+
+if (scrapChecked) {
+replaceCheckbox.disabled = true;
+replaceWrap.classList.add("disabled-item");
+} else {
+replaceCheckbox.disabled = false;
+replaceWrap.classList.remove("disabled-item");
+}
+
+if (districtDiscountSelected) {
+shijingshanCheckbox.checked = false;
+shijingshanCheckbox.disabled = true;
+shijingshanWrap.classList.add("disabled-item");
+shijingshanPrice.textContent = "已与可选优惠区补贴互斥";
+selectedGovSubsidyIds = selectedGovSubsidyIds.filter(id => id !== "shijingshan");
+} else {
+shijingshanCheckbox.disabled = false;
+shijingshanWrap.classList.remove("disabled-item");
+if (shijingshanAmount > 0) {
+shijingshanPrice.textContent = `-￥${formatMoney(shijingshanAmount)}`;
+} else {
+shijingshanPrice.textContent = "当前开票价不满足";
+}
+}
+}
+
+function updateGovSubsidyText() {
+const districtDiscountSelected = hasSelectedDistrictDiscount();
+if (districtDiscountSelected) {
+selectedGovSubsidyIds = selectedGovSubsidyIds.filter(id => id !== "shijingshan");
+}
+
+const textEl = document.getElementById("govSubsidyText");
+if (!selectedGovSubsidyIds.length) {
+textEl.textContent = "请选择政府补贴";
+textEl.className = "multi-select-placeholder";
+return;
+}
+
+const labels = [];
+if (selectedGovSubsidyIds.includes("scrap")) labels.push("报废补贴");
+if (selectedGovSubsidyIds.includes("replace")) labels.push("置换补贴");
+if (selectedGovSubsidyIds.includes("shijingshan") && !districtDiscountSelected) labels.push("石景山补贴");
+
+textEl.textContent = labels.length ? labels.join("、") : "请选择政府补贴";
+textEl.className = labels.length ? "" : "multi-select-placeholder";
+}
+
+function renderGovSubsidySelection() {
+document.querySelectorAll(".gov-subsidy-checkbox").forEach(el => {
+el.checked = selectedGovSubsidyIds.includes(el.value);
+});
+updateGovSubsidyDynamicDisplay();
+document.querySelectorAll(".gov-subsidy-checkbox").forEach(el => {
+if (el.value === "scrap" || el.value === "replace") {
+el.checked = selectedGovSubsidyIds.includes(el.value);
+}
+if (el.value === "shijingshan") {
+el.checked = selectedGovSubsidyIds.includes(el.value) && !hasSelectedDistrictDiscount();
+}
+});
+updateGovSubsidyText();
+}
+
+function toggleGovSubsidyDropdown(forceOpen = null) {
+const wrap = document.getElementById("govSubsidyMultiSelect");
+const shouldOpen = forceOpen === null ? !wrap.classList.contains("open") : forceOpen;
+wrap.classList.toggle("open", shouldOpen);
 }
 
 function handleI6ConfigMutualExclusion(changedId, checked) {
@@ -1044,9 +1369,10 @@ const checked = el.checked;
 selectedConfigIds = Array.from(document.querySelectorAll(".optional-config-checkbox:checked")).map(i => i.value);
 handleI6ConfigMutualExclusion(changedId, checked);
 renderOptionalConfigs();
-const actualCost = getCurrentActualCost();
-if (!isEditingDownPayment) syncDownPaymentByRatio(actualCost);
-else syncDownPaymentByAmount(actualCost, false);
+const invoicePrice = getCurrentInvoicePrice();
+if (!isEditingDownPayment) syncDownPaymentByRatio(invoicePrice);
+else syncDownPaymentByAmount(invoicePrice, false);
+renderGovSubsidySelection();
 calculateQuote();
 });
 });
@@ -1084,10 +1410,15 @@ document.getElementById("financeType").value = "full";
 toggleFinanceFields();
 }
 selectedDiscountIds = Array.from(document.querySelectorAll(".optional-discount-checkbox:checked")).map(i => i.value);
+
+normalizeGovSubsidySelection();
 renderOptionalDiscounts();
-const actualCost = getCurrentActualCost();
-if (!isEditingDownPayment) syncDownPaymentByRatio(actualCost);
-else syncDownPaymentByAmount(actualCost, false);
+
+const invoicePrice = getCurrentInvoicePrice();
+if (!isEditingDownPayment) syncDownPaymentByRatio(invoicePrice);
+else syncDownPaymentByAmount(invoicePrice, false);
+
+renderGovSubsidySelection();
 calculateQuote();
 });
 });
@@ -1097,31 +1428,6 @@ function clearFullOnlyDiscountSelections() {
 const currentDiscounts = getCurrentOptionalDiscounts();
 const fullOnlyIds = currentDiscounts.filter(i => i.fullOnly).map(i => i.id);
 selectedDiscountIds = selectedDiscountIds.filter(id => !fullOnlyIds.includes(id));
-}
-
-function getSelectedOptionalConfigs() {
-const configs = getCurrentOptionalConfigs();
-return configs.filter(item => selectedConfigIds.includes(item.id));
-}
-
-function getSelectedOptionalDiscounts() {
-const discounts = getCurrentOptionalDiscounts();
-return discounts.filter(item => selectedDiscountIds.includes(item.id));
-}
-
-function getOptionalConfigTotal() {
-return getSelectedOptionalConfigs().reduce((sum, item) => sum + item.price, 0);
-}
-
-function getOptionalDiscountTotal() {
-return getSelectedOptionalDiscounts().reduce((sum, item) => sum + item.price, 0);
-}
-
-function getCurrentActualCost() {
-const car = getCurrentCar();
-const optionalConfigTotal = getOptionalConfigTotal();
-const optionalDiscountTotal = getOptionalDiscountTotal();
-return Math.max(0, car.price + optionalConfigTotal - optionalDiscountTotal);
 }
 
 function updateSliderBackground(ratio) {
@@ -1250,9 +1556,10 @@ renderFinanceOptions();
 toggleFinanceFields();
 renderOptionalConfigs();
 renderOptionalDiscounts();
+renderGovSubsidySelection();
 
-const actualCost = getCurrentActualCost();
-syncDownPaymentByRatio(actualCost);
+const invoicePrice = getCurrentInvoicePrice();
+syncDownPaymentByRatio(invoicePrice);
 calculateQuote();
 }
 
@@ -1276,16 +1583,20 @@ return selectedDiscounts.map(item => `
 `).join("");
 }
 
-function renderBaseQuote(invoicePrice, insurance, tax, totalPrice, subsidyName, subsidyValue, actualCost) {
+function renderBaseQuote(invoicePrice, insurance, tax, totalPrice, subsidyItems, subsidyValue, actualCost) {
 let subsidyHtml = "";
 if (subsidyValue > 0) {
+const subsidyLines = subsidyItems.map(item => `
+<div class="line">
+<span class="label">${item.name}</span>
+<span class="value">-￥${formatMoney(item.amount)}</span>
+</div>
+`).join("");
+
 subsidyHtml = `
 <div class="divider"></div>
 <div class="section-hint">政府补贴（以政府政策为准）</div>
-<div class="line">
-<span class="label">${subsidyName}</span>
-<span class="value">-￥${formatMoney(subsidyValue)}</span>
-</div>
+${subsidyLines}
 <div class="strong-line">
 <span class="label">实际花费</span>
 <span class="value">￥${formatMoney(actualCost)}</span>
@@ -1321,7 +1632,7 @@ const total = downPayment + loanAmount;
 const ratio = total > 0 ? Math.round((downPayment / total) * 100) : 0;
 
 return `
-<div class="section-row">
+<div class="section-row finance-first-row">
 <strong>金融产品</strong>
 <span class="scheme-value">${financeName}</span>
 </div>
@@ -1494,9 +1805,9 @@ const selectedConfigs = getSelectedOptionalConfigs();
 const selectedDiscounts = getSelectedOptionalDiscounts();
 const optionalConfigTotal = getOptionalConfigTotal();
 const optionalDiscountTotal = getOptionalDiscountTotal();
-const { subsidyValue, subsidyName } = getGovSubsidyInfo();
 
 const invoicePrice = Math.max(0, guidePrice + optionalConfigTotal - optionalDiscountTotal);
+const { subsidyValue, subsidyItems } = getGovSubsidyInfo(invoicePrice);
 const tax = calculatePurchaseTax(invoicePrice);
 const totalPrice = invoicePrice + insurance + tax;
 const actualCost = Math.max(0, totalPrice - subsidyValue);
@@ -1525,6 +1836,7 @@ if (!isEditingDownPayment) {
 document.getElementById("downPaymentAmountInput").value = Math.round(downPayment);
 }
 updateSliderBackground(downPaymentRatio);
+updateGovSubsidyDynamicDisplay();
 
 let loanAmount = invoicePrice - downPayment;
 if (loanAmount < 0) loanAmount = 0;
@@ -1543,7 +1855,7 @@ ${renderOptionalDiscountLines(selectedDiscounts)}
 </div>
 `;
 
-html += renderBaseQuote(invoicePrice, insurance, tax, totalPrice, subsidyName, subsidyValue, actualCost);
+html += renderBaseQuote(invoicePrice, insurance, tax, totalPrice, subsidyItems, subsidyValue, actualCost);
 
 if (financeType !== "full") {
 if (subsidyValue > 0) html += `<div class="divider"></div>`;
@@ -1568,7 +1880,8 @@ document.getElementById("financeCardArea").innerHTML = html;
 
 function resetForm() {
 document.getElementById("model").selectedIndex = 0;
-document.getElementById("govSubsidy").value = "0";
+selectedGovSubsidyIds = [];
+renderGovSubsidySelection();
 document.getElementById("downPaymentRatio").value = "30";
 document.getElementById("loanYears").value = "3";
 closeImagePreview();
@@ -1601,6 +1914,7 @@ document.getElementById("previewImage").src = "";
 window.onload = function () {
 initModels();
 updateCarInfo();
+renderGovSubsidySelection();
 
 document.getElementById("model").addEventListener("change", function () {
 closeImagePreview();
@@ -1609,16 +1923,7 @@ updateCarInfo();
 });
 
 document.getElementById("insurance").addEventListener("input", function () {
-const actualCost = getCurrentActualCost();
-if (!isEditingDownPayment) enforceMinDownPayment(actualCost);
-else syncDownPaymentByAmount(actualCost, false);
-calculateQuote();
-});
-
-document.getElementById("govSubsidy").addEventListener("change", function () {
-const actualCost = getCurrentActualCost();
-if (!isEditingDownPayment) enforceMinDownPayment(actualCost);
-else syncDownPaymentByAmount(actualCost, false);
+renderGovSubsidySelection();
 calculateQuote();
 });
 
@@ -1629,16 +1934,18 @@ clearFullOnlyDiscountSelections();
 }
 toggleFinanceFields();
 renderOptionalDiscounts();
-const actualCost = getCurrentActualCost();
-if (!isEditingDownPayment) enforceMinDownPayment(actualCost);
-else syncDownPaymentByAmount(actualCost, false);
+const invoicePrice = getCurrentInvoicePrice();
+if (!isEditingDownPayment) enforceMinDownPayment(invoicePrice);
+else syncDownPaymentByAmount(invoicePrice, false);
+renderGovSubsidySelection();
 calculateQuote();
 });
 
 document.getElementById("downPaymentRatio").addEventListener("input", function () {
 isEditingDownPayment = false;
-const actualCost = getCurrentActualCost();
-syncDownPaymentByRatio(actualCost);
+const invoicePrice = getCurrentInvoicePrice();
+syncDownPaymentByRatio(invoicePrice);
+renderGovSubsidySelection();
 calculateQuote();
 });
 
@@ -1647,19 +1954,53 @@ isEditingDownPayment = true;
 });
 
 document.getElementById("downPaymentAmountInput").addEventListener("input", function () {
-const actualCost = getCurrentActualCost();
-syncDownPaymentByAmount(actualCost, false);
+const invoicePrice = getCurrentInvoicePrice();
+syncDownPaymentByAmount(invoicePrice, false);
+renderGovSubsidySelection();
 calculateQuote();
 });
 
 document.getElementById("downPaymentAmountInput").addEventListener("blur", function () {
 isEditingDownPayment = false;
-const actualCost = getCurrentActualCost();
-enforceMinDownPayment(actualCost);
+const invoicePrice = getCurrentInvoicePrice();
+enforceMinDownPayment(invoicePrice);
+renderGovSubsidySelection();
 calculateQuote();
 });
 
 document.getElementById("loanYears").addEventListener("change", calculateQuote);
+
+document.getElementById("govSubsidyTrigger").addEventListener("click", function (e) {
+e.stopPropagation();
+toggleGovSubsidyDropdown();
+});
+
+document.getElementById("govSubsidyTrigger").addEventListener("keydown", function (e) {
+if (e.key === "Enter" || e.key === " ") {
+e.preventDefault();
+toggleGovSubsidyDropdown();
+}
+if (e.key === "Escape") {
+toggleGovSubsidyDropdown(false);
+}
+});
+
+document.getElementById("govSubsidyPanel").addEventListener("click", function (e) {
+e.stopPropagation();
+});
+
+document.querySelectorAll(".gov-subsidy-checkbox").forEach(el => {
+el.addEventListener("change", function () {
+selectedGovSubsidyIds = Array.from(document.querySelectorAll(".gov-subsidy-checkbox:checked")).map(i => i.value);
+normalizeGovSubsidySelection(el.value);
+renderGovSubsidySelection();
+calculateQuote();
+});
+});
+
+document.addEventListener("click", function () {
+toggleGovSubsidyDropdown(false);
+});
 };
 </script>
 </body>
