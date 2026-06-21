@@ -13,61 +13,74 @@ box-sizing: border-box;
 font-family: "Microsoft YaHei", Arial, sans-serif;
 -webkit-tap-highlight-color: transparent;
 }
-
 body {
 margin: 0;
 background: #f6f7fb;
 color: #222;
 font-size: 14px;
 }
-
 .container {
 max-width: 480px;
 margin: 0 auto;
 padding: 10px 10px 20px;
 }
-
-.panel, .quote-card, .image-preview-card {
+.panel,.quote-card,.image-preview-card {
 background: #fff;
 border-radius: 14px;
 box-shadow: 0 4px 14px rgba(0,0,0,0.06);
 padding: 14px;
 margin-bottom: 12px;
 }
-
+.title-bar {
+display: flex;
+align-items: center;
+gap: 10px;
+margin-bottom: 8px;
+}
+.title-logo {
+width: 32px;
+height: 32px;
+border-radius: 6px;
+}
+.quote-logo {
+width: 28px;
+height: 28px;
+border-radius: 4px;
+}
+.quote-head {
+display: flex;
+align-items: center;
+gap: 10px;
+margin-bottom: 12px;
+}
 .title {
 font-size: 20px;
 font-weight: 700;
 color: #111827;
-margin-bottom: 4px;
+margin-bottom: 0;
 }
-
 .sub {
 font-size: 12px;
 color: #6b7280;
 margin-bottom: 14px;
 line-height: 1.6;
 }
-
 .form-grid {
 display: grid;
 grid-template-columns: 1fr;
 gap: 10px;
 }
-
 .form-group {
 display: flex;
 flex-direction: column;
 }
-
 label {
 font-size: 13px;
 color: #374151;
 margin-bottom: 5px;
 font-weight: 600;
 }
-
-input, select {
+input,select {
 width: 100%;
 border: 1px solid #d1d5db;
 border-radius: 10px;
@@ -76,23 +89,19 @@ font-size: 14px;
 outline: none;
 background: #fff;
 }
-
-input:focus, select:focus {
+input:focus,select:focus {
 border-color: #2563eb;
 box-shadow: 0 0 0 2px rgba(37,99,235,0.12);
 }
-
-.readonly {
+input[readonly] {
 background: #f3f4f6;
 }
-
 .btn-row {
 display: flex;
 gap: 8px;
 margin-top: 14px;
 flex-wrap: wrap;
 }
-
 button {
 flex: 1;
 border: none;
@@ -102,39 +111,32 @@ font-size: 14px;
 cursor: pointer;
 min-width: 100px;
 }
-
 .btn-primary {
 background: #2563eb;
 color: #fff;
 }
-
 .btn-secondary {
 background: #e5e7eb;
 color: #111827;
 }
-
 .btn-export {
 background: #111827;
 color: #fff;
 }
-
 .btn-preview-close {
 background: #e5e7eb;
 color: #111827;
 margin-top: 12px;
 }
-
 .car-name {
 font-size: 18px;
 font-weight: 700;
 color: #111827;
-margin-bottom: 10px;
+margin-bottom: 0;
 }
-
 .quote-lines {
 margin-bottom: 10px;
 }
-
 .line {
 display: flex;
 justify-content: space-between;
@@ -143,13 +145,11 @@ padding: 7px 0;
 font-size: 14px;
 gap: 10px;
 }
-
 .line .label {
 color: #111827;
 padding-right: 10px;
 line-height: 1.5;
 }
-
 .line .value {
 color: #374151;
 text-align: right;
@@ -157,23 +157,18 @@ font-weight: 600;
 word-break: break-all;
 line-height: 1.5;
 }
-
 .divider {
 border-top: 1px dashed #cbd5e1;
 margin: 8px 0;
 }
-
 .section-hint {
 font-size: 12px;
 color: #6b7280;
 margin: 4px 0 2px;
 }
-
-.money-red .big-money,
-.money-red .money-label {
+.money-red .big-money,.money-red .money-label {
 color: #7f1d1d !important;
 }
-
 .strong-line {
 display: flex;
 justify-content: space-between;
@@ -185,19 +180,16 @@ font-weight: 700;
 color: #111827;
 gap: 10px;
 }
-
 .strong-line .value {
 font-size: 16px;
 font-weight: 700;
 color: #7f1d1d;
 text-align: right;
 }
-
 .strong-line .label {
 color: #111827;
 font-weight: 700;
 }
-
 .strong-line-same-size {
 display: flex;
 justify-content: space-between;
@@ -207,14 +199,12 @@ font-size: 15px;
 font-weight: 700;
 gap: 10px;
 }
-
 .strong-line-same-size .label {
 color: #111827;
 font-weight: 700;
 padding-right: 10px;
 line-height: 1.5;
 }
-
 .strong-line-same-size .value {
 color: #374151;
 text-align: right;
@@ -223,7 +213,6 @@ font-weight: 700;
 word-break: break-all;
 line-height: 1.5;
 }
-
 .top-money {
 display: grid;
 grid-template-columns: 1fr 1fr 1fr;
@@ -232,24 +221,19 @@ margin: 14px 0 10px;
 padding-top: 14px;
 border-top: 1px dashed #cbd5e1;
 }
-
 .money-box {
 padding: 4px 0;
 min-width: 0;
 }
-
 .money-box.left {
 text-align: left;
 }
-
 .money-box.center {
 text-align: center;
 }
-
 .money-box.right {
 text-align: right;
 }
-
 .big-money {
 font-size: 18px;
 font-weight: 700;
@@ -257,14 +241,12 @@ color: #111827;
 line-height: 1.2;
 white-space: nowrap;
 }
-
 .money-label {
 font-size: 12px;
 color: #9ca3af;
 margin-top: 3px;
 line-height: 1.4;
 }
-
 .section-row {
 display: flex;
 justify-content: space-between;
@@ -274,25 +256,16 @@ border-top: 1px dashed #cbd5e1;
 font-size: 14px;
 gap: 12px;
 }
-
-.section-row:first-child {
-border-top: none;
-padding-top: 0;
-}
-
 .section-row strong {
 color: #111827;
 font-weight: 600;
 }
-
 .finance-first-row {
 position: relative;
 border-top: none;
-padding-top: 16px;
+padding-top: 25px;
 }
-
-.finance-first-row::before,
-.finance-first-row::after {
+.finance-first-row::before,.finance-first-row::after {
 content: "";
 position: absolute;
 left: 0;
@@ -300,25 +273,20 @@ right: 0;
 height: 0;
 border-top: 1px dashed #cbd5e1;
 }
-
 .finance-first-row::before {
 top: 0;
 }
-
 .finance-first-row::after {
 top: 8px;
 }
-
 .scheme-value {
 color: #374151;
 text-align: right;
 }
-
 .stage-block {
 border-top: 1px dashed #cbd5e1;
 padding: 14px 0 6px;
 }
-
 .stage-title {
 display: flex;
 align-items: center;
@@ -329,7 +297,6 @@ color: #111827;
 margin-bottom: 10px;
 flex-wrap: wrap;
 }
-
 .tag {
 font-size: 11px;
 color: #6b7280;
@@ -337,7 +304,6 @@ background: #f3f4f6;
 padding: 2px 7px;
 border-radius: 8px;
 }
-
 .detail-line {
 display: flex;
 justify-content: space-between;
@@ -346,27 +312,22 @@ padding: 6px 0;
 font-size: 14px;
 gap: 10px;
 }
-
 .detail-left {
 color: #111827;
 }
-
 .detail-right {
 color: #374151;
 text-align: right;
 }
-
 .rate-note {
 color: #6b7280;
 font-size: 12px;
 text-align: right;
 margin-top: 2px;
 }
-
 .downpay-wrap {
 padding: 6px 0 2px;
 }
-
 .downpay-top {
 display: flex;
 justify-content: flex-end;
@@ -376,14 +337,12 @@ margin-bottom: 10px;
 font-size: 14px;
 flex-wrap: wrap;
 }
-
 #downPaymentPercentText {
 color: #6b7280;
 font-weight: 600;
 min-width: 44px;
 text-align: right;
 }
-
 .amount-input-wrap {
 display: flex;
 align-items: center;
@@ -393,13 +352,11 @@ padding: 0 10px;
 min-width: 130px;
 border: 1px solid #e5e7eb;
 }
-
 .amount-input-wrap span {
 color: #6b7280;
 margin-right: 6px;
 font-weight: 600;
 }
-
 #downPaymentAmountInput {
 border: none;
 background: transparent;
@@ -410,29 +367,25 @@ font-weight: 700;
 color: #111827;
 text-align: right;
 }
-
 #downPaymentAmountInput:focus {
 border: none;
 box-shadow: none;
 }
-
 input[type="range"] {
 -webkit-appearance: none;
 appearance: none;
 width: 100%;
 height: 6px;
 border-radius: 999px;
-background: linear-gradient(to right, #0f766e 0%, #0f766e 30%, #e5e7eb 30%, #e5e7eb 100%);
+background: linear-gradient(to right,#0f766e 0%,#0f766e 30%,#e5e7eb 30%,#e5e7eb 100%);
 outline: none;
 padding: 0;
 border: none;
 box-shadow: none;
 }
-
 input[type="range"]:focus {
 box-shadow: none;
 }
-
 input[type="range"]::-webkit-slider-thumb {
 -webkit-appearance: none;
 appearance: none;
@@ -441,20 +394,18 @@ height: 24px;
 border-radius: 50%;
 background: #ffffff;
 border: 2px solid #d1d5db;
-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 cursor: pointer;
 }
-
 input[type="range"]::-moz-range-thumb {
 width: 24px;
 height: 24px;
 border-radius: 50%;
 background: #ffffff;
 border: 2px solid #d1d5db;
-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 cursor: pointer;
 }
-
 .downpay-scale {
 display: flex;
 justify-content: space-between;
@@ -462,20 +413,17 @@ color: #9ca3af;
 font-size: 12px;
 margin-top: 8px;
 }
-
 .config-box {
 border: 1px solid #e5e7eb;
 border-radius: 12px;
 padding: 10px 12px;
 background: #fafafa;
 }
-
 .config-empty {
 color: #9ca3af;
 font-size: 13px;
 line-height: 1.6;
 }
-
 .config-item {
 display: flex;
 align-items: center;
@@ -484,11 +432,9 @@ gap: 10px;
 padding: 8px 0;
 border-bottom: 1px solid #eceff3;
 }
-
 .config-item:last-child {
 border-bottom: none;
 }
-
 .config-left {
 display: flex;
 align-items: center;
@@ -496,77 +442,63 @@ gap: 8px;
 flex: 1;
 min-width: 0;
 }
-
 .config-left input[type="checkbox"] {
 width: 16px;
 height: 16px;
 margin: 0;
 flex: 0 0 auto;
 }
-
 .config-name {
 color: #111827;
 line-height: 1.4;
 word-break: break-all;
 }
-
-.config-price,
-.discount-price {
+.config-price,.discount-price {
 color: #374151;
 font-weight: 700;
 white-space: nowrap;
 font-size: 13px;
 }
-
 .disabled-item {
 opacity: 0.45;
 }
-
 .min-downpay-note {
 margin-top: 6px;
 font-size: 12px;
 color: #7c2d12;
 line-height: 1.4;
 }
-
 .image-preview-card {
 display: none;
 }
-
 .image-preview-title {
 font-size: 16px;
 font-weight: 700;
 color: #111827;
 margin-bottom: 8px;
 }
-
 .image-preview-hint {
 font-size: 12px;
 color: #6b7280;
 margin-bottom: 10px;
 line-height: 1.6;
 }
-
 .image-preview-wrap {
 border: 1px solid #e5e7eb;
 border-radius: 12px;
 overflow: hidden;
 background: #fff;
 }
-
 .image-preview-wrap img {
 width: 100%;
 display: block;
 -webkit-user-select: none;
 user-select: none;
 }
-
-/* 政府补贴多选下拉 */
 .multi-select {
 position: relative;
 width: 100%;
 }
-
 .multi-select-trigger {
 width: 100%;
 border: 1px solid #d1d5db;
@@ -582,13 +514,10 @@ display: flex;
 align-items: center;
 line-height: 1.5;
 }
-
-.multi-select-trigger:focus,
-.multi-select.open .multi-select-trigger {
+.multi-select-trigger:focus,.multi-select.open .multi-select-trigger {
 border-color: #2563eb;
 box-shadow: 0 0 0 2px rgba(37,99,235,0.12);
 }
-
 .multi-select-trigger::after {
 content: "";
 position: absolute;
@@ -601,15 +530,12 @@ border-bottom: 2px solid #6b7280;
 transform: translateY(-70%) rotate(45deg);
 transition: transform 0.2s ease;
 }
-
 .multi-select.open .multi-select-trigger::after {
 transform: translateY(-30%) rotate(-135deg);
 }
-
 .multi-select-placeholder {
 color: #9ca3af;
 }
-
 .multi-select-panel {
 position: absolute;
 left: 0;
@@ -623,11 +549,9 @@ padding: 8px 12px;
 z-index: 30;
 display: none;
 }
-
 .multi-select.open .multi-select-panel {
 display: block;
 }
-
 .subsidy-option {
 display: flex;
 align-items: center;
@@ -636,11 +560,9 @@ gap: 10px;
 padding: 10px 0;
 border-bottom: 1px solid #eceff3;
 }
-
 .subsidy-option:last-child {
 border-bottom: none;
 }
-
 .subsidy-option-left {
 display: flex;
 align-items: center;
@@ -648,75 +570,192 @@ gap: 8px;
 flex: 1;
 min-width: 0;
 }
-
 .subsidy-option-left input[type="checkbox"] {
 width: 16px;
 height: 16px;
 margin: 0;
 }
-
 .subsidy-option-name {
 color: #111827;
 line-height: 1.4;
 word-break: break-all;
 }
-
 .subsidy-option-price {
 font-size: 13px;
 font-weight: 700;
 color: #374151;
 white-space: nowrap;
 }
-
-.subsidy-option.disabled-item .subsidy-option-name,
-.subsidy-option.disabled-item .subsidy-option-price {
+.subsidy-option.disabled-item .subsidy-option-name,.subsidy-option.disabled-item .subsidy-option-price {
 color: #9ca3af;
 }
-
-@media (max-width: 390px) {
+.manual-discount-divider {
+position: relative;
+margin-top: 10px;
+padding-top: 14px;
+}
+.manual-discount-divider::before {
+content: "";
+position: absolute;
+left: 0;
+right: 0;
+top: 50%;
+border-top: 1px dashed #d7dee8;
+transform: translateY(-50%);
+}
+.manual-expand-wrap {
+position: relative;
+z-index: 1;
+display: flex;
+justify-content: center;
+}
+.manual-expand-btn {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+min-width: auto;
+padding: 6px 14px;
+border-radius: 999px;
+background: #fff;
+border: 1px solid #d1d5db;
+color: #374151;
+font-size: 12px;
+font-weight: 600;
+flex: 0 0 auto;
+box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+}
+.manual-discount-panel {
+display: none;
+padding-top: 14px;
+}
+.manual-discount-panel.show {
+display: block;
+}
+.extra-discount-wrap {
+padding-bottom: 10px;
+margin-bottom: 12px;
+border-bottom: 1px dashed #d7dee8;
+}
+.extra-discount-title {
+font-size: 14px;
+font-weight: 700;
+color: #111827;
+margin-bottom: 8px;
+}
+.manual-discount-title {
+font-size: 14px;
+font-weight: 700;
+color: #111827;
+margin-bottom: 12px;
+}
+.manual-discount-inputs {
+display: grid;
+grid-template-columns: 1fr 120px 96px;
+gap: 12px;
+align-items: center;
+}
+.manual-discount-inputs input {
+background: #fff;
+}
+.manual-add-btn {
+background: linear-gradient(135deg,#3b82f6,#2563eb);
+color: #fff;
+border-radius: 16px;
+min-width: auto;
+}
+.manual-discount-list-title {
+font-size: 14px;
+font-weight: 700;
+color: #111827;
+margin-top: 14px;
+margin-bottom: 8px;
+}
+.manual-discount-empty {
+font-size: 12px;
+color: #9ca3af;
+line-height: 1.8;
+}
+.manual-discount-item {
+display: flex;
+justify-content: space-between;
+align-items: center;
+gap: 10px;
+padding: 10px 0;
+border-bottom: 1px solid #eceff3;
+}
+.manual-discount-item:last-child {
+border-bottom: none;
+}
+.manual-discount-item-left {
+min-width: 0;
+flex: 1;
+}
+.manual-discount-item-name {
+color: #111827;
+line-height: 1.5;
+word-break: break-all;
+}
+.manual-discount-item-right {
+display: flex;
+align-items: center;
+gap: 8px;
+flex: 0 0 auto;
+}
+.manual-discount-item-price {
+color: #374151;
+font-weight: 700;
+white-space: nowrap;
+}
+.manual-delete-btn {
+background: #ef4444;
+color: #fff;
+border-radius: 10px;
+padding: 6px 10px;
+font-size: 12px;
+min-width: auto;
+flex: 0 0 auto;
+}
+@media (max-width:390px) {
 .container {
 padding: 8px 8px 20px;
 }
-
-.panel, .quote-card, .image-preview-card {
+.panel,.quote-card,.image-preview-card {
 padding: 12px;
 border-radius: 12px;
 }
-
 .big-money {
 font-size: 16px;
 }
-
 .money-label {
 font-size: 11px;
 }
-
-.line, .detail-line, .section-row {
+.line,.detail-line,.section-row {
 font-size: 13px;
 }
-
 .strong-line .value {
 font-size: 15px;
 }
-
 .strong-line-same-size .value {
 font-size: 15px;
 }
-
 .top-money {
 gap: 6px;
 }
+.manual-discount-inputs {
+grid-template-columns: 1fr 92px 72px;
+gap: 8px;
 }
-
-@media (min-width: 768px) {
+.manual-expand-btn {
+padding: 5px 12px;
+}
+}
+@media (min-width:768px) {
 .container {
 max-width: 760px;
 }
-
 .form-grid {
 grid-template-columns: 1fr 1fr;
 }
-
 .full {
 grid-column: span 2;
 }
@@ -726,11 +765,11 @@ grid-column: span 2;
 <body>
 <div class="container">
 <div class="panel">
-<div class="title-container" style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
-<img src="/logo.png" alt="logo" style="width: 32px; height: 32px; border-radius: 6px;">
-<div class="title" style="margin-bottom: 0;">理想汽车报价单</div>
+<div class="title-bar">
+<img src="/logo.png" alt="logo" class="title-logo">
+<div class="title">理想汽车报价单</div>
 </div>
-<div class="sub">Design by Jeff V1.0.8<br>- 新增石景山补贴，根据开票价自动计算</div>
+<div class="sub">Design by Jeff V1.1<br>- 1，支持手动输入优惠</div>
 
 <div class="form-grid">
 <div class="form-group full">
@@ -740,7 +779,7 @@ grid-column: span 2;
 
 <div class="form-group">
 <label for="guidePrice">全国统一零售价</label>
-<input type="text" id="guidePrice" class="readonly" readonly />
+<input type="text" id="guidePrice" readonly />
 </div>
 
 <div class="form-group full">
@@ -750,7 +789,29 @@ grid-column: span 2;
 
 <div class="form-group full">
 <label>可选优惠</label>
-<div class="config-box" id="optionalDiscountArea"></div>
+<div class="config-box">
+<div id="optionalDiscountArea"></div>
+
+<div class="manual-discount-divider">
+<div class="manual-expand-wrap">
+<button type="button" class="manual-expand-btn" id="manualDiscountToggle">展开</button>
+</div>
+</div>
+
+<div class="manual-discount-panel" id="manualDiscountPanel">
+<div id="extraDiscountArea"></div>
+
+<div class="manual-discount-title">手动添加优惠</div>
+<div class="manual-discount-inputs">
+<input type="text" id="manualDiscountNameInput" placeholder="输入优惠明细" />
+<input type="number" id="manualDiscountPriceInput" placeholder="金额" />
+<button type="button" class="manual-add-btn" id="addManualDiscountBtn">添加</button>
+</div>
+
+<div class="manual-discount-list-title">已添加手动优惠</div>
+<div id="manualDiscountArea"></div>
+</div>
+</div>
 </div>
 
 <div class="form-group">
@@ -821,9 +882,9 @@ grid-column: span 2;
 <select id="loanYears">
 <option value="1">1年（12期）</option>
 <option value="2">2年（24期）</option>
-<option value="3" selected>3年（36期）</option>
+<option value="3">3年（36期）</option>
 <option value="4">4年（48期）</option>
-<option value="5">5年（60期）</option>
+<option value="5" selected>5年（60期）</option>
 </select>
 </div>
 </div>
@@ -836,9 +897,9 @@ grid-column: span 2;
 </div>
 
 <div class="quote-card" id="quoteCaptureArea">
-<div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
-<img src="/logo.png" alt="logo" style="width: 28px; height: 28px; border-radius: 4px;">
-<div class="car-name" id="carName" style="margin-bottom: 0;">理想汽车</div>
+<div class="quote-head">
+<img src="/logo.png" alt="logo" class="quote-logo">
+<div class="car-name" id="carName">理想汽车</div>
 </div>
 <div id="financeCardArea"></div>
 </div>
@@ -846,8 +907,8 @@ grid-column: span 2;
 <div class="image-preview-card" id="imagePreviewCard">
 <div class="image-preview-title">报价单图片已生成</div>
 <div class="image-preview-hint">长按下方图片保存到相册</div>
-<div class="image-preview-wrap" onclick="event.preventDefault(); event.stopPropagation(); return false;" ontouchstart="event.stopPropagation();" ontouchend="event.preventDefault(); event.stopPropagation(); return false;">
-<a data-pswp-width='512' data-pswp-height='512' target='_blank' href=""><img id="previewImage" src="" alt="报价单图片" onclick="event.preventDefault(); event.stopPropagation(); return false;" ontouchend="event.preventDefault(); event.stopPropagation(); return false;" style="display: block; width: 100%; -webkit-user-select: none; user-select: none;" /></a>
+<div class="image-preview-wrap">
+<a data-pswp-width='512' data-pswp-height='512' target='_blank' href=""><img id="previewImage" src="" alt="报价单图片" /></a>
 </div>
 <button class="btn-preview-close" onclick="closeImagePreview()">关闭预览</button>
 </div>
@@ -860,7 +921,7 @@ const FINANCE_OPTIONS_L_SERIES = [
 { value: "rate199", label: "1.99%年费率" }
 ];
 
-const FINANCE_OPTIONS_NORMAL = [
+const FINANCE_OPTIONS_I8 = [
 { value: "full", label: "全款" },
 { value: "3free", label: "3年免息" },
 { value: "5m3", label: "限时5免3" },
@@ -878,8 +939,6 @@ const FINANCE_OPTIONS_I6 = [
 
 const FINANCE_OPTIONS_MEGA = [
 { value: "full", label: "全款" },
-{ value: "5free", label: "5年免息" },
-{ value: "rate099", label: "限时0.99%低息" },
 { value: "rate199", label: "1.99%年费率" }
 ];
 
@@ -924,7 +983,7 @@ const optionalConfigMap = {
 { id: "l7ultra_step", name: "电动踏板", price: 10000 }
 ],
 "理想 i6": [
-{ id: "i6_rear_screen", name: "后舱娱乐屏", price: 10000 },
+{ id: "i6_rear_screen", name: "后舱娱乐屏套装", price: 10000 },
 { id: "i6_special_color", name: "特殊颜色", price: 6000 },
 { id: "i6_wheel_21", name: "21寸轮毂", price: 10000 },
 { id: "i6_tow_pack", name: "牵引资质套装", price: 3000 },
@@ -932,9 +991,9 @@ const optionalConfigMap = {
 { id: "i6_awd", name: "四驱（赠送21轮毂）", price: 20000 }
 ],
 "理想 i8": [
-{ id: "rear_screen_pack", name: "后舱娱乐屏", price: 10000 },
-{ id: "special_color", name: "特殊颜色", price: 8000 },
-{ id: "wheel_21", name: "21寸轮毂", price: 10000 }
+{ id: "i8_rear_screen", name: "后舱娱乐屏套装", price: 10000 },
+{ id: "i8_special_color", name: "特殊颜色", price: 8000 },
+{ id: "i8_wheel_21", name: "21寸轮毂", price: 10000 }
 ],
 "理想 MEGA Ultra": [
 { id: "mega_ultra_special_color", name: "特殊颜色", price: 10000 }
@@ -945,6 +1004,7 @@ const optionalConfigMap = {
 "理想 L8 Ultra": [
 { id: "l8ultra_special_color", name: "特殊颜色", price: 10000 },
 { id: "l8ultra_wheel_22", name: "22寸轮毂", price: 10000 },
+{ id: "l8ultra_rear_screen", name: "后舱娱乐屏套装", price: 10000 },
 { id: "l8ultra_glass", name: "二三排电动调光玻璃", price: 10000 },
 { id: "l8ultra_step", name: "电动踏板", price: 10000 },
 { id: "l8ultra_hook", name: "电动拖车钩", price: 6000 }
@@ -980,53 +1040,65 @@ const optionalDiscountMap = {
 { id: "l6max_cash_discount", name: "现金优惠", price: 33000 }
 ],
 "理想 L7 Pro": [
-{ id: "l7pro_cash_discount", name: "现金优惠", price: 40000 },
-{ id: "l7pro_shunyi_subsidy", name: "顺义补贴", price: 5000, subsidyType: "district" }
+{ id: "l7pro_cash_discount", name: "现金优惠", price: 50000 },
 ],
 "理想 L7 Max": [
-{ id: "l7max_cash_discount", name: "现金优惠", price: 40000 },
-{ id: "l7max_shunyi_subsidy", name: "顺义补贴", price: 5000, subsidyType: "district" }
+{ id: "l7max_cash_discount", name: "现金优惠", price: 50000 },
 ],
 "理想 L7 Ultra": [
-{ id: "l7ultra_cash_discount", name: "现金优惠", price: 40000 },
-{ id: "l7ultra_shunyi_subsidy", name: "顺义补贴", price: 5000, subsidyType: "district" }
+{ id: "l7ultra_cash_discount", name: "现金优惠", price: 50000 },
 ],
 "理想 i6": [
 { id: "i6_cash_discount", name: "现金优惠", price: 5000, fullOnly: false, defaultChecked: true },
 { id: "i6_full_payment_discount", name: "全款优惠", price: 5000, fullOnly: true }
 ],
 "理想 i8": [
-{ id: "shunyi_subsidy", name: "顺义补贴", price: 5000, fullOnly: false, defaultChecked: true, subsidyType: "district" },
-{ id: "old_owner", name: "车主复购权益", price: 10000 },
-{ id: "full_payment_discount", name: "全款优惠", price: 10000, fullOnly: true }
+{ id: "i8_cash_discount", name: "现金优惠", price: 10000, fullOnly: false, defaultChecked: true },
+{ id: "i8_full_payment_discount", name: "全款优惠", price: 10000, fullOnly: true }
 ],
 "理想 MEGA Ultra": [
-{ id: "mega_ultra_full_discount", name: "全款优惠", price: 25000, fullOnly: true }
+{ id: "mega_ultra_cash_discount", name: "现金优惠", price: 40000, defaultChecked: true }
 ],
 "理想 MEGA Home": [
-{ id: "mega_home_full_discount", name: "全款优惠", price: 25000, fullOnly: true }
+{ id: "mega_home_cash_discount", name: "现金优惠", price: 40000, defaultChecked: true }
 ],
 "理想 L9 Ultra": [
-{ id: "l9ultra_launch_discount", name: "首销优惠", price: 20000, defaultChecked: true },
-{ id: "l9ultra_repurchase_discount", name: "车主复购权益", price: 10000 }
+{ id: "l9ultra_launch_discount", name: "首销优惠", price: 20000, defaultChecked: true }
 ],
 "理想 L8 Ultra": [
-{ id: "l8ultlra_launch_discount", name: "首销优惠", price: 20000, defaultChecked: true },
+{ id: "l8ultlra_launch_discount", name: "首销优惠", price: 20000, defaultChecked: true }
+],
+"理想 L8 Livis": [
+{ id: "l8livis_launch_discount", name: "首销优惠", price: 20000, defaultChecked: true }
+],
+"理想 L9 Livis": [
+{ id: "l9livis_launch_discount", name: "首销优惠", price: 20000, defaultChecked: true }
+]
+};
+
+const extraDiscountMap = {
+"理想 i8": [
+{ id: "i8_old_owner_discount", name: "车主复购权益", price: 10000 }
+],
+"理想 L8 Ultra": [
 { id: "l8ultra_repurchase_discount", name: "车主复购权益", price: 10000 }
 ],
 "理想 L8 Livis": [
-{ id: "l8livis_launch_discount", name: "首销优惠", price: 20000, defaultChecked: true },
 { id: "l8livis_repurchase_discount", name: "车主复购权益", price: 10000 }
 ],
+"理想 L9 Ultra": [
+{ id: "l9ultra_repurchase_discount", name: "车主复购权益", price: 10000 }
+],
 "理想 L9 Livis": [
-{ id: "l9livis_launch_discount", name: "首销优惠", price: 20000, defaultChecked: true },
 { id: "l9livis_repurchase_discount", name: "车主复购权益", price: 10000 }
 ]
 };
 
 let selectedConfigIds = [];
 let selectedDiscountIds = [];
+let selectedExtraDiscountIds = [];
 let selectedGovSubsidyIds = [];
+let manualDiscounts = [];
 let isEditingDownPayment = false;
 
 function round2(num) {
@@ -1070,14 +1142,14 @@ return carName.startsWith("理想 L");
 function getMinDownPayment(carName, financeType) {
 if (carName === "理想 i6" && (financeType === "3free" || financeType === "5m3")) return 79800;
 if (carName === "理想 i8" && (financeType === "3free" || financeType === "5m3")) return 99800;
-if (isMegaCar(carName) && financeType === "5free") return 99800;
 return 0;
 }
 
 function getFinanceOptionsForCar(car) {
 if (car.name === "理想 i6") return FINANCE_OPTIONS_I6;
+if (car.name === "理想 i8") return FINANCE_OPTIONS_I8;
 if (isLSeries(car.name)) return FINANCE_OPTIONS_L_SERIES;
-return isMegaCar(car.name) ? FINANCE_OPTIONS_MEGA : FINANCE_OPTIONS_NORMAL;
+return FINANCE_OPTIONS_MEGA;
 }
 
 function renderFinanceOptions() {
@@ -1085,58 +1157,65 @@ const financeEl = document.getElementById("financeType");
 const car = getCurrentCar();
 const options = getFinanceOptionsForCar(car);
 const currentValue = financeEl.value || "full";
-
-financeEl.innerHTML = options.map(item =>
-`<option value="${item.value}">${item.label}</option>`
-).join("");
-
-const exists = options.some(item => item.value === currentValue);
-financeEl.value = exists ? currentValue : "full";
+financeEl.innerHTML = options.map(item => `<option value="${item.value}">${item.label}</option>`).join("");
+financeEl.value = options.some(item => item.value === currentValue) ? currentValue : "full";
 }
 
 function getCurrentOptionalConfigs() {
-const car = getCurrentCar();
-return optionalConfigMap[car.name] || [];
+return optionalConfigMap[getCurrentCar().name] || [];
 }
 
 function getCurrentOptionalDiscounts() {
-const car = getCurrentCar();
-return optionalDiscountMap[car.name] || [];
+return optionalDiscountMap[getCurrentCar().name] || [];
 }
 
-function isInstallmentSelected() {
-return document.getElementById("financeType").value !== "full";
+function getCurrentExtraDiscounts() {
+return extraDiscountMap[getCurrentCar().name] || [];
 }
 
-function initDefaultSelectionsForCar(carName) {
-selectedConfigIds = [];
-const discounts = optionalDiscountMap[carName] || [];
-selectedDiscountIds = discounts.filter(item => item.defaultChecked).map(item => item.id);
+function getSelectedItems(items, ids) {
+return items.filter(item => ids.includes(item.id));
+}
+
+function sumPrices(items) {
+return items.reduce((sum, item) => sum + (Number(item.price) || 0), 0);
 }
 
 function getSelectedOptionalConfigs() {
-const configs = getCurrentOptionalConfigs();
-return configs.filter(item => selectedConfigIds.includes(item.id));
+return getSelectedItems(getCurrentOptionalConfigs(), selectedConfigIds);
 }
 
 function getSelectedOptionalDiscounts() {
-const discounts = getCurrentOptionalDiscounts();
-return discounts.filter(item => selectedDiscountIds.includes(item.id));
+return getSelectedItems(getCurrentOptionalDiscounts(), selectedDiscountIds);
+}
+
+function getSelectedExtraDiscounts() {
+return getSelectedItems(getCurrentExtraDiscounts(), selectedExtraDiscountIds);
 }
 
 function getOptionalConfigTotal() {
-return getSelectedOptionalConfigs().reduce((sum, item) => sum + item.price, 0);
+return sumPrices(getSelectedOptionalConfigs());
 }
 
 function getOptionalDiscountTotal() {
-return getSelectedOptionalDiscounts().reduce((sum, item) => sum + item.price, 0);
+return sumPrices(getSelectedOptionalDiscounts());
+}
+
+function getExtraDiscountTotal() {
+return sumPrices(getSelectedExtraDiscounts());
+}
+
+function getValidManualDiscounts() {
+return manualDiscounts.filter(item => (item.name || "").trim() && Number(item.price) > 0);
+}
+
+function getManualDiscountTotal() {
+return sumPrices(getValidManualDiscounts());
 }
 
 function getCurrentInvoicePrice() {
 const car = getCurrentCar();
-const optionalConfigTotal = getOptionalConfigTotal();
-const optionalDiscountTotal = getOptionalDiscountTotal();
-return Math.max(0, car.price + optionalConfigTotal - optionalDiscountTotal);
+return Math.max(0, car.price + getOptionalConfigTotal() - getOptionalDiscountTotal() - getExtraDiscountTotal() - getManualDiscountTotal());
 }
 
 function hasSelectedDistrictDiscount() {
@@ -1157,7 +1236,6 @@ selectedGovSubsidyIds = selectedGovSubsidyIds.filter(id => id !== "replace");
 if (changedValue === "replace" && selectedGovSubsidyIds.includes("replace")) {
 selectedGovSubsidyIds = selectedGovSubsidyIds.filter(id => id !== "scrap");
 }
-
 if (hasSelectedDistrictDiscount()) {
 selectedGovSubsidyIds = selectedGovSubsidyIds.filter(id => id !== "shijingshan");
 }
@@ -1172,12 +1250,10 @@ if (selectedGovSubsidyIds.includes("scrap")) {
 subsidyValue += 20000;
 subsidyItems.push({ name: "报废补贴", amount: 20000 });
 }
-
 if (selectedGovSubsidyIds.includes("replace")) {
 subsidyValue += 15000;
 subsidyItems.push({ name: "置换补贴", amount: 15000 });
 }
-
 if (selectedGovSubsidyIds.includes("shijingshan") && !districtDiscountSelected) {
 const shijingshanAmount = getShijingshanSubsidy(invoicePrice);
 if (shijingshanAmount > 0) {
@@ -1185,25 +1261,19 @@ subsidyValue += shijingshanAmount;
 subsidyItems.push({ name: "石景山补贴", amount: shijingshanAmount });
 }
 }
-
-return {
-subsidyValue,
-subsidyItems
-};
+return { subsidyValue, subsidyItems };
 }
 
 function updateGovSubsidyDynamicDisplay() {
 const invoicePrice = getCurrentInvoicePrice();
 const districtDiscountSelected = hasSelectedDistrictDiscount();
 const shijingshanAmount = getShijingshanSubsidy(invoicePrice);
-
 const scrapChecked = selectedGovSubsidyIds.includes("scrap");
 const replaceChecked = selectedGovSubsidyIds.includes("replace");
 
 const scrapCheckbox = document.querySelector('.gov-subsidy-checkbox[value="scrap"]');
 const replaceCheckbox = document.querySelector('.gov-subsidy-checkbox[value="replace"]');
 const shijingshanCheckbox = document.querySelector('.gov-subsidy-checkbox[value="shijingshan"]');
-
 const scrapWrap = document.getElementById("govSubsidyScrapWrap");
 const replaceWrap = document.getElementById("govSubsidyReplaceWrap");
 const shijingshanWrap = document.getElementById("govSubsidyShijingshanWrap");
@@ -1212,21 +1282,10 @@ const shijingshanPrice = document.getElementById("govSubsidyShijingshanPrice");
 document.getElementById("govSubsidyScrapPrice").textContent = "-￥20,000";
 document.getElementById("govSubsidyReplacePrice").textContent = "-￥15,000";
 
-if (replaceChecked) {
-scrapCheckbox.disabled = true;
-scrapWrap.classList.add("disabled-item");
-} else {
-scrapCheckbox.disabled = false;
-scrapWrap.classList.remove("disabled-item");
-}
-
-if (scrapChecked) {
-replaceCheckbox.disabled = true;
-replaceWrap.classList.add("disabled-item");
-} else {
-replaceCheckbox.disabled = false;
-replaceWrap.classList.remove("disabled-item");
-}
+scrapCheckbox.disabled = replaceChecked;
+replaceCheckbox.disabled = scrapChecked;
+scrapWrap.classList.toggle("disabled-item", replaceChecked);
+replaceWrap.classList.toggle("disabled-item", scrapChecked);
 
 if (districtDiscountSelected) {
 shijingshanCheckbox.checked = false;
@@ -1237,11 +1296,7 @@ selectedGovSubsidyIds = selectedGovSubsidyIds.filter(id => id !== "shijingshan")
 } else {
 shijingshanCheckbox.disabled = false;
 shijingshanWrap.classList.remove("disabled-item");
-if (shijingshanAmount > 0) {
-shijingshanPrice.textContent = `-￥${formatMoney(shijingshanAmount)}`;
-} else {
-shijingshanPrice.textContent = "当前开票价不满足";
-}
+shijingshanPrice.textContent = shijingshanAmount > 0 ? `-￥${formatMoney(shijingshanAmount)}` : "当前开票价不满足";
 }
 }
 
@@ -1250,35 +1305,26 @@ const districtDiscountSelected = hasSelectedDistrictDiscount();
 if (districtDiscountSelected) {
 selectedGovSubsidyIds = selectedGovSubsidyIds.filter(id => id !== "shijingshan");
 }
-
 const textEl = document.getElementById("govSubsidyText");
 if (!selectedGovSubsidyIds.length) {
 textEl.textContent = "请选择政府补贴";
 textEl.className = "multi-select-placeholder";
 return;
 }
-
 const labels = [];
 if (selectedGovSubsidyIds.includes("scrap")) labels.push("报废补贴");
 if (selectedGovSubsidyIds.includes("replace")) labels.push("置换补贴");
 if (selectedGovSubsidyIds.includes("shijingshan") && !districtDiscountSelected) labels.push("石景山补贴");
-
 textEl.textContent = labels.length ? labels.join("、") : "请选择政府补贴";
 textEl.className = labels.length ? "" : "multi-select-placeholder";
 }
 
 function renderGovSubsidySelection() {
-document.querySelectorAll(".gov-subsidy-checkbox").forEach(el => {
-el.checked = selectedGovSubsidyIds.includes(el.value);
-});
 updateGovSubsidyDynamicDisplay();
 document.querySelectorAll(".gov-subsidy-checkbox").forEach(el => {
-if (el.value === "scrap" || el.value === "replace") {
-el.checked = selectedGovSubsidyIds.includes(el.value);
-}
-if (el.value === "shijingshan") {
-el.checked = selectedGovSubsidyIds.includes(el.value) && !hasSelectedDistrictDiscount();
-}
+el.checked = el.value === "shijingshan"
+? selectedGovSubsidyIds.includes(el.value) && !hasSelectedDistrictDiscount()
+: selectedGovSubsidyIds.includes(el.value);
 });
 updateGovSubsidyText();
 }
@@ -1289,7 +1335,7 @@ const shouldOpen = forceOpen === null ? !wrap.classList.contains("open") : force
 wrap.classList.toggle("open", shouldOpen);
 }
 
-function handleI6ConfigMutualExclusion(changedId, checked) {
+function handleConfigMutualExclusion(changedId, checked) {
 const car = getCurrentCar();
 
 if (car.name === "理想 i6") {
@@ -1314,6 +1360,20 @@ if (changedId === dualColorId && checked) selectedConfigIds = selectedConfigIds.
 }
 }
 
+function refreshAfterPriceAffect() {
+const invoicePrice = getCurrentInvoicePrice();
+if (!isEditingDownPayment) syncDownPaymentByRatio(invoicePrice);
+else syncDownPaymentByAmount(invoicePrice, false);
+renderGovSubsidySelection();
+calculateQuote();
+}
+
+function bindCheckboxArea(areaSelector, checkboxSelector, onChange) {
+document.querySelectorAll(`${areaSelector} ${checkboxSelector}`).forEach(el => {
+el.addEventListener("change", onChange);
+});
+}
+
 function renderOptionalConfigs() {
 const area = document.getElementById("optionalConfigArea");
 const configs = getCurrentOptionalConfigs();
@@ -1324,33 +1384,29 @@ area.innerHTML = `<div class="config-empty">当前车型暂无可选配置</div>
 return;
 }
 
-const awdSelected = selectedConfigIds.includes("i6_awd");
-const wheelSelected = selectedConfigIds.includes("i6_wheel_21");
-
-const l9LivisSpecialSelected = selectedConfigIds.includes("l9livis_special_color");
-const l9LivisDualSelected = selectedConfigIds.includes("l9livis_dual_color");
-
-const l8LivisSpecialSelected = selectedConfigIds.includes("l8livis_special_color");
-const l8LivisDualSelected = selectedConfigIds.includes("l8livis_dual_color");
+const state = {
+awdSelected: selectedConfigIds.includes("i6_awd"),
+wheelSelected: selectedConfigIds.includes("i6_wheel_21"),
+l9Special: selectedConfigIds.includes("l9livis_special_color"),
+l9Dual: selectedConfigIds.includes("l9livis_dual_color"),
+l8Special: selectedConfigIds.includes("l8livis_special_color"),
+l8Dual: selectedConfigIds.includes("l8livis_dual_color")
+};
 
 area.innerHTML = configs.map(item => {
 let disabled = false;
-
 if (car.name === "理想 i6") {
-if (item.id === "i6_wheel_21" && awdSelected) disabled = true;
-if (item.id === "i6_awd" && wheelSelected) disabled = true;
+if (item.id === "i6_wheel_21" && state.awdSelected) disabled = true;
+if (item.id === "i6_awd" && state.wheelSelected) disabled = true;
 }
-
 if (car.name === "理想 L9 Livis") {
-if (item.id === "l9livis_special_color" && l9LivisDualSelected) disabled = true;
-if (item.id === "l9livis_dual_color" && l9LivisSpecialSelected) disabled = true;
+if (item.id === "l9livis_special_color" && state.l9Dual) disabled = true;
+if (item.id === "l9livis_dual_color" && state.l9Special) disabled = true;
 }
-
 if (car.name === "理想 L8 Livis") {
-if (item.id === "l8livis_special_color" && l8LivisDualSelected) disabled = true;
-if (item.id === "l8livis_dual_color" && l8LivisSpecialSelected) disabled = true;
+if (item.id === "l8livis_special_color" && state.l8Dual) disabled = true;
+if (item.id === "l8livis_dual_color" && state.l8Special) disabled = true;
 }
-
 return `
 <label class="config-item ${disabled ? "disabled-item" : ""}">
 <div class="config-left">
@@ -1362,26 +1418,20 @@ return `
 `;
 }).join("");
 
-area.querySelectorAll(".optional-config-checkbox").forEach(el => {
-el.addEventListener("change", function () {
-const changedId = el.value;
-const checked = el.checked;
+bindCheckboxArea("#optionalConfigArea", ".optional-config-checkbox", function (e) {
+const changedId = e.target.value;
+const checked = e.target.checked;
 selectedConfigIds = Array.from(document.querySelectorAll(".optional-config-checkbox:checked")).map(i => i.value);
-handleI6ConfigMutualExclusion(changedId, checked);
+handleConfigMutualExclusion(changedId, checked);
 renderOptionalConfigs();
-const invoicePrice = getCurrentInvoicePrice();
-if (!isEditingDownPayment) syncDownPaymentByRatio(invoicePrice);
-else syncDownPaymentByAmount(invoicePrice, false);
-renderGovSubsidySelection();
-calculateQuote();
-});
+refreshAfterPriceAffect();
 });
 }
 
 function renderOptionalDiscounts() {
 const area = document.getElementById("optionalDiscountArea");
 const discounts = getCurrentOptionalDiscounts();
-const installment = isInstallmentSelected();
+const installment = document.getElementById("financeType").value !== "full";
 
 if (!discounts.length) {
 area.innerHTML = `<div class="config-empty">当前车型暂无可选优惠</div>`;
@@ -1390,11 +1440,10 @@ return;
 
 area.innerHTML = discounts.map(item => {
 const disabled = installment && item.fullOnly;
-const checked = selectedDiscountIds.includes(item.id) ? "checked" : "";
 return `
 <label class="config-item ${disabled ? "disabled-item" : ""}">
 <div class="config-left">
-<input type="checkbox" class="optional-discount-checkbox" value="${item.id}" data-full-only="${item.fullOnly ? "1" : "0"}" ${checked} ${disabled ? "disabled" : ""} />
+<input type="checkbox" class="optional-discount-checkbox" value="${item.id}" data-full-only="${item.fullOnly ? "1" : "0"}" ${selectedDiscountIds.includes(item.id) ? "checked" : ""} ${disabled ? "disabled" : ""} />
 <span class="config-name">${item.name}</span>
 </div>
 <span class="discount-price">-￥${formatMoney(item.price)}</span>
@@ -1402,49 +1451,65 @@ return `
 `;
 }).join("");
 
-area.querySelectorAll(".optional-discount-checkbox").forEach(el => {
-el.addEventListener("change", function () {
-const isFullOnly = el.dataset.fullOnly === "1";
-if (el.checked && isFullOnly) {
+bindCheckboxArea("#optionalDiscountArea", ".optional-discount-checkbox", function (e) {
+const isFullOnly = e.target.dataset.fullOnly === "1";
+if (e.target.checked && isFullOnly) {
 document.getElementById("financeType").value = "full";
 toggleFinanceFields();
 }
 selectedDiscountIds = Array.from(document.querySelectorAll(".optional-discount-checkbox:checked")).map(i => i.value);
-
 normalizeGovSubsidySelection();
 renderOptionalDiscounts();
+refreshAfterPriceAffect();
+});
+}
 
-const invoicePrice = getCurrentInvoicePrice();
-if (!isEditingDownPayment) syncDownPaymentByRatio(invoicePrice);
-else syncDownPaymentByAmount(invoicePrice, false);
+function renderExtraDiscounts() {
+const area = document.getElementById("extraDiscountArea");
+const discounts = getCurrentExtraDiscounts();
 
-renderGovSubsidySelection();
-calculateQuote();
+if (!discounts.length) {
+area.innerHTML = "";
+return;
+}
+
+area.innerHTML = `
+<div class="extra-discount-wrap">
+<div class="extra-discount-title">专属优惠</div>
+${discounts.map(item => `
+<label class="config-item">
+<div class="config-left">
+<input type="checkbox" class="extra-discount-checkbox" value="${item.id}" ${selectedExtraDiscountIds.includes(item.id) ? "checked" : ""} />
+<span class="config-name">${item.name}</span>
+</div>
+<span class="discount-price">-￥${formatMoney(item.price)}</span>
+</label>
+`).join("")}
+</div>
+`;
+
+document.querySelectorAll(".extra-discount-checkbox").forEach(el => {
+el.addEventListener("change", function () {
+selectedExtraDiscountIds = Array.from(document.querySelectorAll(".extra-discount-checkbox:checked")).map(i => i.value);
+refreshAfterPriceAffect();
 });
 });
 }
 
 function clearFullOnlyDiscountSelections() {
-const currentDiscounts = getCurrentOptionalDiscounts();
-const fullOnlyIds = currentDiscounts.filter(i => i.fullOnly).map(i => i.id);
+const fullOnlyIds = getCurrentOptionalDiscounts().filter(i => i.fullOnly).map(i => i.id);
 selectedDiscountIds = selectedDiscountIds.filter(id => !fullOnlyIds.includes(id));
 }
 
 function updateSliderBackground(ratio) {
-const slider = document.getElementById("downPaymentRatio");
-slider.style.background = `linear-gradient(to right, #0f766e 0%, #0f766e ${ratio}%, #e5e7eb ${ratio}%, #e5e7eb 100%)`;
+document.getElementById("downPaymentRatio").style.background = `linear-gradient(to right,#0f766e 0%,#0f766e ${ratio}%,#e5e7eb ${ratio}%,#e5e7eb 100%)`;
 }
 
 function updateMinDownPaymentNote() {
 const car = getCurrentCar();
 const financeType = document.getElementById("financeType").value;
 const minDownPayment = getMinDownPayment(car.name, financeType);
-const noteEl = document.getElementById("minDownPaymentNote");
-if (financeType === "full") {
-noteEl.innerText = "";
-return;
-}
-noteEl.innerText = minDownPayment > 0 ? `当前方案最低首付：¥${formatMoney(minDownPayment)}` : "";
+document.getElementById("minDownPaymentNote").innerText = financeType === "full" ? "" : (minDownPayment > 0 ? `当前方案最低首付：¥${formatMoney(minDownPayment)}` : "");
 }
 
 function enforceMinDownPayment(baseAmount = 0) {
@@ -1461,21 +1526,16 @@ updateMinDownPaymentNote();
 }
 
 function syncDownPaymentByRatio(baseAmount = 0) {
-const slider = document.getElementById("downPaymentRatio");
-const ratio = parseFloat(slider.value) || 0;
+const ratio = parseFloat(document.getElementById("downPaymentRatio").value) || 0;
 const car = getCurrentCar();
 const financeType = document.getElementById("financeType").value;
 const minDownPayment = getMinDownPayment(car.name, financeType);
-
 let amount = round2(baseAmount * ratio / 100);
 if (amount < minDownPayment) amount = minDownPayment;
 if (amount < 0) amount = 0;
 if (amount > baseAmount) amount = baseAmount;
-
-let finalRatio = 0;
-if (baseAmount > 0) finalRatio = Math.round(amount / baseAmount * 100);
+let finalRatio = baseAmount > 0 ? Math.round(amount / baseAmount * 100) : 0;
 if (finalRatio > 90) finalRatio = 90;
-
 document.getElementById("downPaymentRatio").value = finalRatio;
 document.getElementById("downPaymentPercentText").innerText = `${finalRatio}%`;
 document.getElementById("downPaymentAmountInput").value = Math.round(amount);
@@ -1487,7 +1547,6 @@ function syncDownPaymentByAmount(baseAmount = 0, forceClamp = false) {
 const amountInput = document.getElementById("downPaymentAmountInput");
 let amount = parseFloat(amountInput.value);
 if (isNaN(amount)) amount = 0;
-
 const car = getCurrentCar();
 const financeType = document.getElementById("financeType").value;
 const minDownPayment = getMinDownPayment(car.name, financeType);
@@ -1501,18 +1560,12 @@ if (amount < 0) amount = 0;
 if (amount > baseAmount) amount = baseAmount;
 }
 
-let ratio = 0;
-if (baseAmount > 0) ratio = round2(amount / baseAmount * 100);
+let ratio = baseAmount > 0 ? round2(amount / baseAmount * 100) : 0;
 if (ratio > 90) ratio = 90;
-
 const ratioInt = Math.round(ratio);
 document.getElementById("downPaymentRatio").value = ratioInt;
 document.getElementById("downPaymentPercentText").innerText = `${ratioInt}%`;
-
-if (forceClamp) {
-document.getElementById("downPaymentAmountInput").value = Math.round(amount);
-}
-
+if (forceClamp) document.getElementById("downPaymentAmountInput").value = Math.round(amount);
 updateSliderBackground(ratioInt);
 updateMinDownPaymentNote();
 }
@@ -1529,74 +1582,113 @@ loanYearsGroup.style.display = "none";
 downPaymentGroup.style.display = "";
 loanYearsGroup.style.display = "none";
 document.getElementById("loanYears").value = "3";
-} else if (financeType === "5free") {
-downPaymentGroup.style.display = "";
-loanYearsGroup.style.display = "none";
-document.getElementById("loanYears").value = "5";
 } else if (financeType === "5m3") {
 downPaymentGroup.style.display = "";
 loanYearsGroup.style.display = "none";
 document.getElementById("loanYears").value = "5";
-} else if (financeType === "rate199" || financeType === "rate099" || financeType === "rate149") {
+} else {
 downPaymentGroup.style.display = "";
 loanYearsGroup.style.display = "";
 }
-
 updateMinDownPaymentNote();
+}
+
+function renderManualDiscounts() {
+const area = document.getElementById("manualDiscountArea");
+
+if (!manualDiscounts.length) {
+area.innerHTML = `<div class="manual-discount-empty">暂无手动优惠</div>`;
+return;
+}
+
+area.innerHTML = manualDiscounts.map((item, index) => `
+<div class="manual-discount-item">
+<div class="manual-discount-item-left">
+<div class="manual-discount-item-name">${item.name}</div>
+</div>
+<div class="manual-discount-item-right">
+<span class="manual-discount-item-price">-￥${formatMoney(item.price)}</span>
+<button type="button" class="manual-delete-btn" data-index="${index}">删除</button>
+</div>
+</div>
+`).join("");
+
+document.querySelectorAll(".manual-delete-btn").forEach(el => {
+el.addEventListener("click", function () {
+const index = Number(el.dataset.index);
+manualDiscounts.splice(index, 1);
+renderManualDiscounts();
+refreshAfterPriceAffect();
+});
+});
+}
+
+function addManualDiscount() {
+const nameInput = document.getElementById("manualDiscountNameInput");
+const priceInput = document.getElementById("manualDiscountPriceInput");
+const name = (nameInput.value || "").trim();
+const price = Math.max(0, Number(priceInput.value) || 0);
+
+if (!name || !price) return;
+
+manualDiscounts.push({ name, price });
+nameInput.value = "";
+priceInput.value = "";
+renderManualDiscounts();
+refreshAfterPriceAffect();
+}
+
+function toggleManualDiscountPanel() {
+const panel = document.getElementById("manualDiscountPanel");
+const btn = document.getElementById("manualDiscountToggle");
+const isShow = panel.classList.toggle("show");
+btn.textContent = isShow ? "收起" : "展开";
 }
 
 function updateCarInfo() {
 const car = getCurrentCar();
 document.getElementById("guidePrice").value = car.price;
 document.getElementById("insurance").value = car.insurance;
-
 selectedConfigIds = [];
-initDefaultSelectionsForCar(car.name);
+selectedExtraDiscountIds = [];
+const discounts = optionalDiscountMap[car.name] || [];
+selectedDiscountIds = discounts.filter(item => item.defaultChecked).map(item => item.id);
 renderFinanceOptions();
 toggleFinanceFields();
 renderOptionalConfigs();
 renderOptionalDiscounts();
+renderExtraDiscounts();
 renderGovSubsidySelection();
-
-const invoicePrice = getCurrentInvoicePrice();
-syncDownPaymentByRatio(invoicePrice);
+renderManualDiscounts();
+syncDownPaymentByRatio(getCurrentInvoicePrice());
 calculateQuote();
 }
 
-function renderOptionalConfigLines(selectedConfigs) {
-if (!selectedConfigs.length) return "";
-return selectedConfigs.map(item => `
+function renderPriceLine(label, value, isDiscount = false) {
+return `
 <div class="line">
-<span class="label">${item.name}</span>
-<span class="value">￥${formatMoney(item.price)}</span>
+<span class="label">${label}</span>
+<span class="value">${isDiscount ? "-" : ""}￥${formatMoney(value)}</span>
 </div>
-`).join("");
+`;
 }
 
-function renderOptionalDiscountLines(selectedDiscounts) {
-if (!selectedDiscounts.length) return "";
-return selectedDiscounts.map(item => `
-<div class="line">
-<span class="label">${item.name}</span>
-<span class="value">-￥${formatMoney(item.price)}</span>
-</div>
-`).join("");
+function renderSelectedLines(items, isDiscount = false) {
+if (!items.length) return "";
+return items.map(item => renderPriceLine(item.name, item.price, isDiscount)).join("");
+}
+
+function renderManualDiscountLines() {
+return getValidManualDiscounts().map(item => renderPriceLine(item.name, item.price, true)).join("");
 }
 
 function renderBaseQuote(invoicePrice, insurance, tax, totalPrice, subsidyItems, subsidyValue, actualCost) {
 let subsidyHtml = "";
 if (subsidyValue > 0) {
-const subsidyLines = subsidyItems.map(item => `
-<div class="line">
-<span class="label">${item.name}</span>
-<span class="value">-￥${formatMoney(item.amount)}</span>
-</div>
-`).join("");
-
 subsidyHtml = `
 <div class="divider"></div>
-<div class="section-hint">政府补贴（以政府政策为准）</div>
-${subsidyLines}
+<div class="section-hint">政府补贴（以政府公告为准，需自行申领与车企无关）</div>
+${subsidyItems.map(item => renderPriceLine(item.name, item.amount, true)).join("")}
 <div class="strong-line">
 <span class="label">实际花费</span>
 <span class="value">￥${formatMoney(actualCost)}</span>
@@ -1610,14 +1702,8 @@ return `
 <span class="label">开票价</span>
 <span class="value">￥${formatMoney(invoicePrice)}</span>
 </div>
-<div class="line">
-<span class="label">保险预估</span>
-<span class="value">￥${formatMoney(insurance)}</span>
-</div>
-<div class="line">
-<span class="label">购置税</span>
-<span class="value">￥${formatMoney(tax)}</span>
-</div>
+${renderPriceLine("保险预估", insurance)}
+${renderPriceLine("购置税", tax)}
 <div class="strong-line">
 <span class="label">购车总价</span>
 <span class="value">￥${formatMoney(totalPrice)}</span>
@@ -1629,8 +1715,7 @@ ${subsidyHtml}
 
 function renderFinanceTop(downPayment, loanAmount, firstPayTotal, financeName, periods) {
 const total = downPayment + loanAmount;
-const ratio = total > 0 ? Math.round((downPayment / total) * 100) : 0;
-
+const ratio = total > 0 ? Math.round(downPayment / total * 100) : 0;
 return `
 <div class="section-row finance-first-row">
 <strong>金融产品</strong>
@@ -1657,6 +1742,15 @@ return `
 `;
 }
 
+function renderFinanceTaxInsurance(insurance, tax) {
+return `
+<div class="quote-lines">
+${renderPriceLine("保险预估", insurance)}
+${renderPriceLine("购置税", tax)}
+</div>
+`;
+}
+
 function renderFreePlan(downPayment, loanAmount, insurance, tax, years, financeName) {
 const months = years * 12;
 const monthlyPayment = loanAmount / months;
@@ -1664,30 +1758,12 @@ const firstPayTotal = round2(downPayment + insurance + tax);
 
 return `
 ${renderFinanceTop(downPayment, loanAmount, firstPayTotal, financeName, `${months}期`)}
-<div class="quote-lines">
-<div class="line">
-<span class="label">保险预估</span>
-<span class="value">￥${formatMoney(insurance)}</span>
-</div>
-<div class="line">
-<span class="label">购置税</span>
-<span class="value">￥${formatMoney(tax)}</span>
-</div>
-</div>
+${renderFinanceTaxInsurance(insurance, tax)}
 <div class="stage-block">
 <div class="stage-title">1-${months}期 <span class="tag">单阶段</span></div>
-<div class="detail-line">
-<span class="detail-left">预估月付</span>
-<span class="detail-right">￥${formatMoney(monthlyPayment)}</span>
-</div>
-<div class="detail-line">
-<span class="detail-left">利息</span>
-<span class="detail-right">￥0</span>
-</div>
-<div class="detail-line">
-<span class="detail-left">年化费率</span>
-<span class="detail-right">0.00%</span>
-</div>
+<div class="detail-line"><span class="detail-left">预估月付</span><span class="detail-right">￥${formatMoney(monthlyPayment)}</span></div>
+<div class="detail-line"><span class="detail-left">利息</span><span class="detail-right">￥0</span></div>
+<div class="detail-line"><span class="detail-left">年化费率</span><span class="detail-right">0.00%</span></div>
 <div class="rate-note">折算年化利率0.00%</div>
 </div>
 `;
@@ -1697,57 +1773,27 @@ function render5M3(loanAmount, downPayment, insurance, tax) {
 const phase2Months = 24;
 const phase1Monthly = loanAmount / 60;
 const remainPrincipal = loanAmount / 5 * 2;
-const phase2Interest = round2(loanAmount * (1.99 / 100) * 2);
+const phase2Interest = round2(loanAmount * 1.99 / 100 * 2);
 const phase2Total = remainPrincipal + phase2Interest;
 const phase2Monthly = round2(phase2Total / phase2Months);
 const firstPayTotal = round2(downPayment + insurance + tax);
 
 return `
 ${renderFinanceTop(downPayment, loanAmount, firstPayTotal, "限时5免3", "60期")}
-<div class="quote-lines">
-<div class="line">
-<span class="label">保险预估</span>
-<span class="value">￥${formatMoney(insurance)}</span>
-</div>
-<div class="line">
-<span class="label">购置税</span>
-<span class="value">￥${formatMoney(tax)}</span>
-</div>
-</div>
+${renderFinanceTaxInsurance(insurance, tax)}
 <div class="stage-block">
 <div class="stage-title">1-36期 <span class="tag">第1阶段</span></div>
-<div class="detail-line">
-<span class="detail-left">预估月付</span>
-<span class="detail-right">￥${formatMoney(phase1Monthly)}</span>
-</div>
-<div class="detail-line">
-<span class="detail-left">利息</span>
-<span class="detail-right">￥0</span>
-</div>
-<div class="detail-line">
-<span class="detail-left">年化费率</span>
-<span class="detail-right">0.00%</span>
-</div>
+<div class="detail-line"><span class="detail-left">预估月付</span><span class="detail-right">￥${formatMoney(phase1Monthly)}</span></div>
+<div class="detail-line"><span class="detail-left">利息</span><span class="detail-right">￥0</span></div>
+<div class="detail-line"><span class="detail-left">年化费率</span><span class="detail-right">0.00%</span></div>
 <div class="rate-note">折算年化利率0.00%</div>
 </div>
 <div class="stage-block">
 <div class="stage-title">37-60期 <span class="tag">第2阶段</span></div>
-<div class="detail-line">
-<span class="detail-left">预估月付</span>
-<span class="detail-right">￥${formatMoney(phase2Monthly)}</span>
-</div>
-<div class="detail-line">
-<span class="detail-left">利息</span>
-<span class="detail-right">￥${formatMoney(phase2Interest)}</span>
-</div>
-<div class="detail-line">
-<span class="detail-left">剩余应还本金</span>
-<span class="detail-right">￥${formatMoney(remainPrincipal)}</span>
-</div>
-<div class="detail-line">
-<span class="detail-left">年化费率</span>
-<span class="detail-right">1.99%</span>
-</div>
+<div class="detail-line"><span class="detail-left">预估月付</span><span class="detail-right">￥${formatMoney(phase2Monthly)}</span></div>
+<div class="detail-line"><span class="detail-left">利息</span><span class="detail-right">￥${formatMoney(phase2Interest)}</span></div>
+<div class="detail-line"><span class="detail-left">剩余应还本金</span><span class="detail-right">￥${formatMoney(remainPrincipal)}</span></div>
+<div class="detail-line"><span class="detail-left">年化费率</span><span class="detail-right">1.99%</span></div>
 <div class="rate-note">近似年化利率3.80%</div>
 </div>
 `;
@@ -1755,41 +1801,20 @@ ${renderFinanceTop(downPayment, loanAmount, firstPayTotal, "限时5免3", "60期
 
 function renderRatePlan(downPayment, loanAmount, insurance, tax, years, annualRate, annualRateText, approxRateText) {
 const months = years * 12;
-const interest = round2(loanAmount * (annualRate / 100) * years);
+const interest = round2(loanAmount * annualRate / 100 * years);
 const totalRepayment = round2(loanAmount + interest);
 const monthlyPayment = round2(totalRepayment / months);
 const firstPayTotal = round2(downPayment + insurance + tax);
 
 return `
 ${renderFinanceTop(downPayment, loanAmount, firstPayTotal, annualRateText, `${months}期`)}
-<div class="quote-lines">
-<div class="line">
-<span class="label">保险预估</span>
-<span class="value">￥${formatMoney(insurance)}</span>
-</div>
-<div class="line">
-<span class="label">购置税</span>
-<span class="value">￥${formatMoney(tax)}</span>
-</div>
-</div>
+${renderFinanceTaxInsurance(insurance, tax)}
 <div class="stage-block">
 <div class="stage-title">1-${months}期 <span class="tag">单阶段</span></div>
-<div class="detail-line">
-<span class="detail-left">预估月付</span>
-<span class="detail-right">￥${formatMoney(monthlyPayment)}</span>
-</div>
-<div class="detail-line">
-<span class="detail-left">利息</span>
-<span class="detail-right">￥${formatMoney(interest)}</span>
-</div>
-<div class="detail-line">
-<span class="detail-left">总还款</span>
-<span class="detail-right">￥${formatMoney(totalRepayment)}</span>
-</div>
-<div class="detail-line">
-<span class="detail-left">年费率</span>
-<span class="detail-right">${annualRate}%</span>
-</div>
+<div class="detail-line"><span class="detail-left">预估月付</span><span class="detail-right">￥${formatMoney(monthlyPayment)}</span></div>
+<div class="detail-line"><span class="detail-left">利息</span><span class="detail-right">￥${formatMoney(interest)}</span></div>
+<div class="detail-line"><span class="detail-left">总还款</span><span class="detail-right">￥${formatMoney(totalRepayment)}</span></div>
+<div class="detail-line"><span class="detail-left">年费率</span><span class="detail-right">${annualRate}%</span></div>
 <div class="rate-note">近似年化利率${approxRateText}</div>
 </div>
 `;
@@ -1803,10 +1828,10 @@ const financeType = document.getElementById("financeType").value;
 const loanYears = parseInt(document.getElementById("loanYears").value) || 3;
 const selectedConfigs = getSelectedOptionalConfigs();
 const selectedDiscounts = getSelectedOptionalDiscounts();
-const optionalConfigTotal = getOptionalConfigTotal();
-const optionalDiscountTotal = getOptionalDiscountTotal();
+const selectedExtraDiscounts = getSelectedExtraDiscounts();
+const validManualDiscounts = getValidManualDiscounts();
 
-const invoicePrice = Math.max(0, guidePrice + optionalConfigTotal - optionalDiscountTotal);
+const invoicePrice = Math.max(0, guidePrice + sumPrices(selectedConfigs) - sumPrices(selectedDiscounts) - sumPrices(selectedExtraDiscounts) - sumPrices(validManualDiscounts));
 const { subsidyValue, subsidyItems } = getGovSubsidyInfo(invoicePrice);
 const tax = calculatePurchaseTax(invoicePrice);
 const totalPrice = invoicePrice + insurance + tax;
@@ -1816,7 +1841,6 @@ let downPayment = parseFloat(document.getElementById("downPaymentAmountInput").v
 if (isNaN(downPayment)) downPayment = 0;
 
 const minDownPayment = getMinDownPayment(car.name, financeType);
-
 if (!isEditingDownPayment) {
 if (downPayment < minDownPayment) downPayment = minDownPayment;
 if (downPayment < 0) downPayment = 0;
@@ -1826,15 +1850,11 @@ if (downPayment < 0) downPayment = 0;
 if (downPayment > invoicePrice) downPayment = invoicePrice;
 }
 
-let downPaymentRatio = 0;
-if (invoicePrice > 0) downPaymentRatio = Math.round(downPayment / invoicePrice * 100);
+let downPaymentRatio = invoicePrice > 0 ? Math.round(downPayment / invoicePrice * 100) : 0;
 if (downPaymentRatio > 90) downPaymentRatio = 90;
-
 document.getElementById("downPaymentRatio").value = downPaymentRatio;
 document.getElementById("downPaymentPercentText").innerText = `${downPaymentRatio}%`;
-if (!isEditingDownPayment) {
-document.getElementById("downPaymentAmountInput").value = Math.round(downPayment);
-}
+if (!isEditingDownPayment) document.getElementById("downPaymentAmountInput").value = Math.round(downPayment);
 updateSliderBackground(downPaymentRatio);
 updateGovSubsidyDynamicDisplay();
 
@@ -1849,8 +1869,10 @@ let html = `
 <span class="label">全国统一零售价</span>
 <span class="value">￥${formatMoney(guidePrice)}</span>
 </div>
-${renderOptionalConfigLines(selectedConfigs)}
-${renderOptionalDiscountLines(selectedDiscounts)}
+${renderSelectedLines(selectedConfigs)}
+${renderSelectedLines(selectedDiscounts, true)}
+${renderSelectedLines(selectedExtraDiscounts, true)}
+${renderManualDiscountLines()}
 <div class="divider"></div>
 </div>
 `;
@@ -1858,12 +1880,8 @@ ${renderOptionalDiscountLines(selectedDiscounts)}
 html += renderBaseQuote(invoicePrice, insurance, tax, totalPrice, subsidyItems, subsidyValue, actualCost);
 
 if (financeType !== "full") {
-if (subsidyValue > 0) html += `<div class="divider"></div>`;
-
 if (financeType === "3free") {
 html += renderFreePlan(downPayment, loanAmount, insurance, tax, 3, "3年免息");
-} else if (financeType === "5free") {
-html += renderFreePlan(downPayment, loanAmount, insurance, tax, 5, "5年免息");
 } else if (financeType === "5m3") {
 html += render5M3(loanAmount, downPayment, insurance, tax);
 } else if (financeType === "rate199") {
@@ -1881,11 +1899,16 @@ document.getElementById("financeCardArea").innerHTML = html;
 function resetForm() {
 document.getElementById("model").selectedIndex = 0;
 selectedGovSubsidyIds = [];
-renderGovSubsidySelection();
+selectedExtraDiscountIds = [];
+manualDiscounts = [];
 document.getElementById("downPaymentRatio").value = "30";
 document.getElementById("loanYears").value = "3";
 closeImagePreview();
 isEditingDownPayment = false;
+document.getElementById("manualDiscountPanel").classList.remove("show");
+document.getElementById("manualDiscountToggle").textContent = "展开";
+document.getElementById("manualDiscountNameInput").value = "";
+document.getElementById("manualDiscountPriceInput").value = "";
 updateCarInfo();
 calculateQuote();
 }
@@ -1897,10 +1920,7 @@ backgroundColor: "#ffffff",
 scale: 2,
 useCORS: true
 }).then(canvas => {
-const imgData = canvas.toDataURL("image/png");
-const img = document.getElementById("previewImage");
-img.src = imgData;
-img.onclick = e => e.preventDefault();
+document.getElementById("previewImage").src = canvas.toDataURL("image/png");
 document.getElementById("imagePreviewCard").style.display = "block";
 document.getElementById("imagePreviewCard").scrollIntoView({ behavior: "smooth", block: "start" });
 });
@@ -1928,8 +1948,7 @@ calculateQuote();
 });
 
 document.getElementById("financeType").addEventListener("change", function () {
-const financeType = document.getElementById("financeType").value;
-if (financeType !== "full") {
+if (document.getElementById("financeType").value !== "full") {
 clearFullOnlyDiscountSelections();
 }
 toggleFinanceFields();
@@ -1943,8 +1962,7 @@ calculateQuote();
 
 document.getElementById("downPaymentRatio").addEventListener("input", function () {
 isEditingDownPayment = false;
-const invoicePrice = getCurrentInvoicePrice();
-syncDownPaymentByRatio(invoicePrice);
+syncDownPaymentByRatio(getCurrentInvoicePrice());
 renderGovSubsidySelection();
 calculateQuote();
 });
@@ -1954,16 +1972,14 @@ isEditingDownPayment = true;
 });
 
 document.getElementById("downPaymentAmountInput").addEventListener("input", function () {
-const invoicePrice = getCurrentInvoicePrice();
-syncDownPaymentByAmount(invoicePrice, false);
+syncDownPaymentByAmount(getCurrentInvoicePrice(), false);
 renderGovSubsidySelection();
 calculateQuote();
 });
 
 document.getElementById("downPaymentAmountInput").addEventListener("blur", function () {
 isEditingDownPayment = false;
-const invoicePrice = getCurrentInvoicePrice();
-enforceMinDownPayment(invoicePrice);
+enforceMinDownPayment(getCurrentInvoicePrice());
 renderGovSubsidySelection();
 calculateQuote();
 });
@@ -2000,6 +2016,17 @@ calculateQuote();
 
 document.addEventListener("click", function () {
 toggleGovSubsidyDropdown(false);
+});
+
+document.getElementById("manualDiscountToggle").addEventListener("click", toggleManualDiscountPanel);
+document.getElementById("addManualDiscountBtn").addEventListener("click", addManualDiscount);
+
+document.getElementById("manualDiscountNameInput").addEventListener("keydown", function (e) {
+if (e.key === "Enter") addManualDiscount();
+});
+
+document.getElementById("manualDiscountPriceInput").addEventListener("keydown", function (e) {
+if (e.key === "Enter") addManualDiscount();
 });
 };
 </script>
