@@ -137,7 +137,7 @@ button.action-btn:active{transform:scale(0.97)}
 <div class="form-col">
 <div class="panel">
 <div class="title-bar">
-<img src="/logo.png" alt="logo" class="title-logo" onerror="this.style.display='none'">
+<img src="logo.png" alt="logo" class="title-logo" onerror="this.style.display='none'">
 <h1 class="title">配置您的理想汽车</h1>
 </div>
 <div class="sub">Design by Jeff V3.0 Beta</div>
@@ -279,15 +279,15 @@ const $id=id=>document.getElementById(id);
 const $qAll=sel=>document.querySelectorAll(sel);
 
 const SUI_XIN_HUAN_CONFIG = {
-    "理想 i6": { minDp: 39800, rate: 2.33, originalRate: 3.32 },
-    "理想 i8": { minDp: 59800, rate: 2.21, originalRate: 3.32 },
-    "理想 L6": { minDp: 39800, rate: 3.32, originalRate: 3.32 },
-    "理想 L8 Ultra": { minDp: 69800, rate: 3.32, originalRate: 3.32 },
-    "理想 L8 Livis": { minDp: 69800, rate: 3.32, originalRate: 3.32 },
-    "理想 L9 Ultra": { minDp: 79800, rate: 3.32, originalRate: 3.32 },
-    "理想 L9 Livis": { minDp: 79800, rate: 3.32, originalRate: 3.32 },
-    "理想 MEGA Ultra": { minDp: 89800, rate: 3.32, originalRate: 3.32 },
-    "理想 MEGA Home": { minDp: 89800, rate: 3.32, originalRate: 3.32 }
+"理想 i6": { minDp: 39800, rate: 2.33, originalRate: 3.32 },
+"理想 i8": { minDp: 59800, rate: 2.21, originalRate: 3.32 },
+"理想 L6": { minDp: 39800, rate: 3.32, originalRate: 3.32 },
+"理想 L8 Ultra": { minDp: 69800, rate: 3.32, originalRate: 3.32 },
+"理想 L8 Livis": { minDp: 69800, rate: 3.32, originalRate: 3.32 },
+"理想 L9 Ultra": { minDp: 79800, rate: 3.32, originalRate: 3.32 },
+"理想 L9 Livis": { minDp: 79800, rate: 3.32, originalRate: 3.32 },
+"理想 MEGA Ultra": { minDp: 89800, rate: 3.32, originalRate: 3.32 },
+"理想 MEGA Home": { minDp: 89800, rate: 3.32, originalRate: 3.32 }
 };
 
 const FINANCE_OPTIONS_L_SERIES=[{value:"full",label:"全款"},{value:"suixin",label:"随心还"},{value:"rate199",label:"1.99%年费率"}];
@@ -525,90 +525,90 @@ syncDownPaymentByRatio(getCurrentInvoicePrice());calculateQuote();
 function renderPriceLine(label,value,isDiscount=false){return `<div class="line"><span class="label">${label}</span><span class="value">${isDiscount?"-":""}￥${formatMoney(value)}</span></div>`;}
 
 function renderSuiXinPlan(d, l, i, t, carName) {
-    const config = SUI_XIN_HUAN_CONFIG[carName] || { minDp: 0, rate: 3.32, originalRate: 3.32 };
-    const rate = config.rate / 100;
-    const origRate = config.originalRate / 100;
-    const hasDiscount = rate < origRate;
-    const yearlyPrincipal = l / 5;
-    const totalInterest = l * 3 * rate;
-    const origTotalInterest = l * 3 * origRate;
-    const totalIntHtml = hasDiscount
-        ? `<span style="text-decoration:line-through;color:var(--text-sub);margin-right:6px;font-weight:normal;font-size:14px;">￥${formatMoney(Math.round(origTotalInterest))}</span>￥${formatMoney(Math.round(totalInterest))}`
-        : `￥${formatMoney(Math.round(totalInterest))}`;
+const config = SUI_XIN_HUAN_CONFIG[carName] || { minDp: 0, rate: 3.32, originalRate: 3.32 };
+const rate = config.rate / 100;
+const origRate = config.originalRate / 100;
+const hasDiscount = rate < origRate;
+const yearlyPrincipal = l / 5;
+const totalInterest = l * 3 * rate;
+const origTotalInterest = l * 3 * origRate;
+const totalIntHtml = hasDiscount
+? `<span style="text-decoration:line-through;color:var(--text-sub);margin-right:6px;font-weight:normal;font-size:14px;">￥${formatMoney(Math.round(origTotalInterest))}</span>￥${formatMoney(Math.round(totalInterest))}`
+: `￥${formatMoney(Math.round(totalInterest))}`;
 
-    const r=(d+l)>0?Math.round(d/(d+l)*100):0;
-    
-    let html = `
-    <div class="section-row finance-first-row">
-        <span class="label">金融产品</span>
-        <span class="scheme-value">随心还</span>
-    </div>
-    <div class="section-row" style="border-top:none; padding-top:4px;">
-        <span class="label">总利息</span>
-        <span style="text-align:right; font-size:15px; font-weight:500;">${totalIntHtml}</span>
-    </div>
-    <div class="section-row" style="border-top:none; padding-top:4px;">
-        <span class="label">分期期数</span>
-        <span class="scheme-value" style="background:var(--apple-gray); color:var(--text-main);">60期</span>
-    </div>
-    <div class="top-money">
-        <div class="money-box left"><div class="big-money">￥${formatMoney(d)}</div><div class="money-label">首付金额(${r}%)</div></div>
-        <div class="money-box center"><div class="big-money">￥${formatMoney(l)}</div><div class="money-label">融资金额</div></div>
-        <div class="money-box right money-accent"><div class="big-money">￥${formatMoney(round2(d+i+t))}</div><div class="money-label">首付合计</div></div>
-    </div>
-    <div class="quote-lines">
-        ${renderPriceLine("保险预估", i)}
-        ${renderPriceLine("购置税", t)}
-    </div>`;
+const r=(d+l)>0?Math.round(d/(d+l)*100):0;
 
-    for (let year = 1; year <= 5; year++) {
-        const remPrincipal = l - yearlyPrincipal * (year - 1);
-        const mInterest = remPrincipal * rate / 12;
-        const mOrigInterest = remPrincipal * origRate / 12;
+let html = `
+<div class="section-row finance-first-row">
+<span class="label">金融产品</span>
+<span class="scheme-value">随心还</span>
+</div>
+<div class="section-row" style="border-top:none; padding-top:4px;">
+<span class="label">总利息</span>
+<span style="text-align:right; font-size:15px; font-weight:500;">${totalIntHtml}</span>
+</div>
+<div class="section-row" style="border-top:none; padding-top:4px;">
+<span class="label">分期期数</span>
+<span class="scheme-value" style="background:var(--apple-gray); color:var(--text-main);">60期</span>
+</div>
+<div class="top-money">
+<div class="money-box left"><div class="big-money">￥${formatMoney(d)}</div><div class="money-label">首付金额(${r}%)</div></div>
+<div class="money-box center"><div class="big-money">￥${formatMoney(l)}</div><div class="money-label">融资金额</div></div>
+<div class="money-box right money-accent"><div class="big-money">￥${formatMoney(round2(d+i+t))}</div><div class="money-label">首付合计</div></div>
+</div>
+<div class="quote-lines">
+${renderPriceLine("保险预估", i)}
+${renderPriceLine("购置税", t)}
+</div>`;
 
-        const regularPayment = Math.round(mInterest);
-        const origRegularPayment = Math.round(mOrigInterest);
-        const lastPayment = Math.round(yearlyPrincipal + mInterest);
-        const origLastPayment = Math.round(yearlyPrincipal + mOrigInterest);
+for (let year = 1; year <= 5; year++) {
+const remPrincipal = l - yearlyPrincipal * (year - 1);
+const mInterest = remPrincipal * rate / 12;
+const mOrigInterest = remPrincipal * origRate / 12;
 
-        const mStart = (year - 1) * 12 + 1;
-        const mEnd = year * 12 - 1;
-        const mFinal = year * 12;
+const regularPayment = Math.round(mInterest);
+const origRegularPayment = Math.round(mOrigInterest);
+const lastPayment = Math.round(yearlyPrincipal + mInterest);
+const origLastPayment = Math.round(yearlyPrincipal + mOrigInterest);
 
-        const rateStr = (config.rate).toFixed(2) + '%';
-        const origRateStr = (config.originalRate).toFixed(2) + '%';
+const mStart = (year - 1) * 12 + 1;
+const mEnd = year * 12 - 1;
+const mFinal = year * 12;
 
-        let int1Html = hasDiscount
-            ? `<span style="text-decoration:line-through;color:var(--text-sub);margin-right:6px;font-weight:normal;font-size:14px;">￥${formatMoney(origRegularPayment)}</span>￥${formatMoney(regularPayment)}`
-            : `￥${formatMoney(regularPayment)}`;
+const rateStr = (config.rate).toFixed(2) + '%';
+const origRateStr = (config.originalRate).toFixed(2) + '%';
 
-        let int2Html = hasDiscount
-            ? `<span style="text-decoration:line-through;color:var(--text-sub);margin-right:6px;font-weight:normal;font-size:14px;">￥${formatMoney(origLastPayment)}</span>￥${formatMoney(lastPayment)}`
-            : `￥${formatMoney(lastPayment)}`;
+let int1Html = hasDiscount
+? `<span style="text-decoration:line-through;color:var(--text-sub);margin-right:6px;font-weight:normal;font-size:14px;">￥${formatMoney(origRegularPayment)}</span>￥${formatMoney(regularPayment)}`
+: `￥${formatMoney(regularPayment)}`;
 
-        let rateHtml = hasDiscount
-            ? `<span style="text-decoration:line-through;color:var(--text-sub);margin-right:6px;font-weight:normal;font-size:14px;">${origRateStr}</span>${rateStr}`
-            : `${rateStr}`;
+let int2Html = hasDiscount
+? `<span style="text-decoration:line-through;color:var(--text-sub);margin-right:6px;font-weight:normal;font-size:14px;">￥${formatMoney(origLastPayment)}</span>￥${formatMoney(lastPayment)}`
+: `￥${formatMoney(lastPayment)}`;
 
-        html += `
-        <div class="stage-block">
-            <div class="stage-title">${mStart}-${mFinal}期 <span class="tag">第${year}阶段</span></div>
-            <div class="detail-line">
-                <span class="detail-left">第${mStart}-${mEnd}期预估月付</span>
-                <span class="detail-right">${int1Html}</span>
-            </div>
-            <div class="detail-line">
-                <span class="detail-left">第${mFinal}期预估月付</span>
-                <span class="detail-right">${int2Html}</span>
-            </div>
-            <div class="detail-line">
-                <span class="detail-left">年化利率（单利）</span>
-                <span class="detail-right">${rateHtml}</span>
-            </div>
-        </div>`;
-    }
+let rateHtml = hasDiscount
+? `<span style="text-decoration:line-through;color:var(--text-sub);margin-right:6px;font-weight:normal;font-size:14px;">${origRateStr}</span>${rateStr}`
+: `${rateStr}`;
 
-    return html;
+html += `
+<div class="stage-block">
+<div class="stage-title">${mStart}-${mFinal}期 <span class="tag">第${year}阶段</span></div>
+<div class="detail-line">
+<span class="detail-left">第${mStart}-${mEnd}期预估月付</span>
+<span class="detail-right">${int1Html}</span>
+</div>
+<div class="detail-line">
+<span class="detail-left">第${mFinal}期预估月付</span>
+<span class="detail-right">${int2Html}</span>
+</div>
+<div class="detail-line">
+<span class="detail-left">年化利率（单利）</span>
+<span class="detail-right">${rateHtml}</span>
+</div>
+</div>`;
+}
+
+return html;
 }
 
 function renderFinanceTop(d,l,t,name,per){
