@@ -277,11 +277,24 @@ button.action-btn:active{transform:scale(0.97)}
 <script>
 const $id=id=>document.getElementById(id);
 const $qAll=sel=>document.querySelectorAll(sel);
-const FINANCE_OPTIONS_L_SERIES=[{value:"full",label:"全款"},{value:"rate199",label:"1.99%年费率"}];
-const FINANCE_OPTIONS_I8=[{value:"full",label:"全款"},{value:"3free",label:"3年免息"},{value:"5m3",label:"限时5免3"},{value:"rate199",label:"1.99%年费率"},{value:"rate099",label:"限时0.99%低息"}];
-const FINANCE_OPTIONS_L8=[{value:"full",label:"全款"},{value:"5m2",label:"限时5免2"},{value:"rate199",label:"1.99%年费率"}];
-const FINANCE_OPTIONS_I6=[{value:"full",label:"全款"},{value:"3free",label:"3年免息"},{value:"5m3",label:"限时5免3"},{value:"rate149",label:"限时1.49%低息"},{value:"rate199",label:"1.99%年费率"}];
-const FINANCE_OPTIONS_MEGA=[{value:"full",label:"全款"},{value:"rate199",label:"1.99%年费率"}];
+
+const SUI_XIN_HUAN_CONFIG = {
+    "理想 i6": { minDp: 39800, rate: 2.33, originalRate: 3.32 },
+    "理想 i8": { minDp: 59800, rate: 2.21, originalRate: 3.32 },
+    "理想 L6": { minDp: 39800, rate: 3.32, originalRate: 3.32 },
+    "理想 L8 Ultra": { minDp: 69800, rate: 3.32, originalRate: 3.32 },
+    "理想 L8 Livis": { minDp: 69800, rate: 3.32, originalRate: 3.32 },
+    "理想 L9 Ultra": { minDp: 79800, rate: 3.32, originalRate: 3.32 },
+    "理想 L9 Livis": { minDp: 79800, rate: 3.32, originalRate: 3.32 },
+    "理想 MEGA Ultra": { minDp: 89800, rate: 3.32, originalRate: 3.32 },
+    "理想 MEGA Home": { minDp: 89800, rate: 3.32, originalRate: 3.32 }
+};
+
+const FINANCE_OPTIONS_L_SERIES=[{value:"full",label:"全款"},{value:"suixin",label:"随心还"},{value:"rate199",label:"1.99%年费率"}];
+const FINANCE_OPTIONS_I8=[{value:"full",label:"全款"},{value:"suixin",label:"随心还"},{value:"3free",label:"3年免息"},{value:"5m3",label:"限时5免3"},{value:"rate199",label:"1.99%年费率"},{value:"rate099",label:"限时0.99%低息"}];
+const FINANCE_OPTIONS_L8=[{value:"full",label:"全款"},{value:"suixin",label:"随心还"},{value:"5m2",label:"限时5免2"},{value:"rate199",label:"1.99%年费率"}];
+const FINANCE_OPTIONS_I6=[{value:"full",label:"全款"},{value:"suixin",label:"随心还"},{value:"3free",label:"3年免息"},{value:"5m3",label:"限时5免3"},{value:"rate149",label:"限时1.49%低息"},{value:"rate199",label:"1.99%年费率"}];
+const FINANCE_OPTIONS_MEGA=[{value:"full",label:"全款"},{value:"suixin",label:"随心还"},{value:"rate199",label:"1.99%年费率"}];
 const carData=[{name:"理想 i6",price:249800,insurance:7361},{name:"理想 i8",price:339800,insurance:9726},{name:"理想 MEGA Ultra",price:529800,insurance:11182},{name:"理想 MEGA Home",price:559800,insurance:11194},{name:"理想 L6",price:249800,insurance:7328},{name:"理想 L8 Ultra",price:369800,insurance:10000},{name:"理想 L8 Livis",price:429800,insurance:10000},{name:"理想 L9 Ultra",price:459800,insurance:11015},{name:"理想 L9 Livis",price:509800,insurance:11015}];
 const optionalConfigMap={"理想 L6":[{id:"l6_rear_screen",name:"后舱娱乐屏套装",price:10000},{id:"l6_special_color",name:"特殊颜色",price:6000},{id:"l6_wheel_21",name:"21寸轮毂",price:10000},{id:"l6_hook",name:"电动拖车钩",price:6000},{id:"l6_platinum_audio",name:"铂金音响",price:5000},{id:"l6_mahe_pack",name:"马赫智驾套装",price:20000}],"理想 i6":[{id:"i6_rear_screen",name:"后舱娱乐屏套装",price:10000},{id:"i6_special_color",name:"特殊颜色",price:6000},{id:"i6_wheel_21",name:"21寸轮毂",price:10000},{id:"i6_tow_pack",name:"牵引资质套装",price:3000},{id:"i6_platinum_audio",name:"铂金音响",price:5000},{id:"i6_awd",name:"四驱(赠21轮毂)",price:20000}],"理想 i8":[{id:"i8_rear_screen",name:"后舱娱乐屏套装",price:10000},{id:"i8_special_color",name:"特殊颜色",price:8000},{id:"i8_wheel_21",name:"21寸轮毂",price:10000}],"理想 MEGA Ultra":[{id:"mega_ultra_special_color",name:"特殊颜色",price:10000}],"理想 MEGA Home":[{id:"mega_home_special_color",name:"特殊颜色",price:10000}],"理想 L8 Ultra":[{id:"l8ultra_special_color",name:"特殊颜色",price:10000},{id:"l8ultra_wheel_22",name:"22寸轮毂",price:10000},{id:"l8ultra_glass",name:"二三排调光玻璃",price:10000},{id:"l8ultra_step",name:"电动踏板",price:10000},{id:"l8ultra_mahe_pack",name:"马赫智驾套装",price:20000},{id:"l8ultra_hook",name:"电动拖车钩",price:6000}],"理想 L8 Livis":[{id:"l8livis_special_color",name:"特殊颜色",price:10000},{id:"l8livis_dual_color",name:"定制双色",price:20000},{id:"l8livis_glass",name:"二三排调光玻璃",price:10000},{id:"l8livis_step",name:"电动踏板",price:10000},{id:"l8livis_hook",name:"电动拖车钩",price:6000}],"理想 L9 Ultra":[{id:"l9ultra_special_color",name:"特殊颜色",price:10000},{id:"l9ultra_wheel_22",name:"22寸轮毂",price:10000},{id:"l9ultra_glass",name:"二三排调光玻璃",price:10000},{id:"l9ultra_step",name:"电动踏板",price:10000},{id:"l9ultra_mahe_pack",name:"马赫智驾套装",price:20000},{id:"l9ultra_hook",name:"电动拖车钩",price:6000}],"理想 L9 Livis":[{id:"l9livis_special_color",name:"特殊颜色",price:10000},{id:"l9livis_dual_color",name:"定制双色",price:20000},{id:"l9livis_glass",name:"二三排调光玻璃",price:10000},{id:"l9livis_step",name:"电动踏板",price:10000},{id:"l9livis_hook",name:"电动拖车钩",price:6000}]};
 const optionalDiscountMap={"理想 L6":[],"理想 i6":[{id:"i6_cash_discount",name:"现金优惠",price:5000,defaultChecked:true},{id:"i6_full_payment_discount",name:"全款优惠",price:5000,fullOnly:true}],"理想 i8":[{id:"i8_cash_discount",name:"现金优惠",price:10000,defaultChecked:true},{id:"i8_full_payment_discount",name:"全款优惠",price:10000,fullOnly:true}],"理想 MEGA Ultra":[{id:"mega_ultra_cash_discount",name:"现金优惠",price:40000,defaultChecked:true}],"理想 MEGA Home":[{id:"mega_home_cash_discount",name:"现金优惠",price:40000,defaultChecked:true}],"理想 L8 Ultra":[{id:"l8ultra_cash_discount",name:"现金优惠",price:5000,defaultChecked:true},{id:"l8ultra_selection_discount",name:"选配基金",price:5000}],"理想 L8 Livis":[{id:"l8livis_cash_discount",name:"现金优惠",price:5000,defaultChecked:true},{id:"l8livis_selection_discount",name:"选配基金",price:5000}],"理想 L9 Ultra":[{id:"l9ultra_cash_discount",name:"现金优惠",price:20000,defaultChecked:true}],"理想 L9 Livis":[{id:"l9livis_cash_discount",name:"现金优惠",price:10000,defaultChecked:true},{id:"l9livis_selection_discount",name:"选配基金",price:10000}]};
@@ -293,6 +306,7 @@ function calculatePurchaseTax(ip){return round2(ip/1.13*0.1-Math.min(ip/1.13*0.0
 function initModels(){const m=$id("model");m.innerHTML="";carData.forEach((car,i)=>{const opt=document.createElement("option");opt.value=i;opt.textContent=car.name;m.appendChild(opt);});}
 function getCurrentCar(){return carData[$id("model").value];}
 function getMinDownPayment(carName,finType){
+if(finType==="suixin"&&SUI_XIN_HUAN_CONFIG[carName]) return SUI_XIN_HUAN_CONFIG[carName].minDp;
 if(carName==="理想 i6"&&(finType==="3free"||finType==="5m3"))return 79800;
 if(carName==="理想 i8"&&(finType==="3free"||finType==="5m3"))return 99800;
 if(carName.startsWith("理想 L8")&&finType==="5m2")return 0;return 0;
@@ -471,7 +485,11 @@ updateSliderBackground(Math.round(r));updateMinDownPaymentNote();
 function toggleFinanceFields(){
 const f=$id("financeType").value, dGrp=$id("downPaymentGroup"), lGrp=$id("loanYearsGroup");
 if(f==="full"){dGrp.style.display="none";lGrp.style.display="none";}
-else if(f==="3free"||f==="5m3"||f==="5m2"){dGrp.style.display="";lGrp.style.display="none";$id("loanYears").value=f==="3free"?"3":"5";initLoanYearsUI();}
+else if(f==="3free"||f==="5m3"||f==="5m2"||f==="suixin"){
+dGrp.style.display="";lGrp.style.display="none";
+$id("loanYears").value=f==="3free"?"3":"5";
+initLoanYearsUI();
+}
 else{dGrp.style.display="";lGrp.style.display="";}
 updateMinDownPaymentNote();
 }
@@ -505,6 +523,94 @@ renderGovSubsidySelection();renderManualDiscounts();renderManualSubsidies();
 syncDownPaymentByRatio(getCurrentInvoicePrice());calculateQuote();
 }
 function renderPriceLine(label,value,isDiscount=false){return `<div class="line"><span class="label">${label}</span><span class="value">${isDiscount?"-":""}￥${formatMoney(value)}</span></div>`;}
+
+function renderSuiXinPlan(d, l, i, t, carName) {
+    const config = SUI_XIN_HUAN_CONFIG[carName] || { minDp: 0, rate: 3.32, originalRate: 3.32 };
+    const rate = config.rate / 100;
+    const origRate = config.originalRate / 100;
+    const hasDiscount = rate < origRate;
+    const yearlyPrincipal = l / 5;
+    const totalInterest = l * 3 * rate;
+    const origTotalInterest = l * 3 * origRate;
+    const totalIntHtml = hasDiscount
+        ? `<span style="text-decoration:line-through;color:var(--text-sub);margin-right:6px;font-weight:normal;font-size:14px;">￥${formatMoney(Math.round(origTotalInterest))}</span>￥${formatMoney(Math.round(totalInterest))}`
+        : `￥${formatMoney(Math.round(totalInterest))}`;
+
+    const r=(d+l)>0?Math.round(d/(d+l)*100):0;
+    
+    let html = `
+    <div class="section-row finance-first-row">
+        <span class="label">金融产品</span>
+        <span class="scheme-value">随心还</span>
+    </div>
+    <div class="section-row" style="border-top:none; padding-top:4px;">
+        <span class="label">总利息</span>
+        <span style="text-align:right; font-size:15px; font-weight:500;">${totalIntHtml}</span>
+    </div>
+    <div class="section-row" style="border-top:none; padding-top:4px;">
+        <span class="label">分期期数</span>
+        <span class="scheme-value" style="background:var(--apple-gray); color:var(--text-main);">60期</span>
+    </div>
+    <div class="top-money">
+        <div class="money-box left"><div class="big-money">￥${formatMoney(d)}</div><div class="money-label">首付金额(${r}%)</div></div>
+        <div class="money-box center"><div class="big-money">￥${formatMoney(l)}</div><div class="money-label">融资金额</div></div>
+        <div class="money-box right money-accent"><div class="big-money">￥${formatMoney(round2(d+i+t))}</div><div class="money-label">首付合计</div></div>
+    </div>
+    <div class="quote-lines">
+        ${renderPriceLine("保险预估", i)}
+        ${renderPriceLine("购置税", t)}
+    </div>`;
+
+    for (let year = 1; year <= 5; year++) {
+        const remPrincipal = l - yearlyPrincipal * (year - 1);
+        const mInterest = remPrincipal * rate / 12;
+        const mOrigInterest = remPrincipal * origRate / 12;
+
+        const regularPayment = Math.round(mInterest);
+        const origRegularPayment = Math.round(mOrigInterest);
+        const lastPayment = Math.round(yearlyPrincipal + mInterest);
+        const origLastPayment = Math.round(yearlyPrincipal + mOrigInterest);
+
+        const mStart = (year - 1) * 12 + 1;
+        const mEnd = year * 12 - 1;
+        const mFinal = year * 12;
+
+        const rateStr = (config.rate).toFixed(2) + '%';
+        const origRateStr = (config.originalRate).toFixed(2) + '%';
+
+        let int1Html = hasDiscount
+            ? `<span style="text-decoration:line-through;color:var(--text-sub);margin-right:6px;font-weight:normal;font-size:14px;">￥${formatMoney(origRegularPayment)}</span>￥${formatMoney(regularPayment)}`
+            : `￥${formatMoney(regularPayment)}`;
+
+        let int2Html = hasDiscount
+            ? `<span style="text-decoration:line-through;color:var(--text-sub);margin-right:6px;font-weight:normal;font-size:14px;">￥${formatMoney(origLastPayment)}</span>￥${formatMoney(lastPayment)}`
+            : `￥${formatMoney(lastPayment)}`;
+
+        let rateHtml = hasDiscount
+            ? `<span style="text-decoration:line-through;color:var(--text-sub);margin-right:6px;font-weight:normal;font-size:14px;">${origRateStr}</span>${rateStr}`
+            : `${rateStr}`;
+
+        html += `
+        <div class="stage-block">
+            <div class="stage-title">${mStart}-${mFinal}期 <span class="tag">第${year}阶段</span></div>
+            <div class="detail-line">
+                <span class="detail-left">第${mStart}-${mEnd}期预估月付</span>
+                <span class="detail-right">${int1Html}</span>
+            </div>
+            <div class="detail-line">
+                <span class="detail-left">第${mFinal}期预估月付</span>
+                <span class="detail-right">${int2Html}</span>
+            </div>
+            <div class="detail-line">
+                <span class="detail-left">年化利率（单利）</span>
+                <span class="detail-right">${rateHtml}</span>
+            </div>
+        </div>`;
+    }
+
+    return html;
+}
+
 function renderFinanceTop(d,l,t,name,per){
 const r=(d+l)>0?Math.round(d/(d+l)*100):0;
 return `<div class="section-row finance-first-row"><span class="label">金融产品</span><span class="scheme-value">${name}</span></div><div class="section-row" style="border-top:none; padding-top:4px;"><span class="label">分期期数</span><span class="scheme-value" style="background:var(--apple-gray); color:var(--text-main);">${per}</span></div><div class="top-money"><div class="money-box left"><div class="big-money">￥${formatMoney(d)}</div><div class="money-label">首付金额(${r}%)</div></div><div class="money-box center"><div class="big-money">￥${formatMoney(l)}</div><div class="money-label">融资金额</div></div><div class="money-box right money-accent"><div class="big-money">￥${formatMoney(t)}</div><div class="money-label">首付合计</div></div></div>`;
@@ -535,7 +641,8 @@ $id("carName").innerText=car.name;
 let html=`<div class="quote-lines"><div class="strong-line-same-size"><span class="label">全国统一零售价</span><span class="value">￥${formatMoney(car.price)}</span></div>${getSelectedOptionalConfigs().map(i=>renderPriceLine(i.name,i.price)).join("")}${getSelectedOptionalDiscounts().map(i=>renderPriceLine(i.name,i.price,true)).join("")}${getSelectedExtraDiscounts().map(i=>renderPriceLine(i.name,i.price,true)).join("")}${getValidManuals(manualDiscounts).map(i=>renderPriceLine(i.name,i.price,true)).join("")}<div class="divider"></div><div class="strong-line-same-size"><span class="label">开票价</span><span class="value">￥${formatMoney(ip)}</span></div>${renderPriceLine("保险预估",ins)}${renderPriceLine("购置税",tax)}<div class="strong-line" style="margin-top:12px;"><span class="label">购车总价</span><span class="value">￥${formatMoney(ip+ins+tax)}</span></div>${subsidyValue>0?`<div class="divider"></div><div class="section-hint">政府补贴（以政府公告为准，需自行申领与车企无关）</div>${subsidyItems.map(i=>renderPriceLine(i.name,i.amount,true)).join("")}<div class="strong-line"><span class="label">实际花费</span><span class="value">￥${formatMoney(Math.max(0,ip+ins+tax-subsidyValue))}</span></div>`:''}</div>`;
 if(fin!=="full"){
 const yrs=parseInt($id("loanYears").value)||3;
-if(fin==="3free")html+=renderFreePlan(d,l,ins,tax,3,"3年免息");
+if(fin==="suixin")html+=renderSuiXinPlan(d,l,ins,tax,car.name);
+else if(fin==="3free")html+=renderFreePlan(d,l,ins,tax,3,"3年免息");
 else if(fin==="5m3")html+=renderMultiStagePlan(d,l,ins,tax,"限时5免3",36,1.0995,"1.99%","3.80%");
 else if(fin==="5m2")html+=renderMultiStagePlan(d,l,ins,tax,"限时5免2",24,1.1495,"2.99%","5.62%");
 else if(fin==="rate199")html+=renderRatePlan(d,l,ins,tax,yrs,1.99,"1.99%年费率","3.80%");
