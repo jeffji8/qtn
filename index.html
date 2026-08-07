@@ -533,9 +533,7 @@ const hasDiscount = rate < origRate;
 const yearlyPrincipal = l / 5;
 const totalInterest = l * 3 * rate;
 const origTotalInterest = l * 3 * origRate;
-const totalIntHtml = hasDiscount
-? `<span style="text-decoration:line-through;color:var(--text-sub);margin-right:6px;font-weight:normal;font-size:14px;">￥${formatMoney(Math.round(origTotalInterest))}</span>￥${formatMoney(Math.round(totalInterest))}`
-: `￥${formatMoney(Math.round(totalInterest))}`;
+const totalIntHtml = `￥${formatMoney(Math.round(totalInterest))}`;
 
 const r=(d+l)>0?Math.round(d/(d+l)*100):0;
 
@@ -579,17 +577,9 @@ const mFinal = year * 12;
 const rateStr = (config.rate).toFixed(2) + '%';
 const origRateStr = (config.originalRate).toFixed(2) + '%';
 
-let int1Html = hasDiscount
-? `<span style="text-decoration:line-through;color:var(--text-sub);margin-right:6px;font-weight:normal;font-size:14px;">￥${formatMoney(origRegularPayment)}</span>￥${formatMoney(regularPayment)}`
-: `￥${formatMoney(regularPayment)}`;
-
-let int2Html = hasDiscount
-? `<span style="text-decoration:line-through;color:var(--text-sub);margin-right:6px;font-weight:normal;font-size:14px;">￥${formatMoney(origLastPayment)}</span>￥${formatMoney(lastPayment)}`
-: `￥${formatMoney(lastPayment)}`;
-
-let rateHtml = hasDiscount
-? `<span style="text-decoration:line-through;color:var(--text-sub);margin-right:6px;font-weight:normal;font-size:14px;">${origRateStr}</span>${rateStr}`
-: `${rateStr}`;
+let int1Html = `￥${formatMoney(regularPayment)}`;
+let int2Html = `￥${formatMoney(lastPayment)}`;
+let rateHtml = `${rateStr}`;
 
 html += `
 <div class="stage-block">
