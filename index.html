@@ -154,10 +154,9 @@ button.action-btn:active{transform:scale(0.97)}
 <select id="model" class="apple-select-hidden"></select>
 </div>
 </div>
-<input type="hidden" id="guidePrice" />
 <div class="form-group">
 <label class="section-title">保险预估</label>
-<input type="number" id="insurance" />
+<input type="number" id="insurance" min="0" />
 </div>
 <div class="form-group" id="optionalConfigGroup" style="display:none;">
 <label class="section-title">外观与选配</label>
@@ -278,31 +277,85 @@ button.action-btn:active{transform:scale(0.97)}
 const $id=id=>document.getElementById(id);
 const $qAll=sel=>document.querySelectorAll(sel);
 
-const SUI_XIN_HUAN_CONFIG = {
-"理想 i6": { minDp: 39800, rate: 2.33, originalRate: 3.32 },
-"理想 i8 后驱长续航": { minDp: 59800, rate: 2.21, originalRate: 3.32 },
-"理想 i8 四驱高性能": { minDp: 59800, rate: 2.21, originalRate: 3.32 },
-"理想 L6": { minDp: 39800, rate: 3.32, originalRate: 3.32 },
-"理想 L8 Ultra": { minDp: 69800, rate: 3.32, originalRate: 3.32 },
-"理想 L8 Livis": { minDp: 69800, rate: 3.32, originalRate: 3.32 },
-"理想 L9 Ultra": { minDp: 79800, rate: 3.32, originalRate: 3.32 },
-"理想 L9 Livis": { minDp: 79800, rate: 3.32, originalRate: 3.32 },
-"理想 MEGA Ultra": { minDp: 89800, rate: 3.32, originalRate: 3.32 },
-"理想 MEGA Home": { minDp: 89800, rate: 3.32, originalRate: 3.32 }
+const SUI_XIN_HUAN_CONFIG={
+"理想 i6":{minDp:39800,rate:2.33},
+"理想 i8 后驱长续航":{minDp:59800,rate:2.21},
+"理想 i8 四驱高性能":{minDp:59800,rate:2.21},
+"理想 L6":{minDp:39800,rate:3.32},
+"理想 L8 Ultra":{minDp:69800,rate:3.32},
+"理想 L8 Livis":{minDp:69800,rate:3.32},
+"理想 L9 Ultra":{minDp:79800,rate:3.32},
+"理想 L9 Livis":{minDp:79800,rate:3.32},
+"理想 MEGA Ultra":{minDp:89800,rate:3.32},
+"理想 MEGA Home":{minDp:89800,rate:3.32}
 };
 
-const FINANCE_OPTIONS_L_SERIES=[{value:"full",label:"全款"},{value:"suixin",label:"随心还"},{value:"rate199",label:"1.99%年费率"}];
-const FINANCE_OPTIONS_I8=[{value:"full",label:"全款"},{value:"suixin",label:"随心还"},{value:"3free",label:"3年免息"},{value:"5m3",label:"限时5免3"},{value:"rate199",label:"1.99%年费率"},{value:"rate099",label:"限时0.99%低息"}];
-const FINANCE_OPTIONS_L8=[{value:"full",label:"全款"},{value:"suixin",label:"随心还"},{value:"5m2",label:"限时5免2"},{value:"rate199",label:"1.99%年费率"}];
-const FINANCE_OPTIONS_I6=[{value:"full",label:"全款"},{value:"suixin",label:"随心还"},{value:"3free",label:"3年免息"},{value:"5m3",label:"限时5免3"},{value:"rate149",label:"限时1.49%低息"},{value:"rate199",label:"1.99%年费率"}];
-const FINANCE_OPTIONS_MEGA=[{value:"full",label:"全款"},{value:"suixin",label:"随心还"},{value:"rate199",label:"1.99%年费率"}];
-const carData=[{name:"理想 i6",price:249800,insurance:7361},{name:"理想 i8 后驱长续航",price:309800,insurance:9726},{name:"理想 i8 四驱高性能",price:339800,insurance:9726},{name:"理想 MEGA Ultra",price:529800,insurance:11182},{name:"理想 MEGA Home",price:559800,insurance:11194},{name:"理想 L6",price:249800,insurance:7328},{name:"理想 L8 Ultra",price:369800,insurance:9144},{name:"理想 L8 Livis",price:429800,insurance:9803},{name:"理想 L9 Ultra",price:459800,insurance:11015},{name:"理想 L9 Livis",price:509800,insurance:11015}];
+const FINANCE_OPTION_CATALOG={
+full:{value:"full",label:"全款"},
+suixin:{value:"suixin",label:"随心还"},
+"3free":{value:"3free",label:"3年免息"},
+"5m3":{value:"5m3",label:"限时5免3"},
+"5m2":{value:"5m2",label:"限时5免2"},
+rate199:{value:"rate199",label:"1.99%年费率"},
+rate149:{value:"rate149",label:"限时1.49%低息"},
+rate099:{value:"rate099",label:"限时0.99%低息"}
+};
+const FINANCE_PROFILES={
+standard:["full","suixin","rate199"],
+i6:["full","suixin","3free","5m3","rate149","rate199"],
+i8:["full","suixin","3free","5m3","rate199","rate099"],
+l8:["full","suixin","5m2","rate199"]
+};
+const carData=[
+{name:"理想 i6",price:249800,insurance:7361,financeProfile:"i6"},
+{name:"理想 i8 后驱长续航",price:309800,insurance:9726,financeProfile:"i8"},
+{name:"理想 i8 四驱高性能",price:339800,insurance:9726,financeProfile:"i8"},
+{name:"理想 MEGA Ultra",price:529800,insurance:11182,financeProfile:"standard"},
+{name:"理想 MEGA Home",price:559800,insurance:11194,financeProfile:"standard"},
+{name:"理想 L6",price:249800,insurance:7328,financeProfile:"standard"},
+{name:"理想 L8 Ultra",price:369800,insurance:9144,financeProfile:"l8"},
+{name:"理想 L8 Livis",price:429800,insurance:9803,financeProfile:"l8"},
+{name:"理想 L9 Ultra",price:459800,insurance:11015,financeProfile:"standard"},
+{name:"理想 L9 Livis",price:509800,insurance:11015,financeProfile:"standard"}
+];
 const optionalConfigMap={"理想 L6":[{id:"l6_rear_screen",name:"后舱娱乐屏套装",price:10000},{id:"l6_special_color",name:"特殊颜色",price:6000},{id:"l6_wheel_21",name:"21寸轮毂",price:10000},{id:"l6_hook",name:"电动拖车钩",price:6000},{id:"l6_platinum_audio",name:"铂金音响",price:5000},{id:"l6_mahe_pack",name:"马赫智驾套装",price:20000}],"理想 i6":[{id:"i6_rear_screen",name:"后舱娱乐屏套装",price:10000},{id:"i6_special_color",name:"特殊颜色",price:6000},{id:"i6_wheel_21",name:"21寸轮毂",price:10000},{id:"i6_tow_pack",name:"牵引资质套装",price:3000},{id:"i6_platinum_audio",name:"铂金音响",price:5000},{id:"i6_awd",name:"四驱(含21寸轮毂)",price:20000}],"理想 i8 后驱长续航":[{id:"i8_rear_screen",name:"后舱娱乐屏套装",price:10000},{id:"i8_special_color",name:"特殊颜色",price:8000},{id:"i8_wheel_21",name:"21寸轮毂",price:10000}],"理想 i8 四驱高性能":[{id:"i8_special_color",name:"特殊颜色",price:8000},{id:"i8_wheel_21",name:"21寸轮毂",price:10000}],"理想 MEGA Ultra":[{id:"mega_ultra_special_color",name:"特殊颜色",price:10000}],"理想 MEGA Home":[{id:"mega_home_special_color",name:"特殊颜色",price:10000}],"理想 L8 Ultra":[{id:"l8ultra_special_color",name:"特殊颜色",price:10000},{id:"l8ultra_wheel_22",name:"22寸轮毂",price:10000},{id:"l8ultra_glass",name:"二三排调光玻璃",price:10000},{id:"l8ultra_step",name:"电动踏板",price:10000},{id:"l8ultra_mahe_pack",name:"马赫智驾套装",price:20000},{id:"l8ultra_hook",name:"电动拖车钩",price:6000}],"理想 L8 Livis":[{id:"l8livis_special_color",name:"特殊颜色",price:10000},{id:"l8livis_dual_color",name:"定制双色",price:20000},{id:"l8livis_glass",name:"二三排调光玻璃",price:10000},{id:"l8livis_step",name:"电动踏板",price:10000},{id:"l8livis_hook",name:"电动拖车钩",price:6000}],"理想 L9 Ultra":[{id:"l9ultra_special_color",name:"特殊颜色",price:10000},{id:"l9ultra_wheel_22",name:"22寸轮毂",price:10000},{id:"l9ultra_glass",name:"二三排调光玻璃",price:10000},{id:"l9ultra_step",name:"电动踏板",price:10000},{id:"l9ultra_mahe_pack",name:"马赫智驾套装",price:20000},{id:"l9ultra_hook",name:"电动拖车钩",price:6000}],"理想 L9 Livis":[{id:"l9livis_special_color",name:"特殊颜色",price:10000},{id:"l9livis_dual_color",name:"定制双色",price:20000},{id:"l9livis_glass",name:"二三排调光玻璃",price:10000},{id:"l9livis_step",name:"电动踏板",price:10000},{id:"l9livis_hook",name:"电动拖车钩",price:6000}]};
-const optionalDiscountMap={"理想 L6":[],"理想 i6":[{id:"i6_cash_discount",name:"现金优惠",price:5000,defaultChecked:true},{id:"i6_full_payment_discount",name:"全款优惠",price:5000,fullOnly:true}],"理想 i8 后驱长续航":[{id:"i8_rear_full_payment_discount",name:"全款优惠",price:10000,fullOnly:true}],"理想 i8 四驱高性能":[{id:"i8_awd_full_payment_discount",name:"全款优惠",price:10000,fullOnly:true}],"理想 MEGA Ultra":[{id:"mega_ultra_cash_discount",name:"现金优惠",price:40000,defaultChecked:true}],"理想 MEGA Home":[{id:"mega_home_cash_discount",name:"现金优惠",price:40000,defaultChecked:true}],"理想 L8 Ultra":[{id:"l8ultra_cash_discount",name:"现金优惠",price:5000,defaultChecked:true},{id:"l8ultra_full_payment_discount",name:"全款优惠",price:5000,fullOnly:true},{id:"l8ultra_selection_discount",name:"选配基金",price:5000}],"理想 L8 Livis":[{id:"l8livis_cash_discount",name:"现金优惠",price:5000,defaultChecked:true},{id:"l8livis_full_payment_discount",name:"全款优惠",price:5000,fullOnly:true},{id:"l8livis_selection_discount",name:"选配基金",price:5000}],"理想 L9 Ultra":[{id:"l9ultra_cash_discount",name:"现金优惠",price:20000,defaultChecked:true}],"理想 L9 Livis":[{id:"l9livis_cash_discount",name:"现金优惠",price:10000,defaultChecked:true},{id:"l9livis_selection_discount",name:"选配基金",price:10000}]};
+const optionalDiscountMap={
+"理想 L6":[],
+"理想 i6":[
+{id:"i6_cash_discount",name:"现金优惠",price:5000,defaultChecked:true},
+{id:"i6_full_payment_discount",name:"全款优惠",price:5000,fullOnly:true}
+],
+"理想 i8 后驱长续航":[{id:"i8_rear_full_payment_discount",name:"全款优惠",price:10000,fullOnly:true}],
+"理想 i8 四驱高性能":[{id:"i8_awd_full_payment_discount",name:"全款优惠",price:10000,fullOnly:true}],
+"理想 MEGA Ultra":[{id:"mega_ultra_cash_discount",name:"现金优惠",price:40000,defaultChecked:true}],
+"理想 MEGA Home":[{id:"mega_home_cash_discount",name:"现金优惠",price:40000,defaultChecked:true}],
+"理想 L8 Ultra":[
+{id:"l8ultra_cash_discount",name:"现金优惠",price:5000,defaultChecked:true},
+{id:"l8ultra_full_payment_discount",name:"全款优惠",price:5000,fullOnly:true},
+{id:"l8ultra_selection_discount",name:"选配基金",price:5000,requiresConfig:true}
+],
+"理想 L8 Livis":[
+{id:"l8livis_cash_discount",name:"现金优惠",price:5000,defaultChecked:true},
+{id:"l8livis_full_payment_discount",name:"全款优惠",price:5000,fullOnly:true},
+{id:"l8livis_selection_discount",name:"选配基金",price:5000,requiresConfig:true}
+],
+"理想 L9 Ultra":[{id:"l9ultra_cash_discount",name:"现金优惠",price:20000,defaultChecked:true}],
+"理想 L9 Livis":[
+{id:"l9livis_cash_discount",name:"现金优惠",price:10000,defaultChecked:true},
+{id:"l9livis_selection_discount",name:"选配基金",price:10000,requiresConfig:true}
+]
+};
 const extraDiscountMap={"理想 i6":[{id:"i6_repurchase_discount",name:"车主复购铂金音响减免",price:5000}],"理想 L6":[{id:"L6_repurchase_discount",name:"车主复购铂金音响减免",price:5000}],"理想 i8 后驱长续航":[{id:"i8_repurchase_discount",name:"车主复购",price:10000}],"理想 i8 四驱高性能":[{id:"i8_repurchase_discount",name:"车主复购",price:10000}],"理想 L8 Ultra":[{id:"l8ultra_repurchase_discount",name:"车主复购",price:10000}],"理想 L8 Livis":[{id:"l8livis_repurchase_discount",name:"车主复购",price:10000}],"理想 L9 Ultra":[{id:"l9ultra_repurchase_discount",name:"车主复购",price:10000}],"理想 L9 Livis":[{id:"l9livis_repurchase_discount",name:"车主复购",price:10000}]};
 let selectedConfigIds=[],selectedDiscountIds=[],selectedExtraDiscountIds=[],selectedGovSubsidyIds=[],manualDiscounts=[],manualSubsidies=[],isEditingDownPayment=false;
 function round2(num){return Math.round(num);}
 function formatMoney(num,digits=0){return Number(num).toLocaleString("zh-CN",{minimumFractionDigits:digits,maximumFractionDigits:digits});}
+function escapeHtml(value){return String(value).replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"})[char]);}
+function getNonNegativeNumber(id){
+const el=$id(id), value=Number(el.value);
+const safeValue=Number.isFinite(value)?Math.max(0,value):0;
+if(!Number.isFinite(value)||value<0)el.value=safeValue;
+return safeValue;
+}
 function calculatePurchaseTax(ip){return round2(ip/1.13*0.1-Math.min(ip/1.13*0.05,15000));}
 function initModels(){const m=$id("model");m.innerHTML="";carData.forEach((car,i)=>{const opt=document.createElement("option");opt.value=i;opt.textContent=car.name;m.appendChild(opt);});}
 function getCurrentCar(){return carData[$id("model").value];}
@@ -312,11 +365,7 @@ if(carName==="理想 i6"&&(finType==="3free"||finType==="5m3"))return 79800;
 if(carName.startsWith("理想 i8")&&(finType==="3free"||finType==="5m3"))return 99800;
 if(carName.startsWith("理想 L8")&&finType==="5m2")return 0;return 0;
 }
-function getFinanceOptionsForCar(car){
-if(car.name==="理想 i6")return FINANCE_OPTIONS_I6;if(car.name.startsWith("理想 i8"))return FINANCE_OPTIONS_I8;
-if(car.name.startsWith("理想 L8"))return FINANCE_OPTIONS_L8;if(car.name.startsWith("理想 L"))return FINANCE_OPTIONS_L_SERIES;
-return FINANCE_OPTIONS_MEGA;
-}
+function getFinanceOptionsForCar(car){return FINANCE_PROFILES[car.financeProfile].map(key=>FINANCE_OPTION_CATALOG[key]);}
 function renderFinanceOptions(){
 const fEl=$id("financeType"), uiEl=$id("financeTypeUI"), car=getCurrentCar(), opts=getFinanceOptionsForCar(car), curr=fEl.value||"full";
 fEl.innerHTML=opts.map(i=>`<option value="${i.value}">${i.label}</option>`).join("");
@@ -339,7 +388,6 @@ function getSelectedOptionalDiscounts(){return getSelectedItems(getCurrentOption
 function getSelectedExtraDiscounts(){return getSelectedItems(getCurrentExtraDiscounts(),selectedExtraDiscountIds);}
 function getValidManuals(list){return list.filter(i=>(i.name||"").trim()&&Number(i.price)>0);}
 function getCurrentInvoicePrice(){return Math.max(0,getCurrentCar().price+sumPrices(getSelectedOptionalConfigs())-sumPrices(getSelectedOptionalDiscounts())-sumPrices(getSelectedExtraDiscounts())-sumPrices(getValidManuals(manualDiscounts)));}
-function hasSelectedDistrictDiscount(){return getSelectedOptionalDiscounts().some(i=>i.subsidyType==="district");}
 function getShijingshanSubsidy(ip){
 if(ip>200000&&ip<300000)return 3000;if(ip>=300000&&ip<500000)return 5000;
 if(ip>=500000)return 8000;return 0;
@@ -349,13 +397,12 @@ function normalizeGovSubsidySelection(changedVal=""){
 if(changedVal==="scrap"&&selectedGovSubsidyIds.includes("scrap"))selectedGovSubsidyIds=selectedGovSubsidyIds.filter(id=>id!=="replace"&&id!=="shijingshan");
 if(changedVal==="replace"&&selectedGovSubsidyIds.includes("replace"))selectedGovSubsidyIds=selectedGovSubsidyIds.filter(id=>id!=="scrap"&&id!=="shijingshan");
 if(changedVal==="shijingshan"&&selectedGovSubsidyIds.includes("shijingshan"))selectedGovSubsidyIds=selectedGovSubsidyIds.filter(id=>id!=="scrap"&&id!=="replace");
-if(hasSelectedDistrictDiscount())selectedGovSubsidyIds=selectedGovSubsidyIds.filter(id=>id!=="shijingshan");
 }
 function getGovSubsidyInfo(ip=0){
 let val=0;const items=[];
 if(selectedGovSubsidyIds.includes("scrap")){val+=20000;items.push({name:"报废补贴",amount:20000});}
 if(selectedGovSubsidyIds.includes("replace")){val+=15000;items.push({name:"置换补贴",amount:15000});}
-if(selectedGovSubsidyIds.includes("shijingshan")&&!hasSelectedDistrictDiscount()){
+if(selectedGovSubsidyIds.includes("shijingshan")){
 const amt=getShijingshanSubsidy(ip);if(amt>0){val+=amt;items.push({name:"石景山补贴",amount:amt});}
 }
 manualSubsidies.forEach(sub=>{if(sub.name&&sub.price>0){val+=sub.price;items.push({name:sub.name,amount:sub.price});}});
@@ -372,19 +419,14 @@ if(!eligible){
 sjsBox.checked=false;sjsBox.disabled=true;sjsWrap.style.display="none";selectedGovSubsidyIds=selectedGovSubsidyIds.filter(id=>id!=="shijingshan");
 }else{
 sjsWrap.style.display="";
-if(hasSelectedDistrictDiscount()){
-sjsBox.checked=false;sjsBox.disabled=true;sjsWrap.classList.add("disabled");
-sjsPrice.textContent="已与可选优惠区互斥";selectedGovSubsidyIds=selectedGovSubsidyIds.filter(id=>id!=="shijingshan");
-}else{
 sjsBox.disabled=scrapChk||repChk;sjsWrap.classList.toggle("disabled",sjsBox.disabled);
 const sjsAmt=getShijingshanSubsidy(ip);sjsPrice.textContent=sjsAmt>0?`-￥${formatMoney(sjsAmt)}`:"开票价不满足";
-}
 }
 }
 function renderGovSubsidySelection(){
 updateGovSubsidyDynamicDisplay();
 $qAll(".gov-subsidy-checkbox").forEach(el=>{
-el.checked=el.value==="shijingshan"?(selectedGovSubsidyIds.includes(el.value)&&!hasSelectedDistrictDiscount()&&isShijingshanEligible()):selectedGovSubsidyIds.includes(el.value);
+el.checked=el.value==="shijingshan"?(selectedGovSubsidyIds.includes(el.value)&&isShijingshanEligible()):selectedGovSubsidyIds.includes(el.value);
 el.parentElement.classList.toggle('selected',el.checked);
 });
 }
@@ -421,8 +463,8 @@ function renderOptionalDiscounts(){
 const area=$id("optionalDiscountArea"), discounts=getCurrentOptionalDiscounts(), inst=$id("financeType").value!=="full";
 if(!discounts.length){area.innerHTML="";return;}
 area.innerHTML=`<div class="apple-card-grid">`+discounts.map(i=>{
-const hasCfg=getSelectedOptionalConfigs().length>0, dis=(inst&&(i.fullOnly||i.installmentExclusive))||(i.name==="选配基金"&&!hasCfg);
-if(i.name==="选配基金"&&!hasCfg)selectedDiscountIds=selectedDiscountIds.filter(id=>id!==i.id);
+const hasCfg=getSelectedOptionalConfigs().length>0, dis=(inst&&i.fullOnly)||(i.requiresConfig&&!hasCfg);
+if(i.requiresConfig&&!hasCfg)selectedDiscountIds=selectedDiscountIds.filter(id=>id!==i.id);
 const sel=selectedDiscountIds.includes(i.id);
 return `<label class="apple-card-option ${dis?"disabled":""} ${sel?"selected":""}"><input type="checkbox" class="optional-discount-checkbox" value="${i.id}" ${sel?"checked":""} ${dis?"disabled":""} /><span class="card-name">${i.name}</span><span class="card-price">-￥${formatMoney(i.price)}</span></label>`;
 }).join("")+`</div>`;
@@ -445,13 +487,10 @@ el.parentElement.classList.toggle('selected',el.checked);refreshAfterPriceAffect
 });
 });
 }
-function clearFullOnlyDiscountSelections(){
-const ids=getCurrentOptionalDiscounts().filter(i=>i.fullOnly).map(i=>i.id);
-selectedDiscountIds=selectedDiscountIds.filter(id=>!ids.includes(id));
-}
-function clearInstallmentExclusiveDiscountSelections(){
-const ids=getCurrentOptionalDiscounts().filter(i=>i.installmentExclusive).map(i=>i.id);
-selectedDiscountIds=selectedDiscountIds.filter(id=>!ids.includes(id));
+function syncFullPaymentDiscounts(){
+const fullOnlyIds=getCurrentOptionalDiscounts().filter(i=>i.fullOnly).map(i=>i.id);
+selectedDiscountIds=selectedDiscountIds.filter(id=>!fullOnlyIds.includes(id));
+if($id("financeType").value==="full")selectedDiscountIds=[...new Set([...selectedDiscountIds,...fullOnlyIds])];
 }
 function updateSliderBackground(ratio){$id("downPaymentRatio").style.background=`linear-gradient(to right, var(--li-green) 0%, var(--li-green) ${ratio}%, var(--border-light) ${ratio}%, var(--border-light) 100%)`;}
 function updateMinDownPaymentNote(){
@@ -496,7 +535,7 @@ updateMinDownPaymentNote();
 }
 function renderManualList(list, areaId, cb){
 const area=$id(areaId);if(!list.length){area.innerHTML="";return;}
-area.innerHTML=list.map((i,idx)=>`<div class="manual-discount-item"><div class="manual-discount-item-name">${i.name}</div><div style="display:flex;align-items:center;gap:12px;"><span class="manual-discount-item-price">-￥${formatMoney(i.price)}</span><button type="button" class="manual-delete-btn" data-index="${idx}">删除</button></div></div>`).join("");
+area.innerHTML=list.map((i,idx)=>`<div class="manual-discount-item"><div class="manual-discount-item-name">${escapeHtml(i.name)}</div><div style="display:flex;align-items:center;gap:12px;"><span class="manual-discount-item-price">-￥${formatMoney(i.price)}</span><button type="button" class="manual-delete-btn" data-index="${idx}">删除</button></div></div>`).join("");
 area.querySelectorAll(".manual-delete-btn").forEach(el=>{el.addEventListener("click",()=>{list.splice(Number(el.dataset.index),1);cb();refreshAfterPriceAffect();});});
 }
 const renderManualDiscounts=()=>renderManualList(manualDiscounts,"manualDiscountArea",renderManualDiscounts);
@@ -515,24 +554,22 @@ btn.classList.toggle("open",isShow);btn.textContent=isShow?"收起":txt;
 function updateCarInfo(){
 const car=getCurrentCar();
 $id("modelDisplayTitle").innerText=car.name;$id("modelDisplayPrice").innerText="￥"+formatMoney(car.price);
-$id("guidePrice").value=formatMoney(car.price);$id("insurance").value=car.insurance;
+$id("insurance").value=car.insurance;
 selectedConfigIds=[];selectedExtraDiscountIds=[];
-selectedDiscountIds=(optionalDiscountMap[car.name]||[]).filter(i=>i.defaultChecked).map(i=>i.id);
-renderFinanceOptions();toggleFinanceFields();initLoanYearsUI();
+renderFinanceOptions();
+selectedDiscountIds=getCurrentOptionalDiscounts().filter(i=>i.defaultChecked).map(i=>i.id);
+syncFullPaymentDiscounts();toggleFinanceFields();initLoanYearsUI();
 renderOptionalConfigs();renderOptionalDiscounts();renderExtraDiscounts();
 renderGovSubsidySelection();renderManualDiscounts();renderManualSubsidies();
 syncDownPaymentByRatio(getCurrentInvoicePrice());calculateQuote();
 }
-function renderPriceLine(label,value,isDiscount=false){return `<div class="line"><span class="label">${label}</span><span class="value">${isDiscount?"-":""}￥${formatMoney(value)}</span></div>`;}
+function renderPriceLine(label,value,isDiscount=false){return `<div class="line"><span class="label">${escapeHtml(label)}</span><span class="value">${isDiscount?"-":""}￥${formatMoney(value)}</span></div>`;}
 
 function renderSuiXinPlan(d, l, i, t, carName) {
-const config = SUI_XIN_HUAN_CONFIG[carName] || { minDp: 0, rate: 3.32, originalRate: 3.32 };
+const config = SUI_XIN_HUAN_CONFIG[carName] || {minDp:0,rate:3.32};
 const rate = config.rate / 100;
-const origRate = config.originalRate / 100;
-const hasDiscount = rate < origRate;
 const yearlyPrincipal = l / 5;
 const totalInterest = l * 3 * rate;
-const origTotalInterest = l * 3 * origRate;
 const totalIntHtml = `￥${formatMoney(Math.round(totalInterest))}`;
 
 const r=(d+l)>0?Math.round(d/(d+l)*100):0;
@@ -563,19 +600,15 @@ ${renderPriceLine("购置税", t)}
 for (let year = 1; year <= 5; year++) {
 const remPrincipal = l - yearlyPrincipal * (year - 1);
 const mInterest = remPrincipal * rate / 12;
-const mOrigInterest = remPrincipal * origRate / 12;
 
 const regularPayment = Math.round(mInterest);
-const origRegularPayment = Math.round(mOrigInterest);
 const lastPayment = Math.round(yearlyPrincipal + mInterest);
-const origLastPayment = Math.round(yearlyPrincipal + mOrigInterest);
 
 const mStart = (year - 1) * 12 + 1;
 const mEnd = year * 12 - 1;
 const mFinal = year * 12;
 
 const rateStr = (config.rate).toFixed(2) + '%';
-const origRateStr = (config.originalRate).toFixed(2) + '%';
 
 let int1Html = `￥${formatMoney(regularPayment)}`;
 let int2Html = `￥${formatMoney(lastPayment)}`;
@@ -619,7 +652,7 @@ return `${renderFinanceTop(d,l,round2(d+i+t),n,`${y*12}期`)}<div class="quote-l
 }
 function calculateQuote(){
 const car=getCurrentCar(), ip=getCurrentInvoicePrice(), {subsidyValue,subsidyItems}=getGovSubsidyInfo(ip), tax=calculatePurchaseTax(ip);
-const ins=parseFloat($id("insurance").value)||0, fin=$id("financeType").value;
+const ins=getNonNegativeNumber("insurance"), fin=$id("financeType").value;
 let d=parseFloat($id("downPaymentAmountInput").value);if(isNaN(d))d=0;
 const min=getMinDownPayment(car.name,fin);
 if(!isEditingDownPayment){if(d<min)d=min;if(d<0)d=0;if(d>ip)d=ip;}else{if(d<0)d=0;if(d>ip)d=ip;}
@@ -666,7 +699,7 @@ initModels();updateCarInfo();initLoanYearsUI();
 $id("model").addEventListener("change",()=>{closeImagePreview();isEditingDownPayment=false;updateCarInfo();});
 $id("insurance").addEventListener("input",()=>{renderGovSubsidySelection();calculateQuote();});
 $id("financeType").addEventListener("change",()=>{
-if($id("financeType").value!=="full"){clearFullOnlyDiscountSelections();clearInstallmentExclusiveDiscountSelections();}
+syncFullPaymentDiscounts();
 toggleFinanceFields();renderOptionalDiscounts();
 if(!isEditingDownPayment)enforceMinDownPayment(getCurrentInvoicePrice());else syncDownPaymentByAmount(getCurrentInvoicePrice(),false);
 renderGovSubsidySelection();calculateQuote();
