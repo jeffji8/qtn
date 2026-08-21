@@ -315,7 +315,7 @@ i8:["full","suixin","3free","5m3","rate199","rate099"],
 l8:["full","suixin","5m2","rate199"],
 l9:["full","suixin","5m2","rate199"]
 };
-const INSURANCE_SUBSIDY_FINANCE_TYPES=["3free","5m3","5m2"];
+const INSURANCE_SUBSIDY_RATE_FINANCE_TYPES=["rate199","rate149","rate099"];
 const carData=[
 {name:"理想 i6",price:249800,insurance:7361,awdInsurance:8035,financeProfile:"i6"},
 {name:"理想 i8 后驱长续航",price:309800,insurance:9726,financeProfile:"i8"},
@@ -513,7 +513,11 @@ selectedDiscountIds=selectedDiscountIds.filter(id=>!fullOnlyIds.includes(id));
 if($id("financeType").value==="full")selectedDiscountIds=[...new Set([...selectedDiscountIds,...fullOnlyIds])];
 }
 function getCurrentFullPaymentDiscount(){return getCurrentOptionalDiscounts().find(i=>i.fullOnly)||null;}
-function isInsuranceSubsidyEligible(){return INSURANCE_SUBSIDY_FINANCE_TYPES.includes($id("financeType").value)&&!!getCurrentFullPaymentDiscount();}
+function isInsuranceSubsidyEligible(){
+const car=getCurrentCar(), financeType=$id("financeType").value, hasFullPaymentDiscount=!!getCurrentFullPaymentDiscount();
+const isL8OrL9Suixin=financeType==="suixin"&&(car.name.startsWith("理想 L8")||car.name.startsWith("理想 L9"));
+return hasFullPaymentDiscount&&(INSURANCE_SUBSIDY_RATE_FINANCE_TYPES.includes(financeType)||isL8OrL9Suixin);
+}
 function getInsuranceSubsidyAmount(){
 const item=getCurrentFullPaymentDiscount();
 return isInsuranceSubsidyEligible()&&$id("insuranceSubsidy").checked?(Number(item.price)||0):0;
