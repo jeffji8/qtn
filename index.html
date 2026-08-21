@@ -308,7 +308,7 @@ l8:["full","suixin","5m2","rate199"],
 l9:["full","suixin","5m2","rate199"]
 };
 const carData=[
-{name:"理想 i6",price:249800,insurance:7361,financeProfile:"i6"},
+{name:"理想 i6",price:249800,insurance:7361,awdInsurance:8035,financeProfile:"i6"},
 {name:"理想 i8 后驱长续航",price:309800,insurance:9726,financeProfile:"i8"},
 {name:"理想 i8 四驱高性能",price:339800,insurance:9726,financeProfile:"i8"},
 {name:"理想 MEGA Ultra",price:529800,insurance:11182,financeProfile:"standard"},
@@ -462,8 +462,11 @@ const sel=selectedConfigIds.includes(i.id);
 return `<label class="apple-card-option ${dis?"disabled":""} ${sel?"selected":""}"><input type="checkbox" class="optional-config-checkbox" value="${i.id}" ${sel?"checked":""} ${dis?"disabled":""} /><span class="card-name">${i.name}</span><span class="card-price">+￥${formatMoney(i.price)}</span></label>`;
 }).join("")+`</div>`;
 $qAll(".optional-config-checkbox").forEach(el=>el.addEventListener("change",e=>{
+const car=getCurrentCar(), hadI6Awd=selectedConfigIds.includes("i6_awd");
 selectedConfigIds=Array.from($qAll(".optional-config-checkbox:checked")).map(i=>i.value);
 handleConfigMutualExclusion(e.target.value,e.target.checked);
+const hasI6Awd=selectedConfigIds.includes("i6_awd");
+if(car.name==="理想 i6"&&hadI6Awd!==hasI6Awd)$id("insurance").value=hasI6Awd?car.awdInsurance:car.insurance;
 renderOptionalConfigs();renderOptionalDiscounts();refreshAfterPriceAffect();
 }));
 }
