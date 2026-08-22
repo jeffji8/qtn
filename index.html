@@ -403,6 +403,11 @@ function getCurrentExtraDiscounts(){return extraDiscountMap[getCurrentCar().name
 function getSelectedOptionalConfigs(){return getSelectedItems(getCurrentOptionalConfigs(),selectedConfigIds);}
 function getSelectedOptionalDiscounts(){return getSelectedItems(getCurrentOptionalDiscounts(),selectedDiscountIds);}
 function getSelectedExtraDiscounts(){return getSelectedItems(getCurrentExtraDiscounts(),selectedExtraDiscountIds);}
+function syncConfigRequiredDiscounts(){
+const requiredIds=getCurrentOptionalDiscounts().filter(i=>i.requiresConfig).map(i=>i.id);
+selectedDiscountIds=selectedDiscountIds.filter(id=>!requiredIds.includes(id));
+if(getSelectedOptionalConfigs().length>0)selectedDiscountIds=[...new Set([...selectedDiscountIds,...requiredIds])];
+}
 function getValidManuals(list){return list.filter(i=>(i.name||"").trim()&&Number(i.price)>0);}
 function getCurrentInvoicePrice(){return Math.max(0,getCurrentCar().price+sumPrices(getSelectedOptionalConfigs())-sumPrices(getSelectedOptionalDiscounts())-sumPrices(getSelectedExtraDiscounts())-sumPrices(getValidManuals(manualDiscounts))-getInsuranceSubsidyAmount());}
 function getShijingshanSubsidy(ip){
@@ -474,6 +479,7 @@ $qAll(".optional-config-checkbox").forEach(el=>el.addEventListener("change",e=>{
 const car=getCurrentCar(), hadI6Awd=selectedConfigIds.includes("i6_awd");
 selectedConfigIds=Array.from($qAll(".optional-config-checkbox:checked")).map(i=>i.value);
 handleConfigMutualExclusion(e.target.value,e.target.checked);
+syncConfigRequiredDiscounts();
 const hasI6Awd=selectedConfigIds.includes("i6_awd");
 if(car.name==="理想 i6"&&hadI6Awd!==hasI6Awd)$id("insurance").value=hasI6Awd?car.awdInsurance:car.insurance;
 renderOptionalConfigs();renderOptionalDiscounts();refreshAfterPriceAffect();
