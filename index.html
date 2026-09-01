@@ -680,7 +680,7 @@ if(!isEditingDownPayment){if(d<min)d=min;if(d<0)d=0;if(d>ip)d=ip;}else{if(d<0)d=
 let r=ip>0?Math.round(d/ip*100):0;if(r>90)r=90;
 $id("downPaymentRatio").value=r;$id("downPaymentPercentText").innerText=`${r}%`;
 if(!isEditingDownPayment)$id("downPaymentAmountInput").value=Math.round(d);
-updateSliderBackground(r);updateGovSubsidyDynamicDisplay();
+updateSliderBackground(r);updateGovSubsidyAvailability();
 let l=ip-d;if(l<0)l=0;
 $id("carName").innerText=car.name;
 let html=`<div class="quote-lines"><div class="strong-line-same-size"><span class="label">全国统一零售价</span><span class="value">￥${formatMoney(car.price)}</span></div>${getSelectedOptionalConfigs().map(i=>renderPriceLine(i.name,i.price)).join("")}${getSelectedOptionalDiscounts().map(i=>renderPriceLine(i.name,i.price,true)).join("")}${getSelectedExtraDiscounts().map(i=>renderPriceLine(i.name,i.price,true)).join("")}${getValidManuals(manualDiscounts).map(i=>renderPriceLine(i.name,i.price,true)).join("")}${insuranceSubsidy>0?renderPriceLine("保险补贴",insuranceSubsidy,true):""}<div class="divider"></div><div class="strong-line-same-size"><span class="label">开票价</span><span class="value">￥${formatMoney(ip)}</span></div>${renderPriceLine("保险预估",ins)}${renderPriceLine("购置税",tax)}<div class="strong-line" style="margin-top:12px;"><span class="label">购车总价</span><span class="value">￥${formatMoney(ip+ins+tax)}</span></div>${subsidyValue>0?`<div class="divider"></div><div class="section-hint">政府补贴（以政府公告为准，需自行申领与车企无关）</div>${subsidyItems.map(i=>renderPriceLine(i.name,i.amount,true)).join("")}<div class="strong-line"><span class="label">实际花费</span><span class="value">￥${formatMoney(Math.max(0,ip+ins+tax-subsidyValue))}</span></div>`:''}</div>`;
