@@ -162,7 +162,7 @@ button.action-btn:active{transform:scale(0.97)}
 <label class="section-title">外观与选配</label>
 <div id="optionalConfigArea"></div>
 </div>
-<div class="form-group" id="optionalDiscountGroup">
+<div class="form-group">
 <label class="section-title">可选购车权益</label>
 <div id="optionalDiscountArea"></div>
 <div class="manual-expand-wrap">
@@ -181,7 +181,7 @@ button.action-btn:active{transform:scale(0.97)}
 </div>
 <div class="form-group">
 <label class="section-title">政府补贴</label>
-<div class="apple-card-grid" id="govSubsidyPanel">
+<div class="apple-card-grid">
 <label class="apple-card-option" id="govSubsidyScrapWrap">
 <input type="checkbox" class="gov-subsidy-checkbox" value="scrap" />
 <span class="card-name">报废补贴</span>
@@ -380,7 +380,7 @@ function getMinDownPayment(carName,finType){
 if(finType==="suixin"&&SUI_XIN_HUAN_CONFIG[carName]) return SUI_XIN_HUAN_CONFIG[carName].minDp;
 if(carName==="理想 i6"&&(finType==="3free"||finType==="5m3"))return 79800;
 if(carName.startsWith("理想 i8")&&(finType==="3free"||finType==="5m3"))return 99800;
-if(carName.startsWith("理想 L8")&&finType==="5m2")return 0;return 0;
+return 0;
 }
 function getFinanceOptionsForCar(car){return FINANCE_PROFILES[car.financeProfile].map(key=>FINANCE_OPTION_CATALOG[key]);}
 function renderFinanceOptions(){
@@ -496,7 +496,7 @@ return `<label class="apple-card-option ${dis?"disabled":""} ${sel?"selected":""
 }).join("")+`</div>`;
 $qAll(".optional-discount-checkbox").forEach(el=>el.addEventListener("change",()=>{
 selectedDiscountIds=Array.from($qAll(".optional-discount-checkbox:checked")).map(i=>i.value);
-normalizeGovSubsidySelection();renderOptionalDiscounts();refreshAfterPriceAffect();
+renderOptionalDiscounts();refreshAfterPriceAffect();
 }));
 }
 function renderExtraDiscounts(){
@@ -738,7 +738,7 @@ $id("imagePreviewCard").style.display="block";$id("imagePreviewCard").scrollInto
 }
 function closeImagePreview(){$id("imagePreviewCard").style.display="none";$id("previewImage").src="";}
 window.onload=function(){
-initModels();updateCarInfo();initLoanYearsUI();
+initModels();updateCarInfo();
 $id("model").addEventListener("change",()=>{closeImagePreview();isEditingDownPayment=false;updateCarInfo();});
 $id("insurance").addEventListener("input",()=>{renderGovSubsidySelection();calculateQuote();});
 $id("financeType").addEventListener("change",()=>{
