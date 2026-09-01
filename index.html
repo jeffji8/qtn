@@ -192,11 +192,6 @@ button.action-btn:active{transform:scale(0.97)}
 <span class="card-name">置换补贴</span>
 <span class="card-price">-￥15,000</span>
 </label>
-<label class="apple-card-option" id="govSubsidyShijingshanWrap">
-<input type="checkbox" class="gov-subsidy-checkbox" value="shijingshan" />
-<span class="card-name">石景山补贴</span>
-<span class="card-price" id="govSubsidyShijingshanPrice">获取中...</span>
-</label>
 </div>
 <div class="manual-expand-wrap">
 <button type="button" class="manual-expand-btn" id="manualSubsidyToggle">添加其他补贴</button>
@@ -410,45 +405,28 @@ if(getSelectedOptionalConfigs().length>0)selectedDiscountIds=[...new Set([...sel
 }
 function getValidManuals(list){return list.filter(i=>(i.name||"").trim()&&Number(i.price)>0);}
 function getCurrentInvoicePrice(){return Math.max(0,getCurrentCar().price+sumPrices(getSelectedOptionalConfigs())-sumPrices(getSelectedOptionalDiscounts())-sumPrices(getSelectedExtraDiscounts())-sumPrices(getValidManuals(manualDiscounts))-getInsuranceSubsidyAmount());}
-function getShijingshanSubsidy(ip){
-if(ip>200000&&ip<300000)return 3000;if(ip>=300000&&ip<500000)return 5000;
-if(ip>=500000)return 8000;return 0;
+function normalizeGovSubsidySelection(changedVal){
+if(changedVal==="scrap"&&selectedGovSubsidyIds.includes("scrap"))selectedGovSubsidyIds=selectedGovSubsidyIds.filter(id=>id!=="replace");
+if(changedVal==="replace"&&selectedGovSubsidyIds.includes("replace"))selectedGovSubsidyIds=selectedGovSubsidyIds.filter(id=>id!=="scrap");
 }
-function isShijingshanEligible(){return ["理想 i6","理想 i8 后驱长续航","理想 i8 四驱高性能","理想 MEGA Ultra","理想 MEGA Home"].includes(getCurrentCar().name);}
-function normalizeGovSubsidySelection(changedVal=""){
-if(changedVal==="scrap"&&selectedGovSubsidyIds.includes("scrap"))selectedGovSubsidyIds=selectedGovSubsidyIds.filter(id=>id!=="replace"&&id!=="shijingshan");
-if(changedVal==="replace"&&selectedGovSubsidyIds.includes("replace"))selectedGovSubsidyIds=selectedGovSubsidyIds.filter(id=>id!=="scrap"&&id!=="shijingshan");
-if(changedVal==="shijingshan"&&selectedGovSubsidyIds.includes("shijingshan"))selectedGovSubsidyIds=selectedGovSubsidyIds.filter(id=>id!=="scrap"&&id!=="replace");
-}
-function getGovSubsidyInfo(ip=0){
+function getGovSubsidyInfo(){
 let val=0;const items=[];
 if(selectedGovSubsidyIds.includes("scrap")){val+=20000;items.push({name:"报废补贴",amount:20000});}
 if(selectedGovSubsidyIds.includes("replace")){val+=15000;items.push({name:"置换补贴",amount:15000});}
-if(selectedGovSubsidyIds.includes("shijingshan")){
-const amt=getShijingshanSubsidy(ip);if(amt>0){val+=amt;items.push({name:"石景山补贴",amount:amt});}
-}
 manualSubsidies.forEach(sub=>{if(sub.name&&sub.price>0){val+=sub.price;items.push({name:sub.name,amount:sub.price});}});
 return {subsidyValue:val,subsidyItems:items};
 }
-function updateGovSubsidyDynamicDisplay(){
-const ip=getCurrentInvoicePrice(), eligible=isShijingshanEligible();
-const scrapChk=selectedGovSubsidyIds.includes("scrap"), repChk=selectedGovSubsidyIds.includes("replace"), sjsChk=selectedGovSubsidyIds.includes("shijingshan");
-const sBox=$qAll('.gov-subsidy-checkbox[value="scrap"]')[0], rBox=$qAll('.gov-subsidy-checkbox[value="replace"]')[0], sjsBox=$qAll('.gov-subsidy-checkbox[value="shijingshan"]')[0];
-const sWrap=$id("govSubsidyScrapWrap"), rWrap=$id("govSubsidyReplaceWrap"), sjsWrap=$id("govSubsidyShijingshanWrap"), sjsPrice=$id("govSubsidyShijingshanPrice");
-sBox.disabled=repChk||sjsChk; rBox.disabled=scrapChk||sjsChk;
-sWrap.classList.toggle("disabled",sBox.disabled); rWrap.classList.toggle("disabled",rBox.disabled);
-if(!eligible){
-sjsBox.checked=false;sjsBox.disabled=true;sjsWrap.style.display="none";selectedGovSubsidyIds=selectedGovSubsidyIds.filter(id=>id!=="shijingshan");
-}else{
-sjsWrap.style.display="";
-sjsBox.disabled=scrapChk||repChk;sjsWrap.classList.toggle("disabled",sjsBox.disabled);
-const sjsAmt=getShijingshanSubsidy(ip);sjsPrice.textContent=sjsAmt>0?`-￥${formatMoney(sjsAmt)}`:"开票价不满足";
-}
+function updateGovSubsidyAvailability(){
+const scrapChk=selectedGovSubsidyIds.includes("scrap"), repChk=selectedGovSubsidyIds.includes("replace");
+const sBox=$qAll('.gov-subsidy-checkbox[value="scrap"]')[0], rBox=$qAll('.gov-subsidy-checkbox[value="replace"]')[0];
+const sWrap=$id("govSubsidyScrapWrap"), rWrap=$id("govSubsidyReplaceWrap");
+sBox.disabled=repChk;rBox.disabled=scrapChk;
+sWrap.classList.toggle("disabled",sBox.disabled);rWrap.classList.toggle("disabled",rBox.disabled);
 }
 function renderGovSubsidySelection(){
-updateGovSubsidyDynamicDisplay();
+updateGovSubsidyAvailability();
 $qAll(".gov-subsidy-checkbox").forEach(el=>{
-el.checked=el.value==="shijingshan"?(selectedGovSubsidyIds.includes(el.value)&&isShijingshanEligible()):selectedGovSubsidyIds.includes(el.value);
+el.checked=selectedGovSubsidyIds.includes(el.value);
 el.parentElement.classList.toggle('selected',el.checked);
 });
 }
@@ -694,7 +672,7 @@ const intst=round2(l*r/100*y), tr=round2(l+intst);
 return `${renderFinanceTop(d,l,round2(d+i+t),n,`${y*12}期`)}<div class="quote-lines">${renderPriceLine("保险预估",i)}${renderPriceLine("购置税",t)}</div><div class="stage-block"><div class="stage-title">1-${y*12}期 <span class="tag">单阶段</span></div><div class="detail-line"><span class="detail-left">预估月付</span><span class="detail-right">￥${formatMoney(round2(tr/(y*12)))}</span></div><div class="detail-line"><span class="detail-left">利息</span><span class="detail-right">￥${formatMoney(intst)}</span></div><div class="detail-line"><span class="detail-left">总还款</span><span class="detail-right">￥${formatMoney(tr)}</span></div><div class="detail-line"><span class="detail-left">年费率</span><span class="detail-right">${r}%</span></div><div class="rate-note">近似年化利率${appr}</div></div>`;
 }
 function calculateQuote(){
-const car=getCurrentCar(), insuranceSubsidy=getInsuranceSubsidyAmount(), ip=getCurrentInvoicePrice(), {subsidyValue,subsidyItems}=getGovSubsidyInfo(ip), tax=calculatePurchaseTax(ip);
+const car=getCurrentCar(), insuranceSubsidy=getInsuranceSubsidyAmount(), ip=getCurrentInvoicePrice(), {subsidyValue,subsidyItems}=getGovSubsidyInfo(), tax=calculatePurchaseTax(ip);
 const ins=getNonNegativeNumber("insurance"), fin=$id("financeType").value;
 let d=parseFloat($id("downPaymentAmountInput").value);if(isNaN(d))d=0;
 const min=getMinDownPayment(car.name,fin);
