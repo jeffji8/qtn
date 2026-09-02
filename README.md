@@ -23,7 +23,7 @@
 - 理想 L6
 - 理想 L8 Ultra / L8 Livis
 - 理想 L9 Ultra / L9 Livis
-- 理想 MEGA Ultra / MEGA Home
+- 理想 MEGA Home
 
 ## 当前 L8 / L9 权益
 
