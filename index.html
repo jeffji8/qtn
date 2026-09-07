@@ -319,7 +319,8 @@ const carData=[
 {name:"理想 i6",price:249800,insurance:7361,awdInsurance:8035,financeProfile:"i6"},
 {name:"理想 i8 后驱长续航",price:309800,insurance:9181,financeProfile:"i8"},
 {name:"理想 i8 四驱高性能",price:339800,insurance:9778,financeProfile:"i8"},
-{name:"理想 i9（未上市）",price:439800,insurance:10050,financeProfile:"i9"},
+// i9 暂不展示，保留配置；仅在用户同步正式价格并确认恢复展示后移除 hidden。
+{name:"理想 i9（未上市）",hidden:true,price:439800,insurance:10050,financeProfile:"i9"},
 {name:"理想 MEGA Home",price:509800,insurance:11194,financeProfile:"standard"},
 {name:"理想 L6",price:249800,insurance:7328,financeProfile:"standard"},
 {name:"理想 L8 Ultra",price:369800,insurance:9144,financeProfile:"l8"},
@@ -373,7 +374,7 @@ if(!Number.isFinite(value)||value<0)el.value=safeValue;
 return safeValue;
 }
 function calculatePurchaseTax(ip){return round2(ip/1.13*0.1-Math.min(ip/1.13*0.05,15000));}
-function initModels(){const m=$id("model");m.innerHTML="";carData.forEach((car,i)=>{const opt=document.createElement("option");opt.value=i;opt.textContent=car.name;m.appendChild(opt);});}
+function initModels(){const m=$id("model");m.innerHTML="";carData.forEach((car,i)=>{if(car.hidden)return;const opt=document.createElement("option");opt.value=i;opt.textContent=car.name;m.appendChild(opt);});}
 function getCurrentCar(){return carData[$id("model").value];}
 function getMinDownPayment(carName,finType){
 if(finType==="suixin"&&SUI_XIN_HUAN_CONFIG[carName]) return SUI_XIN_HUAN_CONFIG[carName].minDp;
