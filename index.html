@@ -238,7 +238,7 @@ button.action-btn:active{transform:scale(0.97)}
 <input type="range" id="downPaymentRatio" min="0" max="90" step="1" value="30" />
 <div class="downpay-scale">
 <span>0%</span>
-<span>90%</span>
+<span id="downPaymentMaxText">90%</span>
 </div>
 <div class="min-downpay-note" id="minDownPaymentNote"></div>
 <div id="insuranceSubsidyGroup" style="display:none;margin-top:20px;">
@@ -358,6 +358,7 @@ const optionalDiscountMap={
 };
 const extraDiscountMap={"理想 MEGA Home":[{id:"mega_home_repurchase_glass_discount",name:"车主复购电动调光玻璃减免",price:15000}],"理想 i6":[{id:"i6_repurchase_discount",name:"车主复购铂金音响减免",price:5000}],"理想 L6":[{id:"L6_repurchase_discount",name:"车主复购铂金音响减免",price:5000}],"理想 i8 后驱长续航":[{id:"i8_repurchase_discount",name:"车主复购",price:10000}],"理想 i8 四驱高性能":[{id:"i8_repurchase_discount",name:"车主复购",price:10000}],"理想 L8 Ultra":[{id:"l8ultra_repurchase_discount",name:"车主复购",price:10000}],"理想 L8 Livis":[{id:"l8livis_repurchase_discount",name:"车主复购",price:10000}],"理想 L9 Ultra":[{id:"l9ultra_repurchase_discount",name:"车主复购",price:10000}],"理想 L9 Livis":[{id:"l9livis_repurchase_discount",name:"车主复购",price:10000}]};
 let selectedConfigIds=[],selectedDiscountIds=[],selectedExtraDiscountIds=[],selectedGovSubsidyIds=[],manualDiscounts=[],manualSubsidies=[],isEditingDownPayment=false;
+let downPaymentMode="ratio", quoteRevision=0, previewRequestId=0, lastQuoteHtml="";
 function round2(num){return Math.round(num);}
 function formatMoney(num,digits=0){return Number(num).toLocaleString("zh-CN",{minimumFractionDigits:digits,maximumFractionDigits:digits});}
 function escapeHtml(value){return String(value).replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"})[char]);}
@@ -437,7 +438,9 @@ if(n==="理想 L8 Livis"){if(id==="l8livis_special_color"&&chk)selectedConfigIds
 }
 function refreshAfterPriceAffect(){
 const ip=getCurrentInvoicePrice();
-if(!isEditingDownPayment)syncDownPaymentByRatio(ip);else syncDownPaymentByAmount(ip,false);
+if(isEditingDownPayment)syncDownPaymentByAmount(ip,false);
+else if(downPaymentMode==="amount")enforceMinDownPayment(ip);
+else syncDownPaymentByRatio(ip);
 renderGovSubsidySelection();calculateQuote();
 }
 function renderOptionalConfigs(){
@@ -512,7 +515,15 @@ group.style.display=eligible?"":"none";
 price.textContent=item?`-￥${formatMoney(item.price)}`:"-￥0";
 wrap.classList.toggle("selected",eligible&&checkbox.checked);
 }
-function updateSliderBackground(ratio){$id("downPaymentRatio").style.background=`linear-gradient(to right, var(--li-green) 0%, var(--li-green) ${ratio}%, var(--border-light) ${ratio}%, var(--border-light) 100%)`;}
+function updateSliderBackground(ratio){const max=Number($id("downPaymentRatio").max)||90;ratio=ratio/max*100;$id("downPaymentRatio").style.background=`linear-gradient(to right, var(--li-green) 0%, var(--li-green) ${ratio}%, var(--border-light) ${ratio}%, var(--border-light) 100%)`;}
+function updateDownPaymentDisplay(amount,base){
+const ratio=base>0?Math.round(amount/base*100):0;
+const slider=$id("downPaymentRatio"), max=ratio>90?100:90;
+slider.max=max;slider.value=ratio;
+$id("downPaymentMaxText").innerText=`${max}%`;
+$id("downPaymentPercentText").innerText=`${ratio}%`;
+updateSliderBackground(ratio);
+}
 function updateMinDownPaymentNote(){
 const min=getMinDownPayment(getCurrentCar().name,$id("financeType").value);
 $id("minDownPaymentNote").innerText=$id("financeType").value==="full"?"":`当前方案最低首付：¥${formatMoney(min)}`;
@@ -528,19 +539,16 @@ function syncDownPaymentByRatio(base=0){
 const min=getMinDownPayment(getCurrentCar().name,$id("financeType").value);
 let amt=round2(base*(parseFloat($id("downPaymentRatio").value)||0)/100);
 if(amt<min)amt=min;if(amt<0)amt=0;if(amt>base)amt=base;
-let r=base>0?Math.round(amt/base*100):0;if(r>90)r=90;
-$id("downPaymentRatio").value=r;$id("downPaymentPercentText").innerText=`${r}%`;
-$id("downPaymentAmountInput").value=Math.round(amt);
-updateSliderBackground(r);updateMinDownPaymentNote();
+amt=Math.round(amt);
+$id("downPaymentAmountInput").value=amt;
+updateDownPaymentDisplay(amt,base);updateMinDownPaymentNote();
 }
 function syncDownPaymentByAmount(base=0,force=false){
 let amt=parseFloat($id("downPaymentAmountInput").value);if(isNaN(amt))amt=0;
 const min=getMinDownPayment(getCurrentCar().name,$id("financeType").value);
 if(force){if(amt<min)amt=min;if(amt<0)amt=0;if(amt>base)amt=base;}else{if(amt<0)amt=0;if(amt>base)amt=base;}
-let r=base>0?round2(amt/base*100):0;if(r>90)r=90;
-$id("downPaymentRatio").value=Math.round(r);$id("downPaymentPercentText").innerText=`${Math.round(r)}%`;
-if(force)$id("downPaymentAmountInput").value=Math.round(amt);
-updateSliderBackground(Math.round(r));updateMinDownPaymentNote();
+if(force){amt=Math.round(amt);$id("downPaymentAmountInput").value=amt;}
+updateDownPaymentDisplay(amt,base);updateMinDownPaymentNote();
 }
 function toggleFinanceFields(){
 const f=$id("financeType").value, dGrp=$id("downPaymentGroup"), lGrp=$id("loanYearsGroup");
@@ -581,7 +589,7 @@ selectedDiscountIds=getCurrentOptionalDiscounts().filter(i=>i.defaultChecked).ma
 syncFullPaymentDiscounts();toggleFinanceFields();syncInsuranceSubsidyUI(true);initLoanYearsUI();
 renderOptionalConfigs();renderOptionalDiscounts();renderExtraDiscounts();
 renderGovSubsidySelection();renderManualDiscounts();renderManualSubsidies();
-syncDownPaymentByRatio(getCurrentInvoicePrice());calculateQuote();
+downPaymentMode="ratio";syncDownPaymentByRatio(getCurrentInvoicePrice());calculateQuote();
 }
 function renderPriceLine(label,value,isDiscount=false){return `<div class="line"><span class="label">${escapeHtml(label)}</span><span class="value">${isDiscount?"-":""}￥${formatMoney(value)}</span></div>`;}
 
@@ -676,10 +684,8 @@ const ins=getNonNegativeNumber("insurance"), fin=$id("financeType").value;
 let d=parseFloat($id("downPaymentAmountInput").value);if(isNaN(d))d=0;
 const min=getMinDownPayment(car.name,fin);
 if(!isEditingDownPayment){if(d<min)d=min;if(d<0)d=0;if(d>ip)d=ip;}else{if(d<0)d=0;if(d>ip)d=ip;}
-let r=ip>0?Math.round(d/ip*100):0;if(r>90)r=90;
-$id("downPaymentRatio").value=r;$id("downPaymentPercentText").innerText=`${r}%`;
 if(!isEditingDownPayment)$id("downPaymentAmountInput").value=Math.round(d);
-updateSliderBackground(r);updateGovSubsidyAvailability();
+updateDownPaymentDisplay(d,ip);updateGovSubsidyAvailability();
 let l=ip-d;if(l<0)l=0;
 $id("carName").innerText=car.name;
 let html=`<div class="quote-lines"><div class="strong-line-same-size"><span class="label">全国统一零售价</span><span class="value">￥${formatMoney(car.price)}</span></div>${getSelectedOptionalConfigs().map(i=>renderPriceLine(i.name,i.price)).join("")}${getSelectedOptionalDiscounts().map(i=>renderPriceLine(i.name,i.price,true)).join("")}${getSelectedExtraDiscounts().map(i=>renderPriceLine(i.name,i.price,true)).join("")}${getValidManuals(manualDiscounts).map(i=>renderPriceLine(i.name,i.price,true)).join("")}${insuranceSubsidy>0?renderPriceLine("保险补贴",insuranceSubsidy,true):""}<div class="divider"></div><div class="strong-line-same-size"><span class="label">开票价</span><span class="value">￥${formatMoney(ip)}</span></div>${renderPriceLine("保险预估",ins)}${renderPriceLine("购置税",tax)}<div class="strong-line" style="margin-top:12px;"><span class="label">购车总价</span><span class="value">￥${formatMoney(ip+ins+tax)}</span></div>${subsidyValue>0?`<div class="divider"></div><div class="section-hint">政府补贴（以政府公告为准，需自行申领与车企无关）</div>${subsidyItems.map(i=>renderPriceLine(i.name,i.amount,true)).join("")}<div class="strong-line"><span class="label">实际花费</span><span class="value">￥${formatMoney(Math.max(0,ip+ins+tax-subsidyValue))}</span></div>`:''}</div>`;
@@ -693,6 +699,7 @@ else if(fin==="rate199")html+=renderRatePlan(d,l,ins,tax,yrs,1.99,"1.99%年费�
 else if(fin==="rate099")html+=renderRatePlan(d,l,ins,tax,yrs,0.99,"限时0.99%低息","1.92%");
 else if(fin==="rate149")html+=renderRatePlan(d,l,ins,tax,yrs,1.49,"限时1.49%低息","2.86%");
 }
+if(lastQuoteHtml!==html){quoteRevision++;closeImagePreview();lastQuoteHtml=html;}
 $id("financeCardArea").innerHTML=html;
 }
 function resetForm(){
@@ -707,16 +714,19 @@ updateCarInfo();
 }
 async function generateQuotePreview(){
 calculateQuote();
+const revision=quoteRevision, requestId=++previewRequestId;
 const target=$id("quoteCaptureArea");target.style.backgroundColor="#ffffff";
 try{
 if(document.fonts&&document.fonts.ready)await document.fonts.ready;
+if(revision!==quoteRevision||requestId!==previewRequestId)return;
 const canvas=await html2canvas(target,{backgroundColor:"#ffffff",scale:2,useCORS:true});
+if(revision!==quoteRevision||requestId!==previewRequestId)return;
 $id("previewImage").src=canvas.toDataURL("image/png");
 $id("imagePreviewCard").style.display="block";$id("imagePreviewCard").scrollIntoView({behavior:"smooth",block:"center"});
 }catch(error){console.error("报价单生成失败",error);alert("报价单生成失败，请稍后重试");}
 finally{target.style.backgroundColor="";}
 }
-function closeImagePreview(){$id("imagePreviewCard").style.display="none";$id("previewImage").src="";}
+function closeImagePreview(){previewRequestId++;$id("imagePreviewCard").style.display="none";$id("previewImage").src="";}
 window.onload=function(){
 initModels();updateCarInfo();
 $id("model").addEventListener("change",()=>{closeImagePreview();isEditingDownPayment=false;updateCarInfo();});
@@ -727,10 +737,11 @@ toggleFinanceFields();syncInsuranceSubsidyUI();renderOptionalDiscounts();
 if(!isEditingDownPayment)enforceMinDownPayment(getCurrentInvoicePrice());else syncDownPaymentByAmount(getCurrentInvoicePrice(),false);
 renderGovSubsidySelection();calculateQuote();
 });
+$id("loanYears").addEventListener("change",calculateQuote);
 $id("insuranceSubsidy").addEventListener("change",()=>{syncInsuranceSubsidyUI();refreshAfterPriceAffect();});
-$id("downPaymentRatio").addEventListener("input",()=>{isEditingDownPayment=false;syncDownPaymentByRatio(getCurrentInvoicePrice());renderGovSubsidySelection();calculateQuote();});
+$id("downPaymentRatio").addEventListener("input",()=>{isEditingDownPayment=false;downPaymentMode="ratio";syncDownPaymentByRatio(getCurrentInvoicePrice());renderGovSubsidySelection();calculateQuote();});
 $id("downPaymentAmountInput").addEventListener("focus",()=>{isEditingDownPayment=true;});
-$id("downPaymentAmountInput").addEventListener("input",()=>{syncDownPaymentByAmount(getCurrentInvoicePrice(),false);renderGovSubsidySelection();calculateQuote();});
+$id("downPaymentAmountInput").addEventListener("input",()=>{downPaymentMode="amount";syncDownPaymentByAmount(getCurrentInvoicePrice(),false);renderGovSubsidySelection();calculateQuote();});
 $id("downPaymentAmountInput").addEventListener("blur",()=>{isEditingDownPayment=false;enforceMinDownPayment(getCurrentInvoicePrice());renderGovSubsidySelection();calculateQuote();});
 $qAll(".gov-subsidy-checkbox").forEach(el=>{el.addEventListener("change",()=>{selectedGovSubsidyIds=Array.from($qAll(".gov-subsidy-checkbox:checked")).map(i=>i.value);normalizeGovSubsidySelection(el.value);renderGovSubsidySelection();calculateQuote();});});
 $id("manualDiscountToggle").addEventListener("click",function(){togglePanel("manualDiscountPanel",this,"添加其他优惠");});
