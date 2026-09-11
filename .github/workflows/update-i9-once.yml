@@ -1,0 +1,45 @@
+name: Update i9 once
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/update-i9-once.yml
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Update i9 production data
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          old_price = '{name:"理想 i9",price:439800,insurance:10050,financeProfile:"i9"}'
+          new_price = '{name:"理想 i9",price:409800,insurance:10050,financeProfile:"i9"}'
+          old_cfg = '"理想 i9":[{id:"i9_dimming_glass",name:"270°电动调光玻璃",price:10000},{id:"i9_special_color",name:"特殊颜色",price:10000},{id:"i9_hook",name:"电动拖车钩",price:6000},{id:"i9_wheel_22",name:"22寸轮毂",price:10000}]'
+          new_cfg = '"理想 i9":[{id:"i9_dimming_glass",name:"二三排调光玻璃",price:10000},{id:"i9_special_color",name:"特殊颜色",price:10000},{id:"i9_mahe_pack",name:"马赫智驾套装",price:20000},{id:"i9_wheel_22",name:"22寸轮毂",price:10000}]'
+          if old_price not in s:
+              raise SystemExit('i9 old price pattern not found')
+          if old_cfg not in s:
+              raise SystemExit('i9 old config pattern not found')
+          s = s.replace(old_price, new_price, 1).replace(old_cfg, new_cfg, 1)
+          p.write_text(s, encoding='utf-8')
+          PY
+
+      - name: Commit production update and remove one-time workflow
+        run: |
+          rm .github/workflows/update-i9-once.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html .github/workflows/update-i9-once.yml
+          git commit -m "更新 i9 正式指导价与选配配置"
+          git push
