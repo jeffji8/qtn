@@ -1,4 +1,4 @@
-name: Apply i9 update and unify option names
+name: Finalize i9 and deploy FTP
 
 on:
   push:
@@ -9,47 +9,28 @@ permissions:
   contents: write
 
 jobs:
-  update-and-deploy:
+  release:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
 
-      - name: Apply business updates
+      - name: Finalize business data
         run: |
           python3 - <<'PY'
           from pathlib import Path
           p=Path('index.html')
           s=p.read_text(encoding='utf-8')
-
-          s=s.replace('"理想 i9":{minDp:69800,rate:3.32}', '"理想 i9":{minDp:59800,rate:3.32}')
-          s=s.replace('i9:["full","suixin","5m2","rate199"]', 'i9:["full","suixin","rate199"]')
-          s=s.replace('{name:"理想 i9",price:409800,insurance:10050,financeProfile:"i9"}', '{name:"理想 i9",price:369800,insurance:10050,financeProfile:"i9"}')
-          old='"理想 i9":[{id:"i9_dimming_glass",name:"二三排调光玻璃",price:10000},{id:"i9_special_color",name:"特殊颜色",price:10000},{id:"i9_mahe_pack",name:"马赫智驾套装",price:20000},{id:"i9_wheel_22",name:"22寸轮毂",price:10000}]'
-          new='"理想 i9":[{id:"i9_dimming_glass",name:"二三排调光玻璃",price:10000},{id:"i9_wheel_22",name:"22寸轮毂",price:10000},{id:"i9_home_theater_audio",name:"Home剧院音响",price:10000},{id:"i9_embodied_intelligence",name:"具身智能套装",price:10000},{id:"i9_floating_table",name:"悬浮组合桌板",price:3500}]'
-          s=s.replace(old,new)
-          s=s.replace('"理想 i9":[{id:"i9_full_payment_discount",name:"全款优惠",price:5000,fullOnly:true}]', '"理想 i9":[]')
-
-          # 全车型统一命名
-          s=s.replace('马赫智驾套装','具身智能套装')
-          # 二三排调光玻璃统一使用这一名称；兼容历史名称
-          s=s.replace('270°电动调光玻璃','二三排调光玻璃')
-          s=s.replace('二三排电动调光玻璃','二三排调光玻璃')
-
-          checks=[
-            '"理想 i9":{minDp:59800,rate:3.32}',
-            'i9:["full","suixin","rate199"]',
-            '{name:"理想 i9",price:369800,insurance:10050,financeProfile:"i9"}',
-            'name:"Home剧院音响",price:10000',
-            'name:"具身智能套装",price:10000',
-            'name:"悬浮组合桌板",price:3500'
-          ]
-          missing=[x for x in checks if x not in s]
-          if missing:
-              raise SystemExit('missing expected data: '+repr(missing))
-          if '马赫智驾套装' in s or '270°电动调光玻璃' in s or '二三排电动调光玻璃' in s:
-              raise SystemExit('legacy option name remains')
+          old='"理想 i9":[{id:"i9_repurchase_discount",name:"车主复购",price:10000}]'
+          new='"理想 i9":[{id:"i9_repurchase_discount",name:"车主复购剧院音响减免",price:10000}]'
+          if old not in s:
+              raise SystemExit('i9 repurchase pattern not found')
+          s=s.replace(old,new,1)
+          # MEGA 保留独立命名及 15000 元价格
+          mega='{id:"mega_home_dimming_glass",name:"270°电动调光玻璃",price:15000}'
+          if mega not in s:
+              raise SystemExit('MEGA dimming glass configuration changed unexpectedly')
           p.write_text(s,encoding='utf-8')
           PY
 
@@ -97,15 +78,15 @@ jobs:
                       README.md
           YAML
 
-      - name: Commit updates
+      - name: Commit production version
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html .github/workflows/deploy-ftp.yml
-          git commit -m "更新 i9 正式配置并统一选配命名"
+          git commit -m "发布 i9 新版配置并更新复购权益名称"
           git push
 
-      - name: Upload website files
+      - name: Upload website files to FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.4.0
         with:
           server: ${{ secrets.FTP_SERVER }}
