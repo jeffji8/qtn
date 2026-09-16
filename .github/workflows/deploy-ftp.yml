@@ -1,29 +1,70 @@
-name: Deploy website to FTP
+name: Apply repurchase dependency upgrade
 
 on:
   push:
     branches:
       - main
-  workflow_dispatch:
 
 permissions:
-  contents: read
-
-concurrency:
-  group: ftp-deploy
-  cancel-in-progress: true
+  contents: write
 
 jobs:
-  deploy:
-    name: Upload site
+  upgrade:
     runs-on: ubuntu-latest
     timeout-minutes: 10
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
 
-      - name: Upload website files
+      - name: Apply business logic upgrade
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+
+          replacements={
+            '{id:"i9_repurchase_discount",name:"车主复购",price:10000}':'{id:"i9_repurchase_discount",name:"车主复购剧院音响减免",price:10000,requiresConfigId:"i9_home_theater_audio"}',
+            '{id:"i9_repurchase_discount",name:"车主复购剧院音响减免",price:10000}':'{id:"i9_repurchase_discount",name:"车主复购剧院音响减免",price:10000,requiresConfigId:"i9_home_theater_audio"}',
+            '{id:"mega_home_repurchase_glass_discount",name:"车主复购电动调光玻璃减免",price:15000}':'{id:"mega_home_repurchase_glass_discount",name:"车主复购电动调光玻璃减免",price:15000,requiresConfigId:"mega_home_dimming_glass"}',
+            '{id:"i6_repurchase_discount",name:"车主复购铂金音响减免",price:5000}':'{id:"i6_repurchase_discount",name:"车主复购铂金音响减免",price:5000,requiresConfigId:"i6_platinum_audio"}',
+            '{id:"L6_repurchase_discount",name:"车主复购铂金音响减免",price:5000}':'{id:"L6_repurchase_discount",name:"车主复购铂金音响减免",price:5000,requiresConfigId:"l6_platinum_audio"}'
+          }
+          for old,new in replacements.items():
+              if old in s: s=s.replace(old,new,1)
+
+          old='renderOptionalConfigs();renderOptionalDiscounts();refreshAfterPriceAffect();'
+          new='renderOptionalConfigs();renderOptionalDiscounts();renderExtraDiscounts();refreshAfterPriceAffect();'
+          if old not in s: raise SystemExit('config refresh hook not found')
+          s=s.replace(old,new,1)
+
+          old='''area.innerHTML=`<div class="apple-card-grid">`+discounts.map(i=>{\nconst sel=selectedExtraDiscountIds.includes(i.id);\nreturn `<label class="apple-card-option ${sel?"selected":""}"><input type="checkbox" class="extra-discount-checkbox" value="${i.id}" ${sel?"checked":""} /><span class="card-name">${i.name}</span><span class="card-price">-￥${formatMoney(i.price)}</span></label>`;\n}).join("")+`</div>`;'''
+          new='''area.innerHTML=`<div class="apple-card-grid">`+discounts.map(i=>{\nconst dis=!!i.requiresConfigId&&!selectedConfigIds.includes(i.requiresConfigId);\nif(dis)selectedExtraDiscountIds=selectedExtraDiscountIds.filter(id=>id!==i.id);\nconst sel=selectedExtraDiscountIds.includes(i.id);\nreturn `<label class="apple-card-option ${dis?"disabled":""} ${sel?"selected":""}"><input type="checkbox" class="extra-discount-checkbox" value="${i.id}" ${sel?"checked":""} ${dis?"disabled":""} /><span class="card-name">${i.name}</span><span class="card-price">-￥${formatMoney(i.price)}</span></label>`;\n}).join("")+`</div>`;'''
+          if old not in s: raise SystemExit('extra discount render block not found')
+          s=s.replace(old,new,1)
+
+          required=[
+            'requiresConfigId:"i9_home_theater_audio"',
+            'requiresConfigId:"mega_home_dimming_glass"',
+            'requiresConfigId:"i6_platinum_audio"',
+            'requiresConfigId:"l6_platinum_audio"',
+            'name:"车主复购剧院音响减免",price:10000',
+            'name:"270°电动调光玻璃",price:15000'
+          ]
+          missing=[x for x in required if x not in s]
+          if missing: raise SystemExit('missing expected final rules: '+repr(missing))
+          p.write_text(s,encoding='utf-8')
+          PY
+
+      - name: Commit upgraded index
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "升级复购权益与对应选配联动逻辑"
+          git push
+
+      - name: Upload upgraded site to FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.4.0
         with:
           server: ${{ secrets.FTP_SERVER }}
