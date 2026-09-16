@@ -1,92 +1,29 @@
-name: Finalize i9 and deploy FTP
+name: Deploy website to FTP
 
 on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
+
+concurrency:
+  group: ftp-deploy
+  cancel-in-progress: true
 
 jobs:
-  release:
+  deploy:
+    name: Upload site
     runs-on: ubuntu-latest
     timeout-minutes: 10
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
 
-      - name: Finalize business data
-        run: |
-          python3 - <<'PY'
-          from pathlib import Path
-          p=Path('index.html')
-          s=p.read_text(encoding='utf-8')
-          old='"理想 i9":[{id:"i9_repurchase_discount",name:"车主复购",price:10000}]'
-          new='"理想 i9":[{id:"i9_repurchase_discount",name:"车主复购剧院音响减免",price:10000}]'
-          if old not in s:
-              raise SystemExit('i9 repurchase pattern not found')
-          s=s.replace(old,new,1)
-          # MEGA 保留独立命名及 15000 元价格
-          mega='{id:"mega_home_dimming_glass",name:"270°电动调光玻璃",price:15000}'
-          if mega not in s:
-              raise SystemExit('MEGA dimming glass configuration changed unexpectedly')
-          p.write_text(s,encoding='utf-8')
-          PY
-
-      - name: Restore normal FTP workflow
-        run: |
-          cat > .github/workflows/deploy-ftp.yml <<'YAML'
-          name: Deploy website to FTP
-
-          on:
-            push:
-              branches:
-                - main
-            workflow_dispatch:
-
-          permissions:
-            contents: read
-
-          concurrency:
-            group: ftp-deploy
-            cancel-in-progress: true
-
-          jobs:
-            deploy:
-              name: Upload site
-              runs-on: ubuntu-latest
-              timeout-minutes: 10
-
-              steps:
-                - name: Checkout repository
-                  uses: actions/checkout@v6
-
-                - name: Upload website files
-                  uses: SamKirkland/FTP-Deploy-Action@v4.4.0
-                  with:
-                    server: ${{ secrets.FTP_SERVER }}
-                    username: ${{ secrets.FTP_USERNAME }}
-                    password: ${{ secrets.FTP_PASSWORD }}
-                    protocol: ftp
-                    port: 21
-                    server-dir: /wwwroot/
-                    exclude: |
-                      **/.git*
-                      **/.git*/**
-                      .github/**
-                      README.md
-          YAML
-
-      - name: Commit production version
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html .github/workflows/deploy-ftp.yml
-          git commit -m "发布 i9 新版配置并更新复购权益名称"
-          git push
-
-      - name: Upload website files to FTP
+      - name: Upload website files
         uses: SamKirkland/FTP-Deploy-Action@v4.4.0
         with:
           server: ${{ secrets.FTP_SERVER }}
