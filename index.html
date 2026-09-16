@@ -360,7 +360,7 @@ const optionalDiscountMap={
 {id:"l9livis_shunyi_discount",name:"顺义补贴",price:10000,defaultChecked:true}
 ]
 };
-const extraDiscountMap={"理想 i9":[{id:"i9_repurchase_discount",name:"车主复购",price:10000}],"理想 MEGA Home":[{id:"mega_home_repurchase_glass_discount",name:"车主复购电动调光玻璃减免",price:15000}],"理想 i6":[{id:"i6_repurchase_discount",name:"车主复购铂金音响减免",price:5000}],"理想 L6":[{id:"L6_repurchase_discount",name:"车主复购铂金音响减免",price:5000}],"理想 i8 后驱长续航":[{id:"i8_repurchase_discount",name:"车主复购",price:10000}],"理想 i8 四驱高性能":[{id:"i8_repurchase_discount",name:"车主复购",price:10000}],"理想 L8 Ultra":[{id:"l8ultra_repurchase_discount",name:"车主复购",price:10000}],"理想 L8 Livis":[{id:"l8livis_repurchase_discount",name:"车主复购",price:10000}],"理想 L9 Ultra":[{id:"l9ultra_repurchase_discount",name:"车主复购",price:10000}],"理想 L9 Livis":[{id:"l9livis_repurchase_discount",name:"车主复购",price:10000}]};
+const extraDiscountMap={"理想 i9":[{id:"i9_repurchase_discount",name:"车主复购剧院音响减免",price:10000,requiresConfigId:"i9_home_theater_audio"}],"理想 MEGA Home":[{id:"mega_home_repurchase_glass_discount",name:"车主复购电动调光玻璃减免",price:15000,requiresConfigId:"mega_home_dimming_glass"}],"理想 i6":[{id:"i6_repurchase_discount",name:"车主复购铂金音响减免",price:5000,requiresConfigId:"i6_platinum_audio"}],"理想 L6":[{id:"L6_repurchase_discount",name:"车主复购铂金音响减免",price:5000,requiresConfigId:"l6_platinum_audio"}],"理想 i8 后驱长续航":[{id:"i8_repurchase_discount",name:"车主复购",price:10000}],"理想 i8 四驱高性能":[{id:"i8_repurchase_discount",name:"车主复购",price:10000}],"理想 L8 Ultra":[{id:"l8ultra_repurchase_discount",name:"车主复购",price:10000}],"理想 L8 Livis":[{id:"l8livis_repurchase_discount",name:"车主复购",price:10000}],"理想 L9 Ultra":[{id:"l9ultra_repurchase_discount",name:"车主复购",price:10000}],"理想 L9 Livis":[{id:"l9livis_repurchase_discount",name:"车主复购",price:10000}]};
 let selectedConfigIds=[],selectedDiscountIds=[],selectedExtraDiscountIds=[],selectedGovSubsidyIds=[],manualDiscounts=[],manualSubsidies=[],isEditingDownPayment=false;
 let downPaymentMode="ratio", quoteRevision=0, previewRequestId=0, lastQuoteHtml="";
 function round2(num){return Math.round(num);}
@@ -466,7 +466,7 @@ handleConfigMutualExclusion(e.target.value,e.target.checked);
 syncConfigRequiredDiscounts();
 const hasI6Awd=selectedConfigIds.includes("i6_awd");
 if(car.name==="理想 i6"&&hadI6Awd!==hasI6Awd)$id("insurance").value=hasI6Awd?car.awdInsurance:car.insurance;
-renderOptionalConfigs();renderOptionalDiscounts();refreshAfterPriceAffect();
+renderOptionalConfigs();renderOptionalDiscounts();renderExtraDiscounts();refreshAfterPriceAffect();
 }));
 }
 function renderOptionalDiscounts(){
@@ -487,8 +487,10 @@ function renderExtraDiscounts(){
 const area=$id("extraDiscountArea"), discounts=getCurrentExtraDiscounts();
 if(!discounts.length){area.innerHTML="";return;}
 area.innerHTML=`<div class="apple-card-grid">`+discounts.map(i=>{
+const dis=!!i.requiresConfigId&&!selectedConfigIds.includes(i.requiresConfigId);
+if(dis)selectedExtraDiscountIds=selectedExtraDiscountIds.filter(id=>id!==i.id);
 const sel=selectedExtraDiscountIds.includes(i.id);
-return `<label class="apple-card-option ${sel?"selected":""}"><input type="checkbox" class="extra-discount-checkbox" value="${i.id}" ${sel?"checked":""} /><span class="card-name">${i.name}</span><span class="card-price">-￥${formatMoney(i.price)}</span></label>`;
+return `<label class="apple-card-option ${dis?"disabled":""} ${sel?"selected":""}"><input type="checkbox" class="extra-discount-checkbox" value="${i.id}" ${sel?"checked":""} ${dis?"disabled":""} /><span class="card-name">${i.name}</span><span class="card-price">-￥${formatMoney(i.price)}</span></label>`;
 }).join("")+`</div>`;
 $qAll(".extra-discount-checkbox").forEach(el=>{
 el.addEventListener("change",()=>{
