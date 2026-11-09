@@ -303,13 +303,12 @@ suixin:{value:"suixin",label:"随心还"},
 "5m3":{value:"5m3",label:"限时5免3"},
 "5m2":{value:"5m2",label:"限时5免2"},
 rate199:{value:"rate199",label:"1.99%年费率"},
-rate149:{value:"rate149",label:"限时1.49%低息"},
-rate099:{value:"rate099",label:"限时0.99%低息"}
+rate149:{value:"rate149",label:"限时1.49%低息"}
 };
 const FINANCE_PROFILES={
 standard:["full","suixin","rate199"],
 i6:["full","suixin","rate199"],
-i8:["full","suixin","3free","5m3","rate199","rate099"],
+i8:["full","suixin","3free","5m3","rate199"],
 i9:["full","suixin","rate199"],
 l8:["full","suixin","5m2","rate199"],
 l9:["full","suixin","5m2","rate199"]
@@ -714,7 +713,6 @@ else if(fin==="3free")html+=renderFreePlan(d,l,ins,tax,3,"3年免息");
 else if(fin==="5m3")html+=renderMultiStagePlan(d,l,ins,tax,"限时5免3",36,1.1495,"2.99%","5.62%");
 else if(fin==="5m2")html+=renderMultiStagePlan(d,l,ins,tax,"限时5免2",24,1.1495,"2.99%","5.62%");
 else if(fin==="rate199")html+=renderRatePlan(d,l,ins,tax,yrs,1.99,"1.99%年费率","3.80%");
-else if(fin==="rate099")html+=renderRatePlan(d,l,ins,tax,yrs,0.99,"限时0.99%低息","1.92%");
 else if(fin==="rate149")html+=renderRatePlan(d,l,ins,tax,yrs,1.49,"限时1.49%低息","2.86%");
 }
 if(lastQuoteHtml!==html){quoteRevision++;closeImagePreview();lastQuoteHtml=html;}
