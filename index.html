@@ -315,6 +315,7 @@ l8:["full","suixin","5m2","rate199"],
 l9:["full","suixin","5m2","rate199"]
 };
 const INSURANCE_SUBSIDY_RATE_FINANCE_TYPE="rate199";
+const INSURANCE_SUBSIDY_OVERRIDE={"理想 i8 后驱长续航":8000,"理想 i8 四驱高性能":8000};
 const carData=[
 {name:"理想 i6",price:249800,insurance:7361,awdInsurance:8035,financeProfile:"i6"},
 {name:"理想 i8 后驱长续航",price:309800,insurance:9181,financeProfile:"i8"},
@@ -336,12 +337,12 @@ const optionalDiscountMap={
 ],
 "理想 i8 后驱长续航":[
 {id:"i8_rear_stock_discount",name:"现车优惠",price:10000,defaultChecked:true},
-{id:"i8_rear_limited_discount",name:"限时优惠减免",price:15000,defaultChecked:true},
+{id:"i8_rear_limited_discount",name:"限时现金优惠",price:5000,defaultChecked:true},
 {id:"i8_rear_full_payment_discount",name:"全款优惠",price:10000,fullOnly:true}
 ],
 "理想 i8 四驱高性能":[
 {id:"i8_awd_stock_discount",name:"现车优惠",price:10000,defaultChecked:true},
-{id:"i8_awd_limited_discount",name:"限时优惠减免",price:15000,defaultChecked:true},
+{id:"i8_awd_limited_discount",name:"限时现金优惠",price:5000,defaultChecked:true},
 {id:"i8_awd_full_payment_discount",name:"全款优惠",price:10000,fullOnly:true}
 ],
 "理想 L8 Ultra":[
@@ -519,14 +520,17 @@ const isSubsidizedSuixin=financeType==="suixin"&&(car.name.startsWith("理想 L8
 return hasFullPaymentDiscount&&(financeType===INSURANCE_SUBSIDY_RATE_FINANCE_TYPE||isSubsidizedSuixin);
 }
 function getInsuranceSubsidyAmount(){
-const item=getCurrentFullPaymentDiscount();
-return isInsuranceSubsidyEligible()&&$id("insuranceSubsidy").checked?(Number(item.price)||0):0;
+return isInsuranceSubsidyEligible()&&$id("insuranceSubsidy").checked?getInsuranceSubsidyValue():0;
+}
+function getInsuranceSubsidyValue(){
+const car=getCurrentCar(), item=getCurrentFullPaymentDiscount();
+return INSURANCE_SUBSIDY_OVERRIDE[car.name]??(Number(item?.price)||0);
 }
 function syncInsuranceSubsidyUI(reset=false){
-const group=$id("insuranceSubsidyGroup"), checkbox=$id("insuranceSubsidy"), wrap=$id("insuranceSubsidyWrap"), price=$id("insuranceSubsidyPrice"), item=getCurrentFullPaymentDiscount(), eligible=isInsuranceSubsidyEligible();
+const group=$id("insuranceSubsidyGroup"), checkbox=$id("insuranceSubsidy"), wrap=$id("insuranceSubsidyWrap"), price=$id("insuranceSubsidyPrice"), eligible=isInsuranceSubsidyEligible();
 if(reset||!eligible)checkbox.checked=false;
 group.style.display=eligible?"":"none";
-price.textContent=item?`-￥${formatMoney(item.price)}`:"-￥0";
+price.textContent=eligible?`-￥${formatMoney(getInsuranceSubsidyValue())}`:"-￥0";
 wrap.classList.toggle("selected",eligible&&checkbox.checked);
 }
 function updateSliderBackground(ratio){const max=Number($id("downPaymentRatio").max)||90;ratio=ratio/max*100;$id("downPaymentRatio").style.background=`linear-gradient(to right, var(--li-green) 0%, var(--li-green) ${ratio}%, var(--border-light) ${ratio}%, var(--border-light) 100%)`;}
@@ -707,7 +711,7 @@ if(fin!=="full"){
 const yrs=parseInt($id("loanYears").value)||3;
 if(fin==="suixin")html+=renderSuiXinPlan(d,l,ins,tax,car.name);
 else if(fin==="3free")html+=renderFreePlan(d,l,ins,tax,3,"3年免息");
-else if(fin==="5m3")html+=renderMultiStagePlan(d,l,ins,tax,"限时5免3",36,1.0995,"1.99%","3.80%");
+else if(fin==="5m3")html+=renderMultiStagePlan(d,l,ins,tax,"限时5免3",36,1.1495,"2.99%","5.62%");
 else if(fin==="5m2")html+=renderMultiStagePlan(d,l,ins,tax,"限时5免2",24,1.1495,"2.99%","5.62%");
 else if(fin==="rate199")html+=renderRatePlan(d,l,ins,tax,yrs,1.99,"1.99%年费率","3.80%");
 else if(fin==="rate099")html+=renderRatePlan(d,l,ins,tax,yrs,0.99,"限时0.99%低息","1.92%");
