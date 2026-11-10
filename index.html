@@ -286,8 +286,8 @@ const $qAll=sel=>document.querySelectorAll(sel);
 const SUI_XIN_HUAN_CONFIG={
 "理想 i9":{minDp:59800,rate:3.32},
 "理想 i6":{minDp:39800,rate:3.32},
-"理想 i8 后驱长续航":{minDp:59800,rate:2.21},
-"理想 i8 四驱高性能":{minDp:59800,rate:2.21},
+"理想 i8 后驱长续航":{minDp:59800,rate:3.32},
+"理想 i8 四驱高性能":{minDp:59800,rate:3.32},
 "理想 L6":{minDp:39800,rate:3.32},
 "理想 L8 Ultra":{minDp:69800,rate:3.32},
 "理想 L8 Livis":{minDp:69800,rate:3.32},
@@ -299,16 +299,14 @@ const SUI_XIN_HUAN_CONFIG={
 const FINANCE_OPTION_CATALOG={
 full:{value:"full",label:"全款"},
 suixin:{value:"suixin",label:"随心还"},
-"3free":{value:"3free",label:"3年免息"},
 "5m3":{value:"5m3",label:"限时5免3"},
 "5m2":{value:"5m2",label:"限时5免2"},
-rate199:{value:"rate199",label:"1.99%年费率"},
-rate149:{value:"rate149",label:"限时1.49%低息"}
+rate199:{value:"rate199",label:"1.99%年费率"}
 };
 const FINANCE_PROFILES={
 standard:["full","suixin","rate199"],
 i6:["full","suixin","rate199"],
-i8:["full","suixin","3free","5m3","rate199"],
+i8:["full","suixin","5m3","rate199"],
 i9:["full","suixin","rate199"],
 l8:["full","suixin","5m2","rate199"],
 l9:["full","suixin","5m2","rate199"]
@@ -385,7 +383,7 @@ function initModels(){const m=$id("model");m.innerHTML="";carData.forEach((car,i
 function getCurrentCar(){return carData[$id("model").value];}
 function getMinDownPayment(carName,finType){
 if(finType==="suixin"&&SUI_XIN_HUAN_CONFIG[carName]) return SUI_XIN_HUAN_CONFIG[carName].minDp;
-if(carName.startsWith("理想 i8")&&(finType==="3free"||finType==="5m3"))return 99800;
+if(carName.startsWith("理想 i8")&&finType==="5m3")return 99800;
 return 0;
 }
 function getFinanceOptionsForCar(car){return FINANCE_PROFILES[car.financeProfile].map(key=>FINANCE_OPTION_CATALOG[key]);}
@@ -515,7 +513,7 @@ function getCurrentFullPaymentDiscount(){return getCurrentOptionalDiscounts().fi
 function isInsuranceSubsidyEligible(){
 const car=getCurrentCar(), financeType=$id("financeType").value, hasFullPaymentDiscount=!!getCurrentFullPaymentDiscount();
 if(car.name==="理想 i6")return false;
-const isSubsidizedSuixin=financeType==="suixin"&&(car.name.startsWith("理想 L8")||car.name.startsWith("理想 L9")||car.name==="理想 i9");
+const isSubsidizedSuixin=financeType==="suixin"&&(car.name.startsWith("理想 L8")||car.name.startsWith("理想 L9")||car.name.startsWith("理想 i8")||car.name==="理想 i9");
 return hasFullPaymentDiscount&&(financeType===INSURANCE_SUBSIDY_RATE_FINANCE_TYPE||isSubsidizedSuixin);
 }
 function getInsuranceSubsidyAmount(){
@@ -570,9 +568,9 @@ updateDownPaymentDisplay(amt,base);updateMinDownPaymentNote();
 function toggleFinanceFields(){
 const f=$id("financeType").value, dGrp=$id("downPaymentGroup"), lGrp=$id("loanYearsGroup");
 if(f==="full"){dGrp.style.display="none";lGrp.style.display="none";}
-else if(f==="3free"||f==="5m3"||f==="5m2"||f==="suixin"){
+else if(f==="5m3"||f==="5m2"||f==="suixin"){
 dGrp.style.display="";lGrp.style.display="none";
-$id("loanYears").value=f==="3free"?"3":"5";
+$id("loanYears").value="5";
 initLoanYearsUI();
 }
 else{dGrp.style.display="";lGrp.style.display="";}
@@ -684,9 +682,6 @@ function renderFinanceTop(d,l,t,name,per){
 const r=(d+l)>0?Math.round(d/(d+l)*100):0;
 return `<div class="section-row finance-first-row"><span class="label">金融产品</span><span class="scheme-value">${name}</span></div><div class="section-row" style="border-top:none; padding-top:4px;"><span class="label">分期期数</span><span class="scheme-value" style="background:var(--apple-gray); color:var(--text-main);">${per}</span></div><div class="top-money"><div class="money-box left"><div class="big-money">￥${formatMoney(d)}</div><div class="money-label">首付金额(${r}%)</div></div><div class="money-box center"><div class="big-money">￥${formatMoney(l)}</div><div class="money-label">融资金额</div></div><div class="money-box right money-accent"><div class="big-money">￥${formatMoney(t)}</div><div class="money-label">首付合计</div></div></div>`;
 }
-function renderFreePlan(d,l,i,t,y,n){
-return `${renderFinanceTop(d,l,round2(d+i+t),n,`${y*12}期`)}<div class="quote-lines">${renderPriceLine("保险预估",i)}${renderPriceLine("购置税",t)}</div><div class="stage-block"><div class="stage-title">1-${y*12}期 <span class="tag">单阶段</span></div><div class="detail-line"><span class="detail-left">预估月付</span><span class="detail-right">￥${formatMoney(l/(y*12))}</span></div><div class="detail-line"><span class="detail-left">利息</span><span class="detail-right">￥0</span></div><div class="detail-line"><span class="detail-left">年化费率</span><span class="detail-right">0.00%</span></div><div class="rate-note">折算年化利率0.00%</div></div>`;
-}
 function renderMultiStagePlan(d,l,i,t,n,m1,m2,r,apprR){
 const p1=round2(l/60), p2=round2(l*m2/60), intst=Math.max(0,round2(p2*(60-m1)+p1*m1-l));
 return `${renderFinanceTop(d,l,round2(d+i+t),n,"60期")}<div class="quote-lines">${renderPriceLine("保险预估",i)}${renderPriceLine("购置税",t)}</div><div class="stage-block"><div class="stage-title">1-${m1}期 <span class="tag">第1阶段</span></div><div class="detail-line"><span class="detail-left">预估月付</span><span class="detail-right">￥${formatMoney(p1)}</span></div><div class="detail-line"><span class="detail-left">利息</span><span class="detail-right">￥0</span></div><div class="detail-line"><span class="detail-left">年化费率</span><span class="detail-right">0.00%</span></div></div><div class="stage-block"><div class="stage-title">${m1+1}-60期 <span class="tag">第2阶段</span></div><div class="detail-line"><span class="detail-left">剩余本金</span><span class="detail-right">￥${formatMoney(round2(l-l*m1/60))}</span></div><div class="detail-line"><span class="detail-left">预估月付</span><span class="detail-right">￥${formatMoney(p2)}</span></div><div class="detail-line"><span class="detail-left">利息</span><span class="detail-right">￥${formatMoney(intst)}</span></div><div class="detail-line"><span class="detail-left">年化费率</span><span class="detail-right">${r}</span></div><div class="rate-note">近似年化利率${apprR}</div></div>`;
@@ -709,11 +704,9 @@ let html=`<div class="quote-lines"><div class="strong-line-same-size"><span clas
 if(fin!=="full"){
 const yrs=parseInt($id("loanYears").value)||3;
 if(fin==="suixin")html+=renderSuiXinPlan(d,l,ins,tax,car.name);
-else if(fin==="3free")html+=renderFreePlan(d,l,ins,tax,3,"3年免息");
 else if(fin==="5m3")html+=renderMultiStagePlan(d,l,ins,tax,"限时5免3",36,1.1495,"2.99%","5.62%");
 else if(fin==="5m2")html+=renderMultiStagePlan(d,l,ins,tax,"限时5免2",24,1.1495,"2.99%","5.62%");
 else if(fin==="rate199")html+=renderRatePlan(d,l,ins,tax,yrs,1.99,"1.99%年费率","3.80%");
-else if(fin==="rate149")html+=renderRatePlan(d,l,ins,tax,yrs,1.49,"限时1.49%低息","2.86%");
 }
 if(lastQuoteHtml!==html){quoteRevision++;closeImagePreview();lastQuoteHtml=html;}
 $id("financeCardArea").innerHTML=html;
