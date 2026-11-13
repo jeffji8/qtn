@@ -686,6 +686,14 @@ function renderMultiStagePlan(d,l,i,t,n,m1,m2,r,apprR){
 const p1=round2(l/60), p2=round2(l*m2/60), intst=Math.max(0,round2(p2*(60-m1)+p1*m1-l));
 return `${renderFinanceTop(d,l,round2(d+i+t),n,"60期")}<div class="quote-lines">${renderPriceLine("保险预估",i)}${renderPriceLine("购置税",t)}</div><div class="stage-block"><div class="stage-title">1-${m1}期 <span class="tag">第1阶段</span></div><div class="detail-line"><span class="detail-left">预估月付</span><span class="detail-right">￥${formatMoney(p1)}</span></div><div class="detail-line"><span class="detail-left">利息</span><span class="detail-right">￥0</span></div><div class="detail-line"><span class="detail-left">年化费率</span><span class="detail-right">0.00%</span></div></div><div class="stage-block"><div class="stage-title">${m1+1}-60期 <span class="tag">第2阶段</span></div><div class="detail-line"><span class="detail-left">剩余本金</span><span class="detail-right">￥${formatMoney(round2(l-l*m1/60))}</span></div><div class="detail-line"><span class="detail-left">预估月付</span><span class="detail-right">￥${formatMoney(p2)}</span></div><div class="detail-line"><span class="detail-left">利息</span><span class="detail-right">￥${formatMoney(intst)}</span></div><div class="detail-line"><span class="detail-left">年化费率</span><span class="detail-right">${r}</span></div><div class="rate-note">近似年化利率${apprR}</div></div>`;
 }
+function renderFiveFreeThreePlan(d,l,i,t){
+const firstMonthly=round2(l/60);
+const remainingPrincipal=round2(l*24/60);
+const totalInterest=round2(l*0.0299*2);
+const lastMonthly=round2(l/60+totalInterest/24);
+const totalRepayment=round2(l+totalInterest);
+return `${renderFinanceTop(d,l,round2(d+i+t),"限时5免3","60期")}<div class="quote-lines">${renderPriceLine("保险预估",i)}${renderPriceLine("购置税",t)}</div><div class="stage-block"><div class="stage-title">1-36期 <span class="tag">第1阶段</span></div><div class="detail-line"><span class="detail-left">预估月付</span><span class="detail-right">￥${formatMoney(firstMonthly)}</span></div><div class="detail-line"><span class="detail-left">利息</span><span class="detail-right">￥0</span></div><div class="detail-line"><span class="detail-left">年费率</span><span class="detail-right">0.00%</span></div></div><div class="stage-block"><div class="stage-title">37-60期 <span class="tag">第2阶段</span></div><div class="detail-line"><span class="detail-left">剩余本金</span><span class="detail-right">￥${formatMoney(remainingPrincipal)}</span></div><div class="detail-line"><span class="detail-left">预估月付</span><span class="detail-right">￥${formatMoney(lastMonthly)}</span></div><div class="detail-line"><span class="detail-left">后两年总利息</span><span class="detail-right">￥${formatMoney(totalInterest)}</span></div><div class="detail-line"><span class="detail-left">后两年年费率</span><span class="detail-right">2.99%</span></div><div class="detail-line"><span class="detail-left">五年总利息</span><span class="detail-right">￥${formatMoney(totalInterest)}</span></div><div class="detail-line"><span class="detail-left">五年总还款</span><span class="detail-right">￥${formatMoney(totalRepayment)}</span></div><div class="rate-note">按原始贷款本金计算后两年利息；月供为预估值，尾期按实际尾差调整</div></div>`;
+}
 function renderRatePlan(d,l,i,t,y,r,n,appr){
 const intst=round2(l*r/100*y), tr=round2(l+intst);
 return `${renderFinanceTop(d,l,round2(d+i+t),n,`${y*12}期`)}<div class="quote-lines">${renderPriceLine("保险预估",i)}${renderPriceLine("购置税",t)}</div><div class="stage-block"><div class="stage-title">1-${y*12}期 <span class="tag">单阶段</span></div><div class="detail-line"><span class="detail-left">预估月付</span><span class="detail-right">￥${formatMoney(round2(tr/(y*12)))}</span></div><div class="detail-line"><span class="detail-left">利息</span><span class="detail-right">￥${formatMoney(intst)}</span></div><div class="detail-line"><span class="detail-left">总还款</span><span class="detail-right">￥${formatMoney(tr)}</span></div><div class="detail-line"><span class="detail-left">年费率</span><span class="detail-right">${r}%</span></div><div class="rate-note">近似年化利率${appr}</div></div>`;
@@ -704,7 +712,7 @@ let html=`<div class="quote-lines"><div class="strong-line-same-size"><span clas
 if(fin!=="full"){
 const yrs=parseInt($id("loanYears").value)||3;
 if(fin==="suixin")html+=renderSuiXinPlan(d,l,ins,tax,car.name);
-else if(fin==="5m3")html+=renderMultiStagePlan(d,l,ins,tax,"限时5免3",36,1.1495,"2.99%","5.62%");
+else if(fin==="5m3")html+=renderFiveFreeThreePlan(d,l,ins,tax);
 else if(fin==="5m2")html+=renderMultiStagePlan(d,l,ins,tax,"限时5免2",24,1.1495,"2.99%","5.62%");
 else if(fin==="rate199")html+=renderRatePlan(d,l,ins,tax,yrs,1.99,"1.99%年费率","3.80%");
 }
