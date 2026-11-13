@@ -370,16 +370,16 @@ const optionalDiscountMap={
 const extraDiscountMap={"理想 i9":[{id:"i9_repurchase_discount",name:"车主复购剧院音响减免",price:10000,requiresConfigId:"i9_home_theater_audio"}],"理想 MEGA Home":[{id:"mega_home_repurchase_glass_discount",name:"车主复购电动调光玻璃减免",price:15000,requiresConfigId:"mega_home_dimming_glass"}],"理想 i6":[{id:"i6_repurchase_discount",name:"车主复购铂金音响减免",price:5000,requiresConfigId:"i6_platinum_audio"}],"理想 L6":[{id:"L6_repurchase_discount",name:"车主复购铂金音响减免",price:5000,requiresConfigId:"l6_platinum_audio"}],"理想 i8 后驱长续航":[{id:"i8_repurchase_discount",name:"车主复购",price:10000}],"理想 i8 四驱高性能":[{id:"i8_repurchase_discount",name:"车主复购",price:10000}],"理想 L8 Ultra":[{id:"l8ultra_repurchase_discount",name:"车主复购",price:10000}],"理想 L8 Livis":[{id:"l8livis_repurchase_discount",name:"车主复购",price:10000}],"理想 L9 Ultra":[{id:"l9ultra_repurchase_discount",name:"车主复购",price:10000}],"理想 L9 Livis":[{id:"l9livis_repurchase_discount",name:"车主复购",price:10000}]};
 let selectedConfigIds=[],selectedDiscountIds=[],selectedExtraDiscountIds=[],selectedGovSubsidyIds=[],manualDiscounts=[],manualSubsidies=[],isEditingDownPayment=false;
 let downPaymentMode="ratio", quoteRevision=0, previewRequestId=0, lastQuoteHtml="";
-function round2(num){return Math.round(num);}
-function formatMoney(num,digits=0){return Number(num).toLocaleString("zh-CN",{minimumFractionDigits:digits,maximumFractionDigits:digits});}
+function roundUpYuan(num){return Math.ceil(num);}
+function formatMoney(num,digits=0){const factor=10**digits;return (Math.ceil(Number(num)*factor)/factor).toLocaleString("zh-CN",{minimumFractionDigits:digits,maximumFractionDigits:digits});}
 function escapeHtml(value){return String(value).replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"})[char]);}
 function getNonNegativeNumber(id){
 const el=$id(id), value=Number(el.value);
-const safeValue=Number.isFinite(value)?Math.round(Math.max(0,value)):0;
+const safeValue=Number.isFinite(value)?Math.ceil(Math.max(0,value)):0;
 if(!Number.isFinite(value)||value!==safeValue)el.value=safeValue;
 return safeValue;
 }
-function calculatePurchaseTax(ip){return round2(ip/1.13*0.1-Math.min(ip/1.13*0.05,15000));}
+function calculatePurchaseTax(ip){return roundUpYuan(ip/1.13*0.1-Math.min(ip/1.13*0.05,15000));}
 function initModels(){const m=$id("model");m.innerHTML="";carData.forEach((car,i)=>{const opt=document.createElement("option");opt.value=i;opt.textContent=car.name;m.appendChild(opt);});}
 function getCurrentCar(){return carData[$id("model").value];}
 function getMinDownPayment(carName,finType){
@@ -548,14 +548,14 @@ function enforceMinDownPayment(base=0){
 const min=getMinDownPayment(getCurrentCar().name,$id("financeType").value);
 let cur=parseFloat($id("downPaymentAmountInput").value);if(isNaN(cur))cur=0;
 if(cur<min)cur=min;if(cur>base)cur=base;
-$id("downPaymentAmountInput").value=Math.round(cur);
+$id("downPaymentAmountInput").value=Math.ceil(cur);
 syncDownPaymentByAmount(base,true);updateMinDownPaymentNote();
 }
 function syncDownPaymentByRatio(base=0){
 const min=getMinDownPayment(getCurrentCar().name,$id("financeType").value);
-let amt=round2(base*(parseFloat($id("downPaymentRatio").value)||0)/100);
+let amt=roundUpYuan(base*(parseFloat($id("downPaymentRatio").value)||0)/100);
 if(amt<min)amt=min;if(amt<0)amt=0;if(amt>base)amt=base;
-amt=Math.round(amt);
+amt=Math.ceil(amt);
 $id("downPaymentAmountInput").value=amt;
 updateDownPaymentDisplay(amt,base);updateMinDownPaymentNote();
 }
@@ -563,7 +563,7 @@ function syncDownPaymentByAmount(base=0,force=false){
 let amt=parseFloat($id("downPaymentAmountInput").value);if(isNaN(amt))amt=0;
 const min=getMinDownPayment(getCurrentCar().name,$id("financeType").value);
 if(force){if(amt<min)amt=min;if(amt<0)amt=0;if(amt>base)amt=base;}else{if(amt<0)amt=0;if(amt>base)amt=base;}
-if(force){amt=Math.round(amt);$id("downPaymentAmountInput").value=amt;}
+if(force){amt=Math.ceil(amt);$id("downPaymentAmountInput").value=amt;}
 updateDownPaymentDisplay(amt,base);updateMinDownPaymentNote();
 }
 function toggleFinanceFields(){
@@ -614,7 +614,7 @@ const config = SUI_XIN_HUAN_CONFIG[carName] || {minDp:0,rate:3.32};
 const rate = config.rate / 100;
 const yearlyPrincipal = l / 5;
 const totalInterest = l * 3 * rate;
-const totalIntHtml = `￥${formatMoney(Math.round(totalInterest))}`;
+const totalIntHtml = `￥${formatMoney(roundUpYuan(totalInterest))}`;
 
 const r=(d+l)>0?Math.round(d/(d+l)*100):0;
 
@@ -634,7 +634,7 @@ let html = `
 <div class="top-money">
 <div class="money-box left"><div class="big-money">￥${formatMoney(d)}</div><div class="money-label">首付金额(${r}%)</div></div>
 <div class="money-box center"><div class="big-money">￥${formatMoney(l)}</div><div class="money-label">融资金额</div></div>
-<div class="money-box right money-accent"><div class="big-money">￥${formatMoney(round2(d+i+t))}</div><div class="money-label">首付合计</div></div>
+<div class="money-box right money-accent"><div class="big-money">￥${formatMoney(roundUpYuan(d+i+t))}</div><div class="money-label">首付合计</div></div>
 </div>
 <div class="quote-lines">
 ${renderPriceLine("保险预估", i)}
@@ -645,8 +645,8 @@ for (let year = 1; year <= 5; year++) {
 const remPrincipal = l - yearlyPrincipal * (year - 1);
 const mInterest = remPrincipal * rate / 12;
 
-const regularPayment = Math.round(mInterest);
-const lastPayment = Math.round(yearlyPrincipal + mInterest);
+const regularPayment = roundUpYuan(mInterest);
+const lastPayment = roundUpYuan(yearlyPrincipal + mInterest);
 
 const mStart = (year - 1) * 12 + 1;
 const mEnd = year * 12 - 1;
@@ -684,19 +684,22 @@ const r=(d+l)>0?Math.round(d/(d+l)*100):0;
 return `<div class="section-row finance-first-row"><span class="label">金融产品</span><span class="scheme-value">${name}</span></div><div class="section-row" style="border-top:none; padding-top:4px;"><span class="label">分期期数</span><span class="scheme-value" style="background:var(--apple-gray); color:var(--text-main);">${per}</span></div><div class="top-money"><div class="money-box left"><div class="big-money">￥${formatMoney(d)}</div><div class="money-label">首付金额(${r}%)</div></div><div class="money-box center"><div class="big-money">￥${formatMoney(l)}</div><div class="money-label">融资金额</div></div><div class="money-box right money-accent"><div class="big-money">￥${formatMoney(t)}</div><div class="money-label">首付合计</div></div></div>`;
 }
 function renderMultiStagePlan(d,l,i,t,n,m1,m2,r,apprR){
-const p1=round2(l/60), p2=round2(l*m2/60), intst=Math.max(0,round2(p2*(60-m1)+p1*m1-l));
-return `${renderFinanceTop(d,l,round2(d+i+t),n,"60期")}<div class="quote-lines">${renderPriceLine("保险预估",i)}${renderPriceLine("购置税",t)}</div><div class="stage-block"><div class="stage-title">1-${m1}期 <span class="tag">第1阶段</span></div><div class="detail-line"><span class="detail-left">预估月付</span><span class="detail-right">￥${formatMoney(p1)}</span></div><div class="detail-line"><span class="detail-left">利息</span><span class="detail-right">￥0</span></div><div class="detail-line"><span class="detail-left">年化费率</span><span class="detail-right">0.00%</span></div></div><div class="stage-block"><div class="stage-title">${m1+1}-60期 <span class="tag">第2阶段</span></div><div class="detail-line"><span class="detail-left">剩余本金</span><span class="detail-right">￥${formatMoney(round2(l-l*m1/60))}</span></div><div class="detail-line"><span class="detail-left">预估月付</span><span class="detail-right">￥${formatMoney(p2)}</span></div><div class="detail-line"><span class="detail-left">利息</span><span class="detail-right">￥${formatMoney(intst)}</span></div><div class="detail-line"><span class="detail-left">年化费率</span><span class="detail-right">${r}</span></div><div class="rate-note">近似年化利率${apprR}</div></div>`;
+const firstPayment=l/60, secondPayment=l*m2/60;
+const p1=roundUpYuan(firstPayment), p2=roundUpYuan(secondPayment);
+const intst=Math.max(0,roundUpYuan(secondPayment*(60-m1)+firstPayment*m1-l));
+return `${renderFinanceTop(d,l,roundUpYuan(d+i+t),n,"60期")}<div class="quote-lines">${renderPriceLine("保险预估",i)}${renderPriceLine("购置税",t)}</div><div class="stage-block"><div class="stage-title">1-${m1}期 <span class="tag">第1阶段</span></div><div class="detail-line"><span class="detail-left">预估月付</span><span class="detail-right">￥${formatMoney(p1)}</span></div><div class="detail-line"><span class="detail-left">利息</span><span class="detail-right">￥0</span></div><div class="detail-line"><span class="detail-left">年化费率</span><span class="detail-right">0.00%</span></div></div><div class="stage-block"><div class="stage-title">${m1+1}-60期 <span class="tag">第2阶段</span></div><div class="detail-line"><span class="detail-left">剩余本金</span><span class="detail-right">￥${formatMoney(roundUpYuan(l-l*m1/60))}</span></div><div class="detail-line"><span class="detail-left">预估月付</span><span class="detail-right">￥${formatMoney(p2)}</span></div><div class="detail-line"><span class="detail-left">利息</span><span class="detail-right">￥${formatMoney(intst)}</span></div><div class="detail-line"><span class="detail-left">年化费率</span><span class="detail-right">${r}</span></div><div class="rate-note">近似年化利率${apprR}</div></div>`;
 }
 function renderFiveFreeThreePlan(d,l,i,t){
-const firstMonthly=round2(l/60);
-const remainingPrincipal=round2(l*24/60);
-const totalInterest=round2(l*0.0299*2);
-const lastMonthly=round2(l/60+totalInterest/24);
-return `${renderFinanceTop(d,l,round2(d+i+t),"限时5免3","60期")}<div class="quote-lines">${renderPriceLine("保险预估",i)}${renderPriceLine("购置税",t)}</div><div class="stage-block"><div class="stage-title">1-36期 <span class="tag">第1阶段</span></div><div class="detail-line"><span class="detail-left">预估月付</span><span class="detail-right">￥${formatMoney(firstMonthly)}</span></div><div class="detail-line"><span class="detail-left">利息</span><span class="detail-right">￥0</span></div><div class="detail-line"><span class="detail-left">年费率</span><span class="detail-right">0.00%</span></div></div><div class="stage-block"><div class="stage-title">37-60期 <span class="tag">第2阶段</span></div><div class="detail-line"><span class="detail-left">剩余本金</span><span class="detail-right">￥${formatMoney(remainingPrincipal)}</span></div><div class="detail-line"><span class="detail-left">预估月付</span><span class="detail-right">￥${formatMoney(lastMonthly)}</span></div><div class="detail-line"><span class="detail-left">利息</span><span class="detail-right">￥${formatMoney(totalInterest)}</span></div><div class="detail-line"><span class="detail-left">年化费率</span><span class="detail-right">2.99%</span></div><div class="rate-note">近似年化利率 5.62%</div></div>`;
+const firstMonthly=roundUpYuan(l/60);
+const remainingPrincipal=roundUpYuan(l*24/60);
+const interest=l*0.0299*2;
+const totalInterest=roundUpYuan(interest);
+const lastMonthly=roundUpYuan(l/60+interest/24);
+return `${renderFinanceTop(d,l,roundUpYuan(d+i+t),"限时5免3","60期")}<div class="quote-lines">${renderPriceLine("保险预估",i)}${renderPriceLine("购置税",t)}</div><div class="stage-block"><div class="stage-title">1-36期 <span class="tag">第1阶段</span></div><div class="detail-line"><span class="detail-left">预估月付</span><span class="detail-right">￥${formatMoney(firstMonthly)}</span></div><div class="detail-line"><span class="detail-left">利息</span><span class="detail-right">￥0</span></div><div class="detail-line"><span class="detail-left">年费率</span><span class="detail-right">0.00%</span></div></div><div class="stage-block"><div class="stage-title">37-60期 <span class="tag">第2阶段</span></div><div class="detail-line"><span class="detail-left">剩余本金</span><span class="detail-right">￥${formatMoney(remainingPrincipal)}</span></div><div class="detail-line"><span class="detail-left">预估月付</span><span class="detail-right">￥${formatMoney(lastMonthly)}</span></div><div class="detail-line"><span class="detail-left">利息</span><span class="detail-right">￥${formatMoney(totalInterest)}</span></div><div class="detail-line"><span class="detail-left">年化费率</span><span class="detail-right">2.99%</span></div><div class="rate-note">近似年化利率 5.62%</div></div>`;
 }
 function renderRatePlan(d,l,i,t,y,r,n,appr){
-const intst=round2(l*r/100*y), tr=round2(l+intst);
-return `${renderFinanceTop(d,l,round2(d+i+t),n,`${y*12}期`)}<div class="quote-lines">${renderPriceLine("保险预估",i)}${renderPriceLine("购置税",t)}</div><div class="stage-block"><div class="stage-title">1-${y*12}期 <span class="tag">单阶段</span></div><div class="detail-line"><span class="detail-left">预估月付</span><span class="detail-right">￥${formatMoney(round2(tr/(y*12)))}</span></div><div class="detail-line"><span class="detail-left">利息</span><span class="detail-right">￥${formatMoney(intst)}</span></div><div class="detail-line"><span class="detail-left">总还款</span><span class="detail-right">￥${formatMoney(tr)}</span></div><div class="detail-line"><span class="detail-left">年费率</span><span class="detail-right">${r}%</span></div><div class="rate-note">近似年化利率${appr}</div></div>`;
+const intst=roundUpYuan(l*r/100*y), tr=roundUpYuan(l+intst);
+return `${renderFinanceTop(d,l,roundUpYuan(d+i+t),n,`${y*12}期`)}<div class="quote-lines">${renderPriceLine("保险预估",i)}${renderPriceLine("购置税",t)}</div><div class="stage-block"><div class="stage-title">1-${y*12}期 <span class="tag">单阶段</span></div><div class="detail-line"><span class="detail-left">预估月付</span><span class="detail-right">￥${formatMoney(roundUpYuan(tr/(y*12)))}</span></div><div class="detail-line"><span class="detail-left">利息</span><span class="detail-right">￥${formatMoney(intst)}</span></div><div class="detail-line"><span class="detail-left">总还款</span><span class="detail-right">￥${formatMoney(tr)}</span></div><div class="detail-line"><span class="detail-left">年费率</span><span class="detail-right">${r}%</span></div><div class="rate-note">近似年化利率${appr}</div></div>`;
 }
 function calculateQuote(){
 const car=getCurrentCar(), insuranceSubsidy=getInsuranceSubsidyAmount(), ip=getCurrentInvoicePrice(), {subsidyValue,subsidyItems}=getGovSubsidyInfo(), tax=calculatePurchaseTax(ip);
@@ -704,7 +707,7 @@ const ins=getNonNegativeNumber("insurance"), fin=$id("financeType").value;
 let d=parseFloat($id("downPaymentAmountInput").value);if(isNaN(d))d=0;
 const min=getMinDownPayment(car.name,fin);
 if(!isEditingDownPayment){if(d<min)d=min;if(d<0)d=0;if(d>ip)d=ip;}else{if(d<0)d=0;if(d>ip)d=ip;}
-if(!isEditingDownPayment)$id("downPaymentAmountInput").value=Math.round(d);
+if(!isEditingDownPayment)$id("downPaymentAmountInput").value=Math.ceil(d);
 updateDownPaymentDisplay(d,ip);updateGovSubsidyAvailability();
 let l=ip-d;if(l<0)l=0;
 $id("carName").innerText=car.name;
