@@ -512,7 +512,8 @@ if($id("financeType").value==="full")selectedDiscountIds=[...new Set([...selecte
 function getCurrentFullPaymentDiscount(){return getCurrentOptionalDiscounts().find(i=>i.fullOnly)||null;}
 function isInsuranceSubsidyEligible(){
 const car=getCurrentCar(), financeType=$id("financeType").value, hasFullPaymentDiscount=!!getCurrentFullPaymentDiscount();
-if(car.name==="理想 i6"||car.name==="理想 L6")return false;
+if(car.name==="理想 i6")return false;
+if(car.name==="理想 L6")return hasFullPaymentDiscount&&financeType===INSURANCE_SUBSIDY_RATE_FINANCE_TYPE;
 const isSubsidizedSuixin=financeType==="suixin"&&(car.name.startsWith("理想 L8")||car.name.startsWith("理想 L9")||car.name.startsWith("理想 i8")||car.name==="理想 i9");
 return hasFullPaymentDiscount&&(financeType===INSURANCE_SUBSIDY_RATE_FINANCE_TYPE||isSubsidizedSuixin);
 }
@@ -691,8 +692,7 @@ const firstMonthly=round2(l/60);
 const remainingPrincipal=round2(l*24/60);
 const totalInterest=round2(l*0.0299*2);
 const lastMonthly=round2(l/60+totalInterest/24);
-const totalRepayment=round2(l+totalInterest);
-return `${renderFinanceTop(d,l,round2(d+i+t),"限时5免3","60期")}<div class="quote-lines">${renderPriceLine("保险预估",i)}${renderPriceLine("购置税",t)}</div><div class="stage-block"><div class="stage-title">1-36期 <span class="tag">第1阶段</span></div><div class="detail-line"><span class="detail-left">预估月付</span><span class="detail-right">￥${formatMoney(firstMonthly)}</span></div><div class="detail-line"><span class="detail-left">利息</span><span class="detail-right">￥0</span></div><div class="detail-line"><span class="detail-left">年费率</span><span class="detail-right">0.00%</span></div></div><div class="stage-block"><div class="stage-title">37-60期 <span class="tag">第2阶段</span></div><div class="detail-line"><span class="detail-left">剩余本金</span><span class="detail-right">￥${formatMoney(remainingPrincipal)}</span></div><div class="detail-line"><span class="detail-left">预估月付</span><span class="detail-right">￥${formatMoney(lastMonthly)}</span></div><div class="detail-line"><span class="detail-left">后两年总利息</span><span class="detail-right">￥${formatMoney(totalInterest)}</span></div><div class="detail-line"><span class="detail-left">后两年年费率</span><span class="detail-right">2.99%</span></div><div class="detail-line"><span class="detail-left">五年总利息</span><span class="detail-right">￥${formatMoney(totalInterest)}</span></div><div class="detail-line"><span class="detail-left">五年总还款</span><span class="detail-right">￥${formatMoney(totalRepayment)}</span></div><div class="rate-note">按原始贷款本金计算后两年利息；月供为预估值，尾期按实际尾差调整</div></div>`;
+return `${renderFinanceTop(d,l,round2(d+i+t),"限时5免3","60期")}<div class="quote-lines">${renderPriceLine("保险预估",i)}${renderPriceLine("购置税",t)}</div><div class="stage-block"><div class="stage-title">1-36期 <span class="tag">第1阶段</span></div><div class="detail-line"><span class="detail-left">预估月付</span><span class="detail-right">￥${formatMoney(firstMonthly)}</span></div><div class="detail-line"><span class="detail-left">利息</span><span class="detail-right">￥0</span></div><div class="detail-line"><span class="detail-left">年费率</span><span class="detail-right">0.00%</span></div></div><div class="stage-block"><div class="stage-title">37-60期 <span class="tag">第2阶段</span></div><div class="detail-line"><span class="detail-left">剩余本金</span><span class="detail-right">￥${formatMoney(remainingPrincipal)}</span></div><div class="detail-line"><span class="detail-left">预估月付</span><span class="detail-right">￥${formatMoney(lastMonthly)}</span></div><div class="detail-line"><span class="detail-left">利息</span><span class="detail-right">￥${formatMoney(totalInterest)}</span></div><div class="detail-line"><span class="detail-left">年化费率</span><span class="detail-right">2.99%</span></div><div class="rate-note">近似年化利率 5.62%</div></div>`;
 }
 function renderRatePlan(d,l,i,t,y,r,n,appr){
 const intst=round2(l*r/100*y), tr=round2(l+intst);
